@@ -2222,3 +2222,148 @@ h1 span {
 .speed-control:hover {
   background: #304551;
 }
+
+/* Guided replay: a compact broadcast rundown, with measured graphics on the pitch. */
+.guide-launch {
+  color: #ffd18e !important;
+  border-color: #8c714b !important;
+}
+.guide-card {
+  position: absolute;
+  z-index: 5;
+  left: 24px;
+  top: 92px;
+  width: 280px;
+  padding: 18px;
+  color: #e4edf2;
+  background: linear-gradient(135deg, #101e2af2, #0b1620eb);
+  border: 1px solid #48606d;
+  border-left: 2px solid #f3c37e;
+  border-radius: 5px;
+  box-shadow: 0 12px 40px #0005;
+  backdrop-filter: blur(14px);
+}
+.guide-eyebrow {
+  display: flex;
+  justify-content: space-between;
+  font: 9px monospace;
+  letter-spacing: 1.6px;
+  color: #f3c37e;
+}
+.guide-chapters {
+  display: flex;
+  gap: 5px;
+  margin: 9px 0 13px;
+}
+.guide-chapters button {
+  flex: 1;
+  padding: 8px 0;
+  background: transparent;
+  border: 0;
+}
+.guide-chapters span {
+  display: block;
+  height: 3px;
+  background: #334b5a;
+}
+.guide-chapters [aria-current] span {
+  background: #f3c37e;
+  box-shadow: 0 0 8px #f3c37e66;
+}
+.guide-card h2 {
+  font:
+    500 27px/1.05 'Barlow Condensed',
+    sans-serif;
+  margin: 0 0 12px;
+}
+.guide-metric {
+  font: 20px monospace;
+  color: #f3c37e;
+}
+.guide-card p {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #adc2ce;
+  margin: 12px 0;
+}
+.guide-card small {
+  display: block;
+  font: 8px/1.5 monospace;
+  color: #829fac;
+  overflow-wrap: anywhere;
+}
+.guide-actions {
+  display: flex;
+  gap: 5px;
+  border-top: 1px solid #304654;
+  margin-top: 14px;
+  padding-top: 12px;
+}
+.guide-actions button {
+  border: 1px solid #405b6c;
+  border-radius: 3px;
+  background: #1b303e;
+  color: #d5e6ee;
+  font-size: 9px;
+  padding: 7px;
+}
+.guide-actions button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.guide-actions button:hover:not(:disabled) {
+  background: #365162;
+}
+.guide-status {
+  display: block;
+  margin-top: 10px;
+  font-size: 9px;
+  color: #8eacba;
+}
+.scene-caption[hidden] {
+  display: none;
+}
+@media (max-width: 900px) {
+  .guide-card {
+    width: 230px;
+    left: 12px;
+    top: 78px;
+    padding: 12px;
+  }
+  .guide-card h2 {
+    font-size: 23px;
+  }
+}
+@media (max-width: 560px) {
+  .match-stage:has(.guide-card) {
+    padding-bottom: 255px;
+  }
+  .guide-card {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+    height: 255px;
+    box-sizing: border-box;
+  }
+  .guide-card p {
+    margin: 7px 0;
+  }
+  .guide-card h2 {
+    margin-bottom: 7px;
+  }
+  .guide-chapters {
+    margin: 2px 0 5px;
+  }
+  .guide-actions {
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+  .guide-status {
+    margin-top: 5px;
+  }
+  .match-stage:has(.guide-card) .stage-bottom {
+    display: none;
+  }
+}

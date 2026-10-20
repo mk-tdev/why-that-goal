@@ -40,3 +40,11 @@ Browser verification: keyboard scenario selection, player typeahead, Escape dism
 Replaced sliding formation interpolation with smooth speed-bounded routes, receiving/carrying positions, defensive retreat and support runs. Added timed ground passes, lofted switches, shot contact/arrival, goalkeeper reactions, net and save rebounds, distance-driven running animation, contextual ball-phase labels and half-speed playback. Removed the original seeded jitter generator; retained seed as fixture provenance.
 
 19 tests pass, including seven new motion checks: speed bounds, contact/reception alignment, position/height continuity, loft versus ground height, shot speed/outcomes, deterministic scrubbing and player separation. Browser inspection confirmed an airborne switch, half-speed playback and the existing follow camera. These are designed synthetic sequences with approximate animation, not a calibrated football physics or tactics simulator. Foundry remains disconnected.
+
+## 20 October 2026 — Guided replay
+
+Added a five-chapter director’s replay for each synthetic sequence: first pass, supporting off-ball movement, receiving-space comparison, final pass and finish. Plays each window at half speed, holds the final frame for 3.5 seconds, then advances. Custom chapter controls support pause/resume, replay, previous/next and exit; manual seeking, scenario changes and fallback exit the guide.
+
+The 3D view transitions between chapter-specific camera positions, respects reduced motion, and allows manual orbit. Pitch graphics show gold pass paths, cyan movement traces with an earlier-position marker, and dashed earlier/current receiving-distance rings. Source event IDs, versions and time windows appear in the chapter card. Space changes compare the same fixed receiving point and do not imply causation. The guide is retrospective, deterministic and English-only; Foundry remains disconnected.
+
+28 core tests pass. New tests cover chapter bounds and source references, off-ball possession exclusion, measured space changes and goal/save outcomes across all three scenarios. Desktop inspection confirmed automatic advancement and close camera framing; narrow-screen inspection confirmed the guide moves below the pitch. Existing Three.js bundle-size warning remains.

@@ -1,4 +1,5 @@
-import { ballMotion, playerMotion } from '../core/motion';
+import type { GuideStep } from '../core/guide';
+import { ballMotion, playerMotion, flightFor } from '../core/motion';
 import { Select } from '../ui/Controls';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -11,6 +12,7 @@ import { interpolate, type Scenario, type MatchEvent } from '../core/model';
 import { inspectSpace } from '../core/spatial';
 
 type Props = {
+  guide?: GuideStep;
   scene: Scenario;
   time: number;
   event: MatchEvent;
@@ -92,7 +94,7 @@ function label(text: string, color: string) {
   c.font = '600 32px sans-serif';
   c.fillStyle = '#eff9ff';
   c.textAlign = 'center';
-  c.fillText(text, 192, 58);
+  c.fillText(text, 192, 58, 356);
   const map = new THREE.CanvasTexture(canvas);
   map.colorSpace = THREE.SRGBColorSpace;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map, depthTest: false }));
@@ -446,10 +448,11 @@ export default function Stadium(props: Props) {
     const overlays = new THREE.Group();
     world.add(overlays);
     let previousOverlay = '';
+    let previousGuide = '';
     function rebuildOverlays(p: Props) {
       disposeObject(overlays);
       overlays.clear();
-      if (p.layer === 'clean') return;
+      if (p.layer === 'clean' && !p.guide) return;
       const line = (points: THREE.Vector3[], color: string, r = 0.08) => {
         const curve = new THREE.CatmullRomCurve3(points);
         const mesh = new THREE.Mesh(
@@ -458,6 +461,84 @@ export default function Stadium(props: Props) {
         );
         overlays.add(mesh);
       };
+      if (p.guide) {
+        const g = p.guide,
+          t = Math.max(g.start, Math.min(g.end, p.time));
+        const tagAt = (
+          text: string,
+          point: { x: number; y: number },
+          color: string,
+          height = 4,
+        ) => {
+          const tag = label(text, color);
+          tag.position.copy(xyz(point.x, point.y, height));
+          overlays.add(tag);
+        };
+        const ringAt = (
+          point: { x: number; y: number },
+          radius: number,
+          color: string,
+          dashed = false,
+        ) => {
+          for (let i = 0; i < (dashed ? 24 : 1); i++) {
+            const mesh = new THREE.Mesh(
+              new THREE.RingGeometry(
+                Math.max(0.01, radius - 0.08),
+                Math.max(0.1, radius),
+                dashed ? 4 : 80,
+                1,
+                dashed ? (i * Math.PI) / 12 : 0,
+                dashed ? Math.PI / 16 : Math.PI * 2,
+              ),
+              new THREE.MeshBasicMaterial({
+                color,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.8,
+                depthWrite: false,
+              }),
+            );
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.position.copy(xyz(point.x, point.y, 0.18));
+            overlays.add(mesh);
+          }
+        };
+        if (g.kind === 'run') {
+          const a = interpolate(p.scene.tracks[g.player!], g.start),
+            b = interpolate(p.scene.tracks[g.player!], t);
+          const points = Array.from({ length: 25 }, (_, i) => {
+            const pt = interpolate(p.scene.tracks[g.player!], g.start + ((t - g.start) * i) / 24);
+            return xyz(pt.x, pt.y, 0.23);
+          });
+          if (t > g.start + 0.01) line(points, '#73e6de', 0.13);
+          ringAt(a, 1.3, '#d3edf1', true);
+          ringAt(b, 1.6, '#73e6de');
+          tagAt(`${p.scene.players.find((q) => q.id === g.player)?.name} · OFF BALL`, b, '#73e6de');
+          tagAt(g.metric, a, '#d3edf1', 6);
+        } else if (g.kind === 'space') {
+          const current = inspectSpace(p.scene, g.event, t).receiver;
+          ringAt(g.anchor, g.before!, '#d3edf1', true);
+          ringAt(g.anchor, current.receiverDistance, '#ffc579');
+          line(
+            [xyz(g.anchor.x, g.anchor.y, 0.2), xyz(current.point.x, current.point.y, 0.2)],
+            '#ff718b',
+          );
+          tagAt(`${current.receiverDistance.toFixed(1)} m · NOW`, g.anchor, '#ffc579', 6);
+          tagAt(
+            `${g.before!.toFixed(1)} m · AT ${g.start.toFixed(1)}s`,
+            { x: g.anchor.x, y: g.anchor.y + g.before! + 2 },
+            '#d3edf1',
+            2,
+          );
+        } else {
+          const a = g.event.from,
+            b = g.kind === 'finish' ? flightFor(g.event, p.scene.events)!.to : g.event.to;
+          line([xyz(a.x, a.y, 0.2), xyz(b.x, b.y, 0.2)], '#ffc579', 0.12);
+          ringAt(b, 1.5, '#ffc579');
+          tagAt(g.metric.toUpperCase(), g.anchor, '#ffc579', 5);
+        }
+        return;
+      }
       if (p.event.type === 'pass') {
         const m = inspectSpace(p.scene, p.event, p.time),
           a = xyz(p.event.from.x, p.event.from.y, 0.16),
@@ -606,10 +687,35 @@ export default function Stadium(props: Props) {
       ball.position.copy(xyz(bp.x, bp.y, flight.height + 0.07));
       ball.rotation.set(flight.spin, 0, flight.spin * 0.3);
       ballHalo.position.copy(xyz(bp.x, bp.y, 0.08));
-      const overlayKey = [p.scene.id, p.event.id, p.layer, Math.round(p.time * 10)].join(':');
+      const overlayKey = [
+        p.scene.id,
+        p.event.id,
+        p.layer,
+        p.guide?.id,
+        Math.round(p.time * 10),
+      ].join(':');
       if (overlayKey !== previousOverlay) {
         rebuildOverlays(p);
         previousOverlay = overlayKey;
+      }
+      const guideKey = p.guide ? `${p.scene.id}:${p.guide.id}` : '';
+      if (guideKey !== previousGuide) {
+        previousGuide = guideKey;
+        if (p.guide) {
+          const g = p.guide,
+            wide = Math.max(1, 1.2 / camera.aspect);
+          cameraMode.current = 'free';
+          setView('free');
+          goalTarget.copy(xyz(g.anchor.x, g.anchor.y, 0));
+          goalCamera.copy(
+            xyz(
+              g.anchor.x - (g.kind === 'space' ? 3 : 20) * wide,
+              g.anchor.y + (g.kind === 'space' ? 12 : 32) * wide,
+              (g.kind === 'space' ? 57 : 36) * wide,
+            ),
+          );
+          transitioning = true;
+        }
       }
       if (cameraMode.current === 'follow') {
         const subject = p.focus ? interpolate(p.scene.tracks[p.focus], p.time) : bp;
@@ -693,7 +799,7 @@ export default function Stadium(props: Props) {
           ]}
         />
       </div>
-      <div className="scene-caption">
+      <div className="scene-caption" hidden={!!props.guide}>
         <span>SPATIAL REPLAY</span>
         <strong>{props.comparison ? 'Two seconds earlier.' : 'See the whole play.'}</strong>
         <small>

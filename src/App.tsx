@@ -1,5 +1,6 @@
+import { buildGuide } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 const Stadium = lazy(() => import('./scene/Stadium'));
 import { scenarios } from './core/scenarios';
 import {
@@ -226,6 +227,9 @@ function Field({
 }
 
 export default function App() {
+  const [guideIndex, setGuideIndex] = useState<number | null>(null);
+  const [guideRunning, setGuideRunning] = useState(false);
+  const [guideReplay, setGuideReplay] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [threeD, setThreeD] = useState(true);
   const [immersive, setImmersive] = useState(true);
@@ -243,6 +247,47 @@ export default function App() {
   const scene = scenarios.find((s) => s.id === sceneId)!,
     event = scene.events[selected],
     displayTime = comparison ? Math.max(0, time - 2) : time;
+  const guideSteps = useMemo(() => buildGuide(scene), [scene]);
+  const guide = guideIndex === null ? undefined : guideSteps[guideIndex];
+  function endGuide() {
+    setGuideIndex(null);
+    setGuideRunning(false);
+  }
+  function enterGuide(index: number) {
+    const step = guideSteps[index];
+    setGuideIndex(index);
+    setGuideRunning(true);
+    setGuideReplay((n) => n + 1);
+    setPlaying(false);
+    setComparison(false);
+    setLayer('space');
+    setThreeD(true);
+    setTime(step.start);
+    setSelected(scene.events.indexOf(step.event));
+    setFocus(step.player ?? null);
+  }
+  useEffect(() => {
+    if (!guide || !guideRunning) return;
+    let previous = performance.now(),
+      hold = 0;
+    const timer = window.setInterval(() => {
+      const now = performance.now(),
+        elapsed = Math.min(0.1, (now - previous) / 1000);
+      previous = now;
+      if (document.hidden) return;
+      setTime((t) => Math.min(guide.end, t + elapsed * 0.5));
+      // Hold the final evidence frame for reading before the next chapter.
+      if (time >= guide.end) {
+        hold += elapsed;
+        if (hold >= 3.5) {
+          clearInterval(timer);
+          if (guideIndex! < guideSteps.length - 1) enterGuide(guideIndex! + 1);
+          else setGuideRunning(false);
+        }
+      }
+    }, 32);
+    return () => clearInterval(timer);
+  }, [guide, guideRunning, guideReplay, time >= (guide?.end ?? Infinity)]);
   const state = matchState(scene.events, displayTime),
     spatial = inspectSpace(scene, event, displayTime);
   const player = scene.players.find((p) => p.id === event.player)!,
@@ -274,12 +319,14 @@ export default function App() {
     return () => clearTimeout(id);
   }, [notice]);
   function jump(index: number) {
+    endGuide();
     setSelected(index);
     setTime(scene.events[index].at);
     setPlaying(false);
     setComparison(false);
   }
   function changeScene(id: string) {
+    endGuide();
     const next = scenarios.find((s) => s.id === id)!;
     setSceneId(id);
     setSelected(2);
@@ -412,7 +459,20 @@ export default function App() {
             <section className="replay-surface" aria-label="Match replay">
               <div className="canvas-toolbar">
                 <div className="scene-view-controls">
-                  <button aria-pressed={threeD} onClick={() => setThreeD(!threeD)}>
+                  <button
+                    className="guide-launch"
+                    aria-pressed={!!guide}
+                    onClick={() => (guide ? endGuide() : enterGuide(0))}
+                  >
+                    ✦ {guide ? 'Exit guided replay' : 'Guided replay'}
+                  </button>
+                  <button
+                    aria-pressed={threeD}
+                    onClick={() => {
+                      endGuide();
+                      setThreeD(!threeD);
+                    }}
+                  >
                     {threeD ? '◈  3D Stadium' : '◇  Switch to 3D'}
                   </button>
                   <button aria-pressed={!immersive} onClick={() => setImmersive(!immersive)}>
@@ -422,19 +482,28 @@ export default function App() {
                 <div className="view-tabs">
                   <button
                     className={layer === 'space' ? 'active' : ''}
-                    onClick={() => setLayer('space')}
+                    onClick={() => {
+                      endGuide();
+                      setLayer('space');
+                    }}
                   >
                     Passing lanes
                   </button>
                   <button
                     className={layer === 'trails' ? 'active' : ''}
-                    onClick={() => setLayer('trails')}
+                    onClick={() => {
+                      endGuide();
+                      setLayer('trails');
+                    }}
                   >
                     Movement
                   </button>
                   <button
                     className={layer === 'clean' ? 'active' : ''}
-                    onClick={() => setLayer('clean')}
+                    onClick={() => {
+                      endGuide();
+                      setLayer('clean');
+                    }}
                   >
                     Clean feed
                   </button>
@@ -443,6 +512,7 @@ export default function App() {
                   className={`compare-button ${comparison ? 'active' : ''}`}
                   aria-pressed={comparison}
                   onClick={() => {
+                    endGuide();
                     setComparison(!comparison);
                     setPlaying(false);
                   }}
@@ -461,13 +531,21 @@ export default function App() {
                   <time>{clock(scene.baseClock, displayTime)}</time>
                 </div>
                 <span className="replay-indicator">
-                  {comparison ? 'EARLIER FRAME' : playing ? 'REPLAYING' : 'PAUSED'} <i />
+                  {guide
+                    ? 'GUIDED REPLAY'
+                    : comparison
+                      ? 'EARLIER FRAME'
+                      : playing
+                        ? 'REPLAYING'
+                        : 'PAUSED'}{' '}
+                  <i />
                 </span>
                 {threeD ? (
                   <Suspense
                     fallback={<div className="stadium-loading">Preparing the stadium…</div>}
                   >
                     <Stadium
+                      guide={guide}
                       scene={scene}
                       time={displayTime}
                       event={event}
@@ -475,7 +553,10 @@ export default function App() {
                       focus={focus}
                       onFocus={setFocus}
                       comparison={comparison}
-                      onFallback={() => setThreeD(false)}
+                      onFallback={() => {
+                        endGuide();
+                        setThreeD(false);
+                      }}
                     />
                   </Suspense>
                 ) : (
@@ -488,6 +569,62 @@ export default function App() {
                     onFocus={setFocus}
                     comparison={comparison}
                   />
+                )}
+                {guide && (
+                  <aside className="guide-card" aria-label="Guided replay chapter">
+                    <div className="guide-eyebrow">
+                      DIRECTOR’S REPLAY{' '}
+                      <span>
+                        {guideIndex! + 1} / {guideSteps.length}
+                      </span>
+                    </div>
+                    <div className="guide-chapters">
+                      {guideSteps.map((step, i) => (
+                        <button
+                          key={step.id}
+                          aria-label={`Guide chapter ${i + 1}: ${step.title}`}
+                          aria-current={i === guideIndex ? 'step' : undefined}
+                          onClick={() => enterGuide(i)}
+                        >
+                          <span />
+                        </button>
+                      ))}
+                    </div>
+                    <h2>{guide.title}</h2>
+                    <strong className="guide-metric">{guide.metric}</strong>
+                    <p>{guide.detail}</p>
+                    <small>
+                      Synthetic tracks · {guide.start.toFixed(1)}–{guide.end.toFixed(1)}s ·{' '}
+                      {guide.event.id} v{guide.event.version}
+                    </small>
+                    <div className="guide-actions">
+                      <button
+                        aria-label="Previous guide chapter"
+                        disabled={guideIndex === 0}
+                        onClick={() => enterGuide(guideIndex! - 1)}
+                      >
+                        ←
+                      </button>
+                      <button onClick={() => setGuideRunning(!guideRunning)}>
+                        {guideRunning ? 'Pause guide' : 'Resume guide'}
+                      </button>
+                      <button onClick={() => enterGuide(guideIndex!)}>Replay moment</button>
+                      <button
+                        aria-label="Next guide chapter"
+                        disabled={guideIndex === guideSteps.length - 1}
+                        onClick={() => enterGuide(guideIndex! + 1)}
+                      >
+                        →
+                      </button>
+                    </div>
+                    <span className="guide-status">
+                      {!guideRunning
+                        ? 'Paused · explore the evidence'
+                        : time >= guide.end
+                          ? 'Hold frame · reading the play'
+                          : '½ speed · following the action'}
+                    </span>
+                  </aside>
                 )}
                 <div className="stage-bottom">
                   <span>
@@ -505,6 +642,7 @@ export default function App() {
                   className="transport-back"
                   aria-label="Rewind sequence"
                   onClick={() => {
+                    endGuide();
                     setTime(0);
                     setSelected(0);
                     setPlaying(false);
@@ -517,8 +655,10 @@ export default function App() {
                   className="play"
                   aria-label={playing ? 'Pause replay' : 'Play replay'}
                   onClick={() => {
+                    endGuide();
                     setComparison(false);
                     if (time >= scene.duration) {
+                      endGuide();
                       setTime(0);
                       setSelected(0);
                     }
@@ -535,6 +675,7 @@ export default function App() {
                     max={scene.duration}
                     value={time}
                     onChange={(t) => {
+                      endGuide();
                       setTime(t);
                       setSelected(
                         Math.max(
@@ -555,11 +696,12 @@ export default function App() {
                 <button
                   className="speed-control"
                   aria-label="Toggle slow motion"
-                  aria-pressed={playbackRate === 0.5}
+                  disabled={!!guide}
+                  aria-pressed={!!guide || playbackRate === 0.5}
                   onClick={() => setPlaybackRate(playbackRate === 1 ? 0.5 : 1)}
                 >
-                  {playbackRate === 1 ? '1×' : '.5×'}
-                  <span>{playbackRate === 1 ? 'Speed' : 'Slow'}</span>
+                  {guide || playbackRate === 0.5 ? '.5×' : '1×'}
+                  <span>{guide ? 'Guide' : playbackRate === 1 ? 'Speed' : 'Slow'}</span>
                 </button>
                 <span className="transport-divider" />
                 <button
@@ -747,6 +889,7 @@ export default function App() {
                     <button
                       className="compare-note"
                       onClick={() => {
+                        endGuide();
                         setComparison(!comparison);
                         setPlaying(false);
                       }}
