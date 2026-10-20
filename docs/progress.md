@@ -26,3 +26,11 @@ Redesign verification: production build and all 12 tests passed. Browser checks 
 Added a lazy-loaded WebGL stadium with procedural pitch texture, 22 articulated players, goals, 2,400 instanced seats, floodlights, shadows and bloom. Broadcast, overhead and follow cameras support orbit/pan/zoom. The same match-time state drives both renderers and geometry overlays. Added full-width stadium mode, a player dropdown and a 2D fallback with cleanup of GPU resources.
 
 Verified in the browser: real 3D rendering, camera transitions, player focus connected to the notebook, switching to 2D while retaining selection/time, and 390px layout without horizontal overflow. TypeScript/production build and all 12 core tests pass. The 3D chunk is about 155 KB gzipped; Vite retains an uncompressed-chunk size warning. Broad mobile GPU benchmarking and automated context-loss testing have not been performed. This remains synthetic replay with deterministic analysis; Foundry integration is still pending.
+
+## 20 October 2026 — Custom controls and visual refinement
+
+Replaced all three native select menus, the native range input and the details/summary disclosure with shared custom React controls. Menus render in a portal with viewport-aware placement, selected states, descriptive options, arrow/Home/End navigation, typeahead, Escape dismissal and focus return. Replay seeking supports pointer capture, touch, arrow stepping, PageUp/PageDown and Home/End, with an accessible time value and a custom tooltip. Semantic buttons and ARIA remain for accessibility.
+
+Refined camera controls with vector icons, segmented visualization layers, framed scene controls, highlighted timeline progress, filmstrip selection and rounded panel edges. Foundry remains disconnected.
+
+Browser verification: keyboard scenario selection, player typeahead, Escape dismissal, slider increments (0 → 0.1 → 1.1 seconds), language selection and evidence expansion all worked. DOM inspection found zero select elements, native range inputs or details widgets. At 390px, the menu stayed within the viewport and document width remained 390px.

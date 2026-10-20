@@ -1,3 +1,4 @@
+import { Select } from '../ui/Controls';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -640,21 +641,24 @@ export default function Stadium(props: Props) {
     <div className="stadium-shell">
       <div className="stadium-canvas" ref={mount} />
       <div className="stadium-vignette" />
-      <label className="scene-player-select">
+      <div className="scene-player-select">
         <span>PLAYER FOCUS</span>
-        <select
-          aria-label="Follow player in 3D"
+        <Select
+          compact
+          label="Follow player in 3D"
           value={props.focus ?? ''}
-          onChange={(e) => props.onFocus(e.target.value || null)}
-        >
-          <option value="">All players</option>
-          {props.scene.players.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.number} · {p.name} ({p.team === 'home' ? 'NSF' : 'ATL'})
-            </option>
-          ))}
-        </select>
-      </label>
+          onChange={(v) => props.onFocus(v || null)}
+          options={[
+            { value: '', label: 'All players', detail: 'Follow the ball' },
+            ...props.scene.players.map((p) => ({
+              value: p.id,
+              label: p.name,
+              badge: String(p.number).padStart(2, '0'),
+              detail: p.team === 'home' ? 'Northstar FC' : 'Atlas Athletic',
+            })),
+          ]}
+        />
+      </div>
       <div className="scene-caption">
         <span>SPATIAL REPLAY</span>
         <strong>{props.comparison ? 'Two seconds earlier.' : 'See the whole play.'}</strong>
@@ -672,6 +676,24 @@ export default function Stadium(props: Props) {
               controlsRef.current?.switchView(v);
             }}
           >
+            <svg
+              className="camera-icon"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              aria-hidden="true"
+            >
+              <path
+                d={
+                  v === 'broadcast'
+                    ? 'M3 5h10v10H3zM13 8l4-2v8l-4-2'
+                    : v === 'tactical'
+                      ? 'M3 3h14v14H3zM10 3v14M3 10h14'
+                      : 'M10 2v4m0 8v4M2 10h4m8 0h4M15 10a5 5 0 1 1-10 0 5 5 0 0 1 10 0'
+                }
+              />
+            </svg>
             {v === 'broadcast' ? 'Broadcast' : v === 'tactical' ? 'Overhead' : 'Follow play'}
           </button>
         ))}

@@ -16,6 +16,7 @@ This first implementation runs locally without credentials. It includes:
 - A Three.js stadium with procedural kits, articulated players, goals, instanced seating, floodlights, shadows and bloom.
 - Broadcast, overhead and follow-play cameras; drag to orbit and scroll to zoom.
 - Full-width stadium mode, expandable analysis notebook, accessible player selector and 2D fallback.
+- Custom sequence/player/language menus with keyboard navigation and typeahead; custom pointer/keyboard replay slider and evidence disclosure.
 - Animated 22-player tracking, ball movement, player focus, trails and replay controls.
 - A scoreboard and statistics computed from events visible at the selected time.
 - Clickable, versioned event evidence and coordinate-derived passing distances.

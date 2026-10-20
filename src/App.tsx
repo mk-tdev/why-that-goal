@@ -1,3 +1,4 @@
+import { Select, Slider, Disclosure } from './ui/Controls';
 import { lazy, Suspense, useEffect, useState } from 'react';
 const Stadium = lazy(() => import('./scene/Stadium'));
 import { scenarios } from './core/scenarios';
@@ -380,7 +381,7 @@ export default function App() {
           <div className="rail-bottom">
             WTG
             <br />
-            <span>0.3</span>
+            <span>0.4</span>
           </div>
         </nav>
         <main className="studio">
@@ -391,20 +392,20 @@ export default function App() {
                 Northstar <span>vs</span> Atlas Athletic
               </h1>
             </div>
-            <label className="scenario-select">
-              <span>SEQUENCE</span>
-              <select
-                aria-label="Choose synthetic scenario"
+            <div className="scenario-select">
+              <span>SEQUENCE LIBRARY</span>
+              <Select
+                label="Choose synthetic scenario"
                 value={sceneId}
-                onChange={(e) => changeScene(e.target.value)}
-              >
-                {scenarios.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.chapter} / {s.title}
-                  </option>
-                ))}
-              </select>
-            </label>
+                onChange={changeScene}
+                options={scenarios.map((s) => ({
+                  value: s.id,
+                  label: s.title,
+                  detail: s.subtitle,
+                  badge: s.chapter,
+                }))}
+              />
+            </div>
           </div>
           <div className="working-area">
             <section className="replay-surface" aria-label="Match replay">
@@ -527,15 +528,12 @@ export default function App() {
                 </button>
                 <time>{clock(scene.baseClock, displayTime)}</time>
                 <div className="scrub">
-                  <input
-                    aria-label="Replay time"
-                    type="range"
-                    min="0"
+                  <Slider
+                    label="Replay time"
+                    valueText={clock(scene.baseClock, time)}
                     max={scene.duration}
-                    step=".1"
                     value={time}
-                    onChange={(e) => {
-                      const t = Number(e.target.value);
+                    onChange={(t) => {
                       setTime(t);
                       setSelected(
                         Math.max(
@@ -667,14 +665,16 @@ export default function App() {
                   <button className={analyst ? 'selected' : ''} onClick={() => setAnalyst(true)}>
                     Analyst view
                   </button>
-                  <select
-                    aria-label="Explanation language"
+                  <Select
+                    compact
+                    label="Explanation language"
                     value={language}
-                    onChange={(e) => setLanguage(e.target.value as Language)}
-                  >
-                    <option value="en">EN</option>
-                    <option value="es">ES</option>
-                  </select>
+                    onChange={(v) => setLanguage(v as Language)}
+                    options={[
+                      { value: 'en', label: 'EN', detail: 'English' },
+                      { value: 'es', label: 'ES', detail: 'Español' },
+                    ]}
+                  />
                 </div>
                 <p className="explanation">
                   {time < event.at && !comparison
@@ -764,10 +764,7 @@ export default function App() {
                     <button onClick={() => setFocus(null)}>Clear player focus ×</button>
                   </div>
                 )}
-                <details className="evidence-details" open={drawer || analyst}>
-                  <summary>
-                    Inspect the evidence <span>↗</span>
-                  </summary>
+                <Disclosure title="Inspect the evidence" open={drawer || analyst}>
                   <code>
                     {event.id}@{event.version}
                   </code>
@@ -780,7 +777,7 @@ export default function App() {
                     Authored synthetic movement. These measurements do not establish pass success or
                     tactical causality.
                   </p>
-                </details>
+                </Disclosure>
               </div>
               <div className="notebook-footer">
                 <span className="engine-dot" />
@@ -795,7 +792,7 @@ export default function App() {
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
             </span>
             <span>
-              Foundry integration pending <b>·</b> v0.3
+              Foundry integration pending <b>·</b> v0.4
             </span>
           </footer>
         </main>
