@@ -1,0 +1,339 @@
+import type { EventType, Keyframe, MatchEvent, Player, Point, Scenario } from './model';
+
+const names = [
+  'Mora',
+  'Kato',
+  'Marin',
+  'Costa',
+  'Reyes',
+  'Osei',
+  'Vega',
+  'Silva',
+  'Okafor',
+  'Tan',
+  'Mendes',
+];
+const formation: Point[] = [
+  { x: 8, y: 34 },
+  { x: 30, y: 10 },
+  { x: 27, y: 25 },
+  { x: 27, y: 43 },
+  { x: 30, y: 58 },
+  { x: 49, y: 26 },
+  { x: 57, y: 53 },
+  { x: 60, y: 19 },
+  { x: 82, y: 34 },
+  { x: 67, y: 43 },
+  { x: 71, y: 12 },
+];
+type Action = [number, EventType, number, Point, Point, number?, string?, string?];
+function makeScenario(
+  id: string,
+  title: string,
+  subtitle: string,
+  chapter: string,
+  seed: number,
+  baseClock: number,
+  actions: Action[],
+  thesis: Scenario['thesis'],
+): Scenario {
+  let randomState = seed;
+  const random = () => {
+    randomState = (randomState * 1664525 + 1013904223) >>> 0;
+    return randomState / 2 ** 32;
+  };
+  const duration = actions[actions.length - 1][0] + 3;
+  const players: Player[] = ['home', 'away'].flatMap((team, side) =>
+    names.map((name, i) => ({
+      id: `${side ? 'A' : 'N'}-${i + 1}`,
+      name: side
+        ? [
+            'Paz',
+            'Sato',
+            'Frey',
+            'Park',
+            'Diaz',
+            'Amin',
+            'Duarte',
+            'Cole',
+            'Luca',
+            'Santos',
+            'Ibrahim',
+          ][i]
+        : name,
+      number: i + 1,
+      team: team as Player['team'],
+    })),
+  );
+  const events: MatchEvent[] = actions.map(
+    ([at, type, number, from, to, recipient, en, es], i) => ({
+      id: `${id}-${String(i + 1).padStart(2, '0')}`,
+      version: 1,
+      at,
+      receivedAt: at,
+      type,
+      team: type === 'save' ? 'away' : 'home',
+      player: type === 'save' ? 'A-1' : `N-${number}`,
+      recipient: recipient ? `N-${recipient}` : undefined,
+      from,
+      to,
+      outcome: 'success',
+      label: { en: en ?? type, es: es ?? type },
+    }),
+  );
+  const tracks: Record<string, Keyframe[]> = {};
+  for (const p of players) {
+    const base = formation[p.number - 1];
+    const start = {
+      x: p.team === 'home' ? base.x : 105 - base.x,
+      y: p.team === 'home' ? base.y : 68 - base.y,
+    };
+    const jitter = { x: (random() - 0.5) * 3, y: (random() - 0.5) * 3 };
+    const frames: Keyframe[] = [
+      { at: 0, point: start },
+      {
+        at: duration,
+        point: {
+          x: Math.max(2, Math.min(103, start.x + (p.team === 'home' ? 10 : -4) + jitter.x)),
+          y: Math.max(2, Math.min(66, start.y + jitter.y)),
+        },
+      },
+    ];
+    for (const e of events) {
+      if (e.player === p.id && e.type !== 'goal')
+        frames.push({ at: Math.max(0, e.at - (e.type === 'pass' ? 2 : 0)), point: e.from });
+      if (e.recipient === p.id) frames.push({ at: e.at, point: e.to });
+    }
+    const unique = new Map<number, Keyframe>();
+    for (const f of frames) unique.set(f.at, f);
+    tracks[p.id] = [...unique.values()].sort((a, b) => a.at - b.at);
+  }
+  const ballFrames: Keyframe[] = [{ at: 0, point: events[0].from }];
+  for (const e of events) {
+    ballFrames.push({
+      at: Math.max(0, e.at - (e.type === 'pass' || e.type === 'shot' ? 1.5 : 0)),
+      point: e.from,
+    });
+    ballFrames.push({ at: e.at, point: e.to });
+  }
+  const uniqueBall = new Map<number, Keyframe>();
+  for (const f of ballFrames) uniqueBall.set(f.at, f);
+  return {
+    id,
+    title,
+    subtitle,
+    chapter,
+    home: 'Northstar FC',
+    away: 'Atlas Athletic',
+    baseClock,
+    duration,
+    seed,
+    players,
+    events,
+    tracks,
+    ball: [...uniqueBall.values()].sort((a, b) => a.at - b.at),
+    thesis,
+    limitation: {
+      en: 'These are authored synthetic events. Spatial movement is illustrative; it does not prove tactical causality.',
+      es: 'Eventos sintéticos diseñados. El movimiento es ilustrativo y no demuestra causalidad táctica.',
+    },
+  };
+}
+
+export const scenarios: Scenario[] = [
+  makeScenario(
+    'quick-break',
+    'The quick break',
+    'One recovery. Three passes. A finish.',
+    '01',
+    71,
+    72 * 60,
+    [
+      [
+        1,
+        'recovery',
+        6,
+        { x: 57, y: 31 },
+        { x: 57, y: 31 },
+        undefined,
+        'The recovery',
+        'La recuperación',
+      ],
+      [4, 'pass', 6, { x: 57, y: 31 }, { x: 72, y: 24 }, 8, 'The first pass', 'El primer pase'],
+      [
+        8,
+        'pass',
+        8,
+        { x: 72, y: 24 },
+        { x: 88, y: 46 },
+        7,
+        'Into the wide channel',
+        'Hacia la banda',
+      ],
+      [12, 'pass', 7, { x: 88, y: 46 }, { x: 94, y: 34 }, 9, 'The final pass', 'El último pase'],
+      [15, 'shot', 9, { x: 94, y: 34 }, { x: 104, y: 34 }, undefined, 'The finish', 'El remate'],
+      [
+        16,
+        'goal',
+        9,
+        { x: 104, y: 34 },
+        { x: 105, y: 34 },
+        undefined,
+        'Goal, Northstar',
+        'Gol de Northstar',
+      ],
+    ],
+    {
+      en: 'The finish took a second. The buildup tells the story.',
+      es: 'El remate duró un segundo. La jugada cuenta la historia.',
+    },
+  ),
+  makeScenario(
+    'switch-play',
+    'A change of perspective',
+    'Across the pitch. Into a new angle.',
+    '02',
+    214,
+    38 * 60,
+    [
+      [
+        1,
+        'recovery',
+        3,
+        { x: 38, y: 52 },
+        { x: 38, y: 52 },
+        undefined,
+        'A fresh possession',
+        'Una nueva posesión',
+      ],
+      [
+        5,
+        'pass',
+        3,
+        { x: 38, y: 52 },
+        { x: 60, y: 18 },
+        8,
+        'Switching the play',
+        'Cambio de orientación',
+      ],
+      [
+        9,
+        'pass',
+        8,
+        { x: 60, y: 18 },
+        { x: 85, y: 12 },
+        11,
+        'Progress on the left',
+        'Avance por la izquierda',
+      ],
+      [
+        14,
+        'pass',
+        11,
+        { x: 85, y: 12 },
+        { x: 93, y: 31 },
+        9,
+        'Back into the centre',
+        'Hacia el centro',
+      ],
+      [
+        17,
+        'shot',
+        9,
+        { x: 93, y: 31 },
+        { x: 104, y: 33 },
+        undefined,
+        'The close-range shot',
+        'El remate cercano',
+      ],
+      [
+        18,
+        'goal',
+        9,
+        { x: 104, y: 33 },
+        { x: 105, y: 33 },
+        undefined,
+        'The move pays off',
+        'La jugada termina en gol',
+      ],
+    ],
+    {
+      en: 'Follow the ball across the pitch, then back into the centre.',
+      es: 'Sigue el balón por el campo y después hacia el centro.',
+    },
+  ),
+  makeScenario(
+    'no-finish',
+    'Possession isn’t a promise',
+    'A passing sequence. A save. No goal.',
+    '03',
+    503,
+    54 * 60,
+    [
+      [
+        1,
+        'recovery',
+        4,
+        { x: 40, y: 42 },
+        { x: 40, y: 42 },
+        undefined,
+        'A new sequence',
+        'Una nueva secuencia',
+      ],
+      [
+        5,
+        'pass',
+        4,
+        { x: 40, y: 42 },
+        { x: 56, y: 23 },
+        6,
+        'Building patiently',
+        'Construcción paciente',
+      ],
+      [
+        10,
+        'pass',
+        6,
+        { x: 56, y: 23 },
+        { x: 69, y: 42 },
+        10,
+        'Another connection',
+        'Otra conexión',
+      ],
+      [
+        14,
+        'pass',
+        10,
+        { x: 69, y: 42 },
+        { x: 79, y: 28 },
+        9,
+        'An opening to shoot',
+        'Oportunidad de remate',
+      ],
+      [
+        17,
+        'shot',
+        9,
+        { x: 79, y: 28 },
+        { x: 100, y: 34 },
+        undefined,
+        'A shot from distance',
+        'Un remate lejano',
+      ],
+      [
+        18,
+        'save',
+        9,
+        { x: 100, y: 34 },
+        { x: 101, y: 34 },
+        undefined,
+        'Saved by Atlas',
+        'Parada de Atlas',
+      ],
+    ],
+    {
+      en: 'Three completed passes. A shot. Still no goal.',
+      es: 'Tres pases completados. Un remate. Ningún gol.',
+    },
+  ),
+];
