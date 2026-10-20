@@ -6,14 +6,17 @@ A visual football match companion built for Microsoft + Premier League's Inside 
 
 [Innovation Studio project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704)
 
-![Tactical replay workspace](docs/screenshots/tactical-studio.jpg)
+![Interactive 3D stadium](docs/screenshots/stadium-3d.jpg)
 
-## Current milestone: tactical replay workspace
+## Current milestone: interactive 3D replay
 
 This first implementation runs locally without credentials. It includes:
 
 - Three original fictional match sequences, including a sequence that ends in a save.
-- An animated 22-player pitch, ball movement, player focus, trails and replay controls.
+- A Three.js stadium with procedural kits, articulated players, goals, instanced seating, floodlights, shadows and bloom.
+- Broadcast, overhead and follow-play cameras; drag to orbit and scroll to zoom.
+- Full-width stadium mode, expandable analysis notebook, accessible player selector and 2D fallback.
+- Animated 22-player tracking, ball movement, player focus, trails and replay controls.
 - A scoreboard and statistics computed from events visible at the selected time.
 - Clickable, versioned event evidence and coordinate-derived passing distances.
 - Rule-based fan/analyst explanations in English and Spanish.
@@ -43,10 +46,10 @@ npm run preview
 
 ## Read the play
 
-1. Open directly into a selected pass and its pitch annotation.
+1. Open into the 3D stadium; select Broadcast, Overhead or Follow play. Drag the scene to orbit, or scroll to zoom.
 2. Select another moment in the buildup strip, or use play and the scrubber.
 3. Compare positions two seconds earlier; lane and receiving-space distances update.
-4. Select a player to inspect their current coordinates.
+4. Select a player on the field or with the player-focus dropdown. Follow play tracks that player when selected. Use Show analysis to inspect their coordinates.
 5. Switch the geometric layers, audience detail or explanation language.
 6. Inspect the evidence or export the analysis. Earlier-frame comparisons are retrospective inspections of the selected event.
 
@@ -66,6 +69,7 @@ src/core/spatial.ts     Finite-segment and receiving-point measurements
 src/core/spatial.test.ts Geometry edge cases and opponent selection
 src/App.tsx            Pitch, replay, evidence and personalization
 src/styles.css         Responsive tactical workspace
+src/scene/Stadium.tsx   Three.js renderer, procedural scene and camera controls
 docs/architecture.md   Data contract, boundaries and next milestones
 ```
 

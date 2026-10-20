@@ -54,3 +54,11 @@ The existing Azure capability check from planning is not an implemented applicat
 ## Verification boundaries
 
 Core tests check temporal scoring, duplicates, delayed arrivals, correction replacement, coordinate distances, interpolation, saved-shot behavior and current-time overlay scope. These do not establish football realism, narrative usefulness, production resilience or AI quality. Browser checks are reported separately from core tests.
+
+## 3D renderer
+
+`Stadium.tsx` is lazy-loaded with Three.js. The scene maps match x/y metres into world x/z coordinates, centred on the pitch. Players and ball share the same interpolation and selected time as the 2D renderer. Limb animation illustrates motion; it is not measured biomechanics. All geometry, pitch texture, kits, seating and labels are generated locally, without external models or licensed footage.
+
+OrbitControls supplies orbit/pan/zoom. Camera presets interpolate to broadcast, overhead or a player/ball-follow position. Reduced-motion preference disables camera interpolation. WebGL context creation/loss exposes a 2D fallback. A keyboard-accessible dropdown provides player focus alongside canvas picking.
+
+Rendering is capped near 30 fps and device pixel ratio 1.5; seating is instanced. Bloom and output colour conversion use Three.js postprocessing. ResizeObserver resizes render targets. Unmount cancels the animation loop and disposes scene materials, textures, geometries, controls, postprocessing targets and the WebGL context. The 3D chunk is roughly 154 KB gzipped; Vite reports a >500 KB uncompressed-chunk warning. Broad device performance testing remains outstanding.

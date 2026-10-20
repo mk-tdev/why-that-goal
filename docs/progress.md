@@ -20,3 +20,9 @@ The initial interface was rejected by the user. Replaced the entire application 
 Added three spatial tests (finite-segment clamping, zero-length segments, opponent selection/time-sensitive tracking), bringing the suite to 12. The prior entry records historical checks of the rejected version, not acceptance of the redesign. See [product reset](product-reset.md) for research, rationale and remaining work. The same synthetic fixture limitations and missing Foundry integration remain.
 
 Redesign verification: production build and all 12 tests passed. Browser checks confirmed playback advancing to the goal, comparison changing clearance from 3.0 m to 3.3 m, player coordinate inspection, and a 390px viewport with no horizontal overflow. Downloaded JSON was checked for exactly three visible events through second 8 and the selected spatial measurement. Desktop screenshot saved as `docs/screenshots/tactical-studio.jpg`.
+
+## 20 October 2026 — Three.js spatial replay
+
+Added a lazy-loaded WebGL stadium with procedural pitch texture, 22 articulated players, goals, 2,400 instanced seats, floodlights, shadows and bloom. Broadcast, overhead and follow cameras support orbit/pan/zoom. The same match-time state drives both renderers and geometry overlays. Added full-width stadium mode, a player dropdown and a 2D fallback with cleanup of GPU resources.
+
+Verified in the browser: real 3D rendering, camera transitions, player focus connected to the notebook, switching to 2D while retaining selection/time, and 390px layout without horizontal overflow. TypeScript/production build and all 12 core tests pass. The 3D chunk is about 155 KB gzipped; Vite retains an uncompressed-chunk size warning. Broad mobile GPU benchmarking and automated context-loss testing have not been performed. This remains synthetic replay with deterministic analysis; Foundry integration is still pending.

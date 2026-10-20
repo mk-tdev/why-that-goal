@@ -1174,3 +1174,476 @@ h1 span {
     scroll-behavior: auto !important;
   }
 }
+
+/* Spatial replay: the stadium is the primary surface. */
+.desk-3d {
+  --line: #25323c;
+  --orange: #e7ad63;
+  background: #0d151e;
+  color: #d8e6e8;
+  min-height: 100vh;
+}
+.desk-3d .app-bar {
+  background: #0d151e;
+  border-color: #25323c;
+}
+.desk-3d .brand-mark {
+  background: #dfa960;
+  color: #111c24;
+}
+.desk-3d .workspace-name,
+.desk-3d .prototype-label {
+  color: #81959f;
+}
+.desk-3d .export {
+  background: #1d323b;
+  color: #c5dce1;
+  border: 1px solid #304852;
+}
+.desk-3d .tool-rail {
+  background: #101b24;
+  border-color: #25323c;
+}
+.desk-3d h1 {
+  color: #e7f0f1;
+}
+.desk-3d .scenario-select select {
+  color: #c3d2d7;
+  border-color: #344651;
+}
+.desk-3d select option {
+  background: #13232d;
+  color: #dbe8eb;
+}
+.desk-3d .working-area,
+.desk-3d .notebook {
+  background: #14212b;
+  border-color: #2a3b46;
+}
+.desk-3d .replay-surface {
+  border-color: #2a3b46;
+}
+.desk-3d .canvas-toolbar {
+  background: #14212b;
+}
+.desk-3d .view-tabs button {
+  color: #8b9faa;
+}
+.desk-3d .view-tabs .active {
+  color: #f2c98f;
+  border-color: #e6b374;
+}
+.desk-3d .match-stage {
+  padding-top: 0;
+  background: #070e17;
+}
+.desk-3d .broadcast-score {
+  z-index: 3;
+  left: 28px;
+  top: 26px;
+}
+.desk-3d .replay-indicator {
+  z-index: 3;
+  top: 36px;
+  right: 28px;
+}
+.desk-3d .stage-bottom {
+  display: none;
+}
+.desk-3d .transport {
+  background: #12202a;
+  color: #b6cbd1;
+}
+.desk-3d .transport time {
+  color: #b6cbd1;
+}
+.desk-3d .play {
+  background: #edba79;
+  color: #1a242b;
+}
+.desk-3d .scrub input {
+  background: #354752;
+}
+.desk-3d .scrub input::-webkit-slider-thumb {
+  background: #f1c188;
+}
+.desk-3d .sequence-title {
+  color: #9fb5bd;
+}
+.desk-3d .filmstrip {
+  background: #13212b;
+}
+.desk-3d .mini-pitch {
+  background: #1e343a;
+  border-color: #324b50;
+}
+.desk-3d .mini-pitch svg {
+  stroke: #54706d;
+}
+.desk-3d .mini-pitch .mini-player {
+  fill: #8ca7a1;
+}
+.desk-3d .mini-pitch .mini-ball {
+  fill: #ebbd7c;
+}
+.desk-3d .mini-pitch .mini-pass {
+  stroke: #ebbd7c;
+}
+.desk-3d .mini-pitch span {
+  background: #182c33;
+  color: #a6bdbf;
+}
+.desk-3d .film-frame.selected .mini-pitch {
+  border-color: #e8b47a;
+  box-shadow: 0 0 0 1px #e8b47a;
+}
+.desk-3d .selected .frame-label,
+.desk-3d .selected .frame-label b {
+  color: #e8bd86;
+}
+.desk-3d .frame-label {
+  color: #8aa3ae;
+}
+.desk-3d .note-body h2 {
+  color: #e1edf1;
+}
+.desk-3d .note-body h2 em {
+  color: #7ca5ad;
+}
+.desk-3d .explanation {
+  color: #9bb1bb;
+}
+.desk-3d .measurement {
+  border-color: #293c46;
+}
+.desk-3d .measurement strong {
+  color: #dce8ed;
+}
+.desk-3d .connection,
+.desk-3d .audience-row,
+.desk-3d .evidence-details {
+  border-color: #30434d;
+}
+.desk-3d .audience-row .selected {
+  color: #ecc28c;
+  border-color: #ecc28c;
+}
+.desk-3d .compare-note,
+.desk-3d .evidence-details summary {
+  color: #85c8cf;
+}
+.desk-3d .player-inspector {
+  background: #1d3540;
+  color: #99b3bc;
+}
+.desk-3d .player-inspector strong {
+  color: #d2e6e8;
+}
+.desk-3d .notebook-heading {
+  color: #9bb2bf;
+}
+.desk-3d .notebook-footer {
+  color: #86a1ad;
+}
+.desk-3d .status-bar {
+  color: #718995;
+}
+.desk-3d .note-number {
+  color: #e8b47a;
+}
+.scene-view-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.scene-view-controls button {
+  font-size: 10px;
+  color: #c1d7df;
+  white-space: nowrap;
+}
+.scene-view-controls button:first-child {
+  color: #e8bc80;
+}
+.canvas-toolbar {
+  gap: 15px;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 48px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.view-tabs {
+  min-height: 32px;
+  margin-left: auto;
+}
+.desk-immersive .working-area {
+  grid-template-columns: minmax(0, 1fr);
+}
+.desk-immersive .notebook {
+  display: none;
+}
+.desk-immersive .replay-surface {
+  border-right: 0;
+}
+.desk-immersive .filmstrip {
+  gap: 12px;
+}
+.desk-immersive .mini-pitch {
+  aspect-ratio: 2.8;
+}
+.desk-immersive .mini-pitch svg {
+  max-height: 75px;
+}
+.stadium-shell {
+  height: 570px;
+  position: relative;
+  isolation: isolate;
+}
+.desk-immersive .stadium-shell {
+  height: min(69vh, 760px);
+  min-height: 480px;
+}
+.stadium-canvas {
+  position: absolute;
+  inset: 0;
+}
+.stadium-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+.stadium-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #070e1766 0%,
+    transparent 22%,
+    transparent 65%,
+    #070e17c9 100%
+  );
+}
+.scene-caption {
+  position: absolute;
+  left: 28px;
+  bottom: 88px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.scene-caption > span {
+  font: 8px monospace;
+  letter-spacing: 2px;
+  color: #89a9bc;
+}
+.scene-caption strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #e5f0f5;
+}
+.scene-caption small {
+  font-size: 9px;
+  color: #7e9ead;
+}
+.camera-deck {
+  position: absolute;
+  bottom: 29px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #101d28df;
+  border: 1px solid #2f4655;
+  padding: 5px;
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+}
+.camera-deck > span {
+  font: 8px monospace;
+  color: #6f92a5;
+  letter-spacing: 1px;
+  padding: 0 10px;
+}
+.camera-deck button {
+  font-size: 10px;
+  color: #91b3c2;
+  padding: 8px 12px;
+  border-radius: 2px;
+}
+.camera-deck button.active {
+  background: #314855;
+  color: #f0cb94;
+}
+.camera-deck button:hover {
+  background: #243b49;
+}
+.orbit-hint {
+  position: absolute;
+  right: 28px;
+  bottom: 41px;
+  font: 8px monospace;
+  letter-spacing: 1px;
+  color: #718e9d;
+  pointer-events: none;
+}
+.orbit-hint span {
+  margin: 0 8px;
+}
+.stadium-loading {
+  height: 570px;
+  display: grid;
+  place-items: center;
+  background: #070e17;
+  color: #8aafb9;
+  font: 12px monospace;
+}
+.webgl-error {
+  position: absolute;
+  inset: 0;
+  background: #0c1725ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #c6dce5;
+  font-size: 13px;
+}
+.webgl-error button {
+  border: 1px solid #7fa5b4;
+  padding: 12px 20px;
+  margin-top: 10px;
+  color: #f3c283;
+}
+@media (max-width: 1150px) {
+  .desk-3d .canvas-toolbar .view-tabs {
+    margin-left: 0;
+  }
+  .scene-view-controls {
+    gap: 10px;
+  }
+  .scene-view-controls button {
+    font-size: 9px;
+  }
+  .orbit-hint {
+    display: none;
+  }
+  .camera-deck {
+    left: 20px;
+  }
+  .scene-caption {
+    left: 20px;
+  }
+  .stadium-shell {
+    height: 550px;
+  }
+}
+@media (max-width: 560px) {
+  .desk-immersive .stadium-shell,
+  .stadium-shell {
+    height: 530px;
+    min-height: 0;
+  }
+  .scene-caption {
+    bottom: 92px;
+  }
+  .scene-caption strong {
+    font-size: 30px;
+  }
+  .camera-deck {
+    left: 12px;
+    right: 12px;
+    bottom: 25px;
+    justify-content: center;
+    gap: 2px;
+  }
+  .camera-deck > span {
+    display: none;
+  }
+  .camera-deck button {
+    padding: 9px 11px;
+    font-size: 10px;
+  }
+  .desk-3d .canvas-toolbar {
+    gap: 5px 12px;
+    padding: 8px 12px;
+  }
+  .scene-view-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .desk-3d .view-tabs {
+    margin-right: auto;
+  }
+  .desk-3d .broadcast-score {
+    left: 15px;
+    top: 20px;
+  }
+  .desk-3d .replay-indicator {
+    right: 15px;
+    top: 29px;
+  }
+  .desk-immersive .mini-pitch {
+    aspect-ratio: 1.8;
+  }
+  .desk-3d .status-bar {
+    line-height: 1.7;
+  }
+  .desk-3d .notebook {
+    border-top: 1px solid #2a3b46;
+  }
+}
+.desk-3d .broadcast-score {
+  color: #172d30;
+}
+.scene-player-select {
+  position: absolute;
+  right: 28px;
+  top: 69px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+.scene-player-select > span {
+  font: 7px monospace;
+  letter-spacing: 1px;
+  color: #7296a5;
+}
+.scene-player-select select {
+  font-size: 10px;
+  background: #0b1b27b0;
+  color: #a9c5d2;
+  border: 1px solid #28404e;
+  padding: 7px 9px;
+  max-width: 160px;
+  border-radius: 3px;
+}
+.scene-player-select option {
+  background: #10242f;
+  color: #cce0e9;
+}
+@media (max-width: 560px) {
+  .scene-player-select {
+    right: 15px;
+    top: 57px;
+  }
+  .scene-player-select select {
+    font-size: 9px;
+    max-width: 135px;
+    padding: 6px;
+  }
+  .scene-player-select > span {
+    display: none;
+  }
+}
+.desk:not(.desk-3d) .scene-view-controls button {
+  color: #55634c;
+}
+.desk:not(.desk-3d) .scene-view-controls button:first-child {
+  color: #b66b36;
+}

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
+const Stadium = lazy(() => import('./scene/Stadium'));
 import { scenarios } from './core/scenarios';
 import {
   clock,
@@ -224,6 +225,8 @@ function Field({
 }
 
 export default function App() {
+  const [threeD, setThreeD] = useState(true);
+  const [immersive, setImmersive] = useState(true);
   const [sceneId, setSceneId] = useState(scenarios[0].id),
     [time, setTime] = useState(8),
     [selected, setSelected] = useState(2),
@@ -330,7 +333,7 @@ export default function App() {
       ? `${player.name} moves the ball ${spatial.progress.toFixed(1)} m forward and ${sideways.toFixed(1)} m across the pitch. At ${clock(scene.baseClock, displayTime)}, the receiving point is ${spatial.receiver.receiverDistance.toFixed(1)} m from the nearest defender. ${analyst ? `The nearest opponent to the pass segment is ${spatial.lane.player.name}, ${spatial.lane.laneDistance.toFixed(1)} m away. These are frame measurements, not interception probabilities.` : 'The shaded circle shows that space; the pink marker identifies the defender closest to the passing lane.'}`
       : `${player.name} avanza el balón ${spatial.progress.toFixed(1)} m y lo desplaza ${sideways.toFixed(1)} m lateralmente. A las ${clock(scene.baseClock, displayTime)}, el punto de recepción está a ${spatial.receiver.receiverDistance.toFixed(1)} m del defensor más cercano. Son distancias geométricas, no probabilidades.`;
   return (
-    <div className="desk">
+    <div className={`desk ${immersive ? 'desk-immersive' : ''} ${threeD ? 'desk-3d' : ''}`}>
       <header className="app-bar">
         <a className="brand" href="/" aria-label="Why That Goal home">
           <span className="brand-mark">
@@ -342,7 +345,7 @@ export default function App() {
         </a>
         <span className="app-divider" />
         <span className="workspace-name">
-          Match studio <span>/</span> Untitled analysis
+          Spatial replay <span>/</span> Northstar vs Atlas
         </span>
         <div className="header-actions">
           <span className="prototype-label">
@@ -366,7 +369,10 @@ export default function App() {
           <button
             className={drawer ? 'rail-active' : ''}
             aria-label="Open evidence notebook"
-            onClick={() => setDrawer(!drawer)}
+            onClick={() => {
+              setDrawer(!drawer);
+              setImmersive(false);
+            }}
           >
             <Glyph kind="layers" />
             <span>Evidence</span>
@@ -374,7 +380,7 @@ export default function App() {
           <div className="rail-bottom">
             WTG
             <br />
-            <span>0.2</span>
+            <span>0.3</span>
           </div>
         </nav>
         <main className="studio">
@@ -403,6 +409,14 @@ export default function App() {
           <div className="working-area">
             <section className="replay-surface" aria-label="Match replay">
               <div className="canvas-toolbar">
+                <div className="scene-view-controls">
+                  <button aria-pressed={threeD} onClick={() => setThreeD(!threeD)}>
+                    {threeD ? '◈  3D Stadium' : '◇  Switch to 3D'}
+                  </button>
+                  <button aria-pressed={!immersive} onClick={() => setImmersive(!immersive)}>
+                    {immersive ? 'Show analysis ↗' : 'Expand stadium ↗'}
+                  </button>
+                </div>
                 <div className="view-tabs">
                   <button
                     className={layer === 'space' ? 'active' : ''}
@@ -447,15 +461,32 @@ export default function App() {
                 <span className="replay-indicator">
                   {comparison ? 'EARLIER FRAME' : playing ? 'REPLAYING' : 'PAUSED'} <i />
                 </span>
-                <Field
-                  scene={scene}
-                  time={displayTime}
-                  event={event}
-                  layer={layer}
-                  focus={focus}
-                  onFocus={setFocus}
-                  comparison={comparison}
-                />
+                {threeD ? (
+                  <Suspense
+                    fallback={<div className="stadium-loading">Preparing the stadium…</div>}
+                  >
+                    <Stadium
+                      scene={scene}
+                      time={displayTime}
+                      event={event}
+                      layer={layer}
+                      focus={focus}
+                      onFocus={setFocus}
+                      comparison={comparison}
+                      onFallback={() => setThreeD(false)}
+                    />
+                  </Suspense>
+                ) : (
+                  <Field
+                    scene={scene}
+                    time={displayTime}
+                    event={event}
+                    layer={layer}
+                    focus={focus}
+                    onFocus={setFocus}
+                    comparison={comparison}
+                  />
+                )}
                 <div className="stage-bottom">
                   <span>
                     <i className="team-dot home" /> Northstar <i className="team-dot away" /> Atlas
@@ -764,7 +795,7 @@ export default function App() {
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
             </span>
             <span>
-              Foundry integration pending <b>·</b> v0.2
+              Foundry integration pending <b>·</b> v0.3
             </span>
           </footer>
         </main>
