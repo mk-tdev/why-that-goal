@@ -226,6 +226,7 @@ function Field({
 }
 
 export default function App() {
+  const [playbackRate, setPlaybackRate] = useState(1);
   const [threeD, setThreeD] = useState(true);
   const [immersive, setImmersive] = useState(true);
   const [sceneId, setSceneId] = useState(scenarios[0].id),
@@ -253,14 +254,14 @@ export default function App() {
     const id = window.setInterval(() => {
       const now = performance.now();
       setTime((t) => {
-        const next = Math.min(scene.duration, t + (now - previous) / 1000);
+        const next = Math.min(scene.duration, t + ((now - previous) / 1000) * playbackRate);
         previous = now;
         if (next >= scene.duration) setPlaying(false);
         return next;
       });
     }, 32);
     return () => clearInterval(id);
-  }, [playing, scene.duration]);
+  }, [playing, scene.duration, playbackRate]);
   useEffect(() => {
     if (playing) {
       const i = scene.events.reduce((last, e, i) => (e.at <= time ? i : last), -1);
@@ -381,7 +382,7 @@ export default function App() {
           <div className="rail-bottom">
             WTG
             <br />
-            <span>0.4</span>
+            <span>0.5</span>
           </div>
         </nav>
         <main className="studio">
@@ -551,7 +552,15 @@ export default function App() {
                     ))}
                   </div>
                 </div>
-                <span className="duration">{scene.duration}s</span>
+                <button
+                  className="speed-control"
+                  aria-label="Toggle slow motion"
+                  aria-pressed={playbackRate === 0.5}
+                  onClick={() => setPlaybackRate(playbackRate === 1 ? 0.5 : 1)}
+                >
+                  {playbackRate === 1 ? '1×' : '.5×'}
+                  <span>{playbackRate === 1 ? 'Speed' : 'Slow'}</span>
+                </button>
                 <span className="transport-divider" />
                 <button
                   className="small-button"
@@ -792,7 +801,7 @@ export default function App() {
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
             </span>
             <span>
-              Foundry integration pending <b>·</b> v0.4
+              Foundry integration pending <b>·</b> v0.5
             </span>
           </footer>
         </main>

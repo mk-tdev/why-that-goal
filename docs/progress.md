@@ -34,3 +34,9 @@ Replaced all three native select menus, the native range input and the details/s
 Refined camera controls with vector icons, segmented visualization layers, framed scene controls, highlighted timeline progress, filmstrip selection and rounded panel edges. Foundry remains disconnected.
 
 Browser verification: keyboard scenario selection, player typeahead, Escape dismissal, slider increments (0 → 0.1 → 1.1 seconds), language selection and evidence expansion all worked. DOM inspection found zero select elements, native range inputs or details widgets. At 390px, the menu stayed within the viewport and document width remained 390px.
+
+## 20 October 2026 — Football motion
+
+Replaced sliding formation interpolation with smooth speed-bounded routes, receiving/carrying positions, defensive retreat and support runs. Added timed ground passes, lofted switches, shot contact/arrival, goalkeeper reactions, net and save rebounds, distance-driven running animation, contextual ball-phase labels and half-speed playback. Removed the original seeded jitter generator; retained seed as fixture provenance.
+
+19 tests pass, including seven new motion checks: speed bounds, contact/reception alignment, position/height continuity, loft versus ground height, shot speed/outcomes, deterministic scrubbing and player separation. Browser inspection confirmed an airborne switch, half-speed playback and the existing follow camera. These are designed synthetic sequences with approximate animation, not a calibrated football physics or tactics simulator. Foundry remains disconnected.

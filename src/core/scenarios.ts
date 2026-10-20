@@ -1,4 +1,5 @@
-import type { EventType, Keyframe, MatchEvent, Player, Point, Scenario } from './model';
+import { buildMotion } from './motion';
+import type { EventType, MatchEvent, Player, Point, Scenario } from './model';
 
 const names = [
   'Mora',
@@ -37,11 +38,6 @@ function makeScenario(
   actions: Action[],
   thesis: Scenario['thesis'],
 ): Scenario {
-  let randomState = seed;
-  const random = () => {
-    randomState = (randomState * 1664525 + 1013904223) >>> 0;
-    return randomState / 2 ** 32;
-  };
   const duration = actions[actions.length - 1][0] + 3;
   const players: Player[] = ['home', 'away'].flatMap((team, side) =>
     names.map((name, i) => ({
@@ -81,63 +77,29 @@ function makeScenario(
       label: { en: en ?? type, es: es ?? type },
     }),
   );
-  const tracks: Record<string, Keyframe[]> = {};
-  for (const p of players) {
-    const base = formation[p.number - 1];
-    const start = {
-      x: p.team === 'home' ? base.x : 105 - base.x,
-      y: p.team === 'home' ? base.y : 68 - base.y,
-    };
-    const jitter = { x: (random() - 0.5) * 3, y: (random() - 0.5) * 3 };
-    const frames: Keyframe[] = [
-      { at: 0, point: start },
-      {
-        at: duration,
-        point: {
-          x: Math.max(2, Math.min(103, start.x + (p.team === 'home' ? 10 : -4) + jitter.x)),
-          y: Math.max(2, Math.min(66, start.y + jitter.y)),
-        },
+  return buildMotion(
+    {
+      id,
+      title,
+      subtitle,
+      chapter,
+      home: 'Northstar FC',
+      away: 'Atlas Athletic',
+      baseClock,
+      duration,
+      seed,
+      players,
+      events,
+      tracks: {},
+      ball: [],
+      thesis,
+      limitation: {
+        en: 'These are authored synthetic events. Spatial movement is illustrative; it does not prove tactical causality.',
+        es: 'Eventos sintéticos diseñados. El movimiento es ilustrativo y no demuestra causalidad táctica.',
       },
-    ];
-    for (const e of events) {
-      if (e.player === p.id && e.type !== 'goal')
-        frames.push({ at: Math.max(0, e.at - (e.type === 'pass' ? 2 : 0)), point: e.from });
-      if (e.recipient === p.id) frames.push({ at: e.at, point: e.to });
-    }
-    const unique = new Map<number, Keyframe>();
-    for (const f of frames) unique.set(f.at, f);
-    tracks[p.id] = [...unique.values()].sort((a, b) => a.at - b.at);
-  }
-  const ballFrames: Keyframe[] = [{ at: 0, point: events[0].from }];
-  for (const e of events) {
-    ballFrames.push({
-      at: Math.max(0, e.at - (e.type === 'pass' || e.type === 'shot' ? 1.5 : 0)),
-      point: e.from,
-    });
-    ballFrames.push({ at: e.at, point: e.to });
-  }
-  const uniqueBall = new Map<number, Keyframe>();
-  for (const f of ballFrames) uniqueBall.set(f.at, f);
-  return {
-    id,
-    title,
-    subtitle,
-    chapter,
-    home: 'Northstar FC',
-    away: 'Atlas Athletic',
-    baseClock,
-    duration,
-    seed,
-    players,
-    events,
-    tracks,
-    ball: [...uniqueBall.values()].sort((a, b) => a.at - b.at),
-    thesis,
-    limitation: {
-      en: 'These are authored synthetic events. Spatial movement is illustrative; it does not prove tactical causality.',
-      es: 'Eventos sintéticos diseñados. El movimiento es ilustrativo y no demuestra causalidad táctica.',
     },
-  };
+    formation,
+  );
 }
 
 export const scenarios: Scenario[] = [

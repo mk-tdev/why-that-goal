@@ -2186,3 +2186,39 @@ h1 span {
     transition: none;
   }
 }
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font: 11px monospace;
+  padding: 6px 9px;
+  border: 1px solid #36515f;
+  border-radius: 4px;
+  color: #bcd0d8;
+  white-space: nowrap;
+}
+.speed-control span {
+  font:
+    8px 'DM Sans',
+    sans-serif;
+  color: #7897a5;
+}
+.speed-control[aria-pressed='true'] {
+  border-color: #c69b64;
+  color: #f1c891;
+  background: #b8883420;
+}
+@media (max-width: 560px) {
+  .speed-control {
+    padding: 6px;
+  }
+  .speed-control span {
+    display: none;
+  }
+}
+.motion-phase {
+  color: #c4dce4;
+}
+.speed-control:hover {
+  background: #304551;
+}

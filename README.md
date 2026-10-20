@@ -17,7 +17,9 @@ This first implementation runs locally without credentials. It includes:
 - Broadcast, overhead and follow-play cameras; drag to orbit and scroll to zoom.
 - Full-width stadium mode, expandable analysis notebook, accessible player selector and 2D fallback.
 - Custom sequence/player/language menus with keyboard navigation and typeahead; custom pointer/keyboard replay slider and evidence disclosure.
-- Animated 22-player tracking, ball movement, player focus, trails and replay controls.
+- Smooth player runs, distance-driven gait, settling touches, timed kicks and goalkeeper reactions.
+- Ground-pass deceleration, lofted switches, shot flight and goal/save rebounds.
+- Half-speed playback, player focus, trails and replay controls.
 - A scoreboard and statistics computed from events visible at the selected time.
 - Clickable, versioned event evidence and coordinate-derived passing distances.
 - Rule-based fan/analyst explanations in English and Spanish.
@@ -56,7 +58,7 @@ npm run preview
 
 ## Data and interpretation
 
-All teams, players, events and tracking are fictional, authored in this repository. The pitch uses metres in a 105 × 68 coordinate system. A seeded generator creates background player movement; keyframes illustrate the authored event sequences. This is not a physics-calibrated match simulator or a licensed live feed.
+All teams, players, events and tracking are fictional, authored in this repository. The pitch uses metres in a 105 × 68 coordinate system. Authored routes are baked into smooth, speed-bounded tracking. Passes have explicit release/arrival timing, ground deceleration or a gravity-based arc; shots terminate at the recorded outcome. Goal and save rebounds are authored damped responses. The seed field is retained as a fixture identifier. This is not a physics-calibrated match simulator or a licensed live feed.
 
 Distance is computed from coordinates. No xG, success probabilities, measured pressing intensity, or causal claims about off-ball movement are presented. Interpolated animation is illustrative; a real event reference does not prove a tactical interpretation.
 
@@ -64,7 +66,7 @@ Distance is computed from coordinates. No xG, success probabilities, measured pr
 
 ```text
 src/core/model.ts       Event visibility, revisions, metrics, templates, exports
-src/core/scenarios.ts   Original synthetic events and seeded tracking
+src/core/scenarios.ts   Original synthetic match fixtures
 src/core/model.test.ts  Event integrity and temporal tests
 src/core/spatial.ts     Finite-segment and receiving-point measurements
 src/core/spatial.test.ts Geometry edge cases and opponent selection

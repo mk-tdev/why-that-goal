@@ -1,3 +1,4 @@
+import { ballMotion, playerMotion } from '../core/motion';
 import { Select } from '../ui/Controls';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -323,6 +324,7 @@ export default function Stadium(props: Props) {
       string,
       {
         group: THREE.Group;
+        rig: THREE.Group;
         legs: THREE.Group[];
         arms: THREE.Group[];
         ring: THREE.Mesh;
@@ -332,6 +334,9 @@ export default function Stadium(props: Props) {
     const pickables: THREE.Object3D[] = [];
     for (const p of latest.current.scene.players) {
       const group = new THREE.Group();
+      const rig = new THREE.Group();
+      rig.scale.setScalar(0.76);
+      group.add(rig);
       group.userData.playerId = p.id;
       world.add(group);
       const home = p.team === 'home';
@@ -347,17 +352,17 @@ export default function Stadium(props: Props) {
       const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.37, 0.55, 4, 8), kit);
       body.position.y = 1.48;
       body.castShadow = true;
-      group.add(body);
+      rig.add(body);
       const head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8), skin);
       head.position.y = 2.25;
       head.castShadow = true;
-      group.add(head);
+      rig.add(head);
       const hair = new THREE.Mesh(
         new THREE.SphereGeometry(0.245, 8, 6, 0, Math.PI * 2, 0, 1.5),
         new THREE.MeshStandardMaterial({ color: '#202329' }),
       );
       hair.position.y = 2.28;
-      group.add(hair);
+      rig.add(hair);
       const legs: THREE.Group[] = [],
         arms: THREE.Group[] = [];
       for (const side of [-1, 1]) {
@@ -373,14 +378,14 @@ export default function Stadium(props: Props) {
         );
         boot.position.set(0, -0.85, 0.1);
         leg.add(boot);
-        group.add(leg);
+        rig.add(leg);
         legs.push(leg);
         const arm = new THREE.Group();
         arm.position.set(side * 0.43, 1.8, 0);
         const sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.45, 3, 6), kit);
         sleeve.position.y = -0.23;
         arm.add(sleeve);
-        group.add(arm);
+        rig.add(arm);
         arms.push(arm);
       }
       const ring = new THREE.Mesh(
@@ -406,10 +411,10 @@ export default function Stadium(props: Props) {
       hit.userData.playerId = p.id;
       group.add(hit);
       pickables.push(hit);
-      actors.set(p.id, { group, legs, arms, ring, tag });
+      actors.set(p.id, { group, rig, legs, arms, ring, tag });
     }
     const ball = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.35, 1),
+      new THREE.IcosahedronGeometry(0.18, 2),
       new THREE.MeshStandardMaterial({
         color: '#ffffff',
         emissive: '#aec7df',
@@ -417,6 +422,14 @@ export default function Stadium(props: Props) {
         roughness: 0.35,
       }),
     );
+    for (let i = 0; i < 3; i++) {
+      const seam = new THREE.Mesh(
+        new THREE.TorusGeometry(0.181, 0.012, 4, 24),
+        new THREE.MeshStandardMaterial({ color: '#243442', roughness: 0.8 }),
+      );
+      seam.rotation.set(i === 0 ? Math.PI / 2 : 0, i === 1 ? Math.PI / 2 : 0, 0);
+      ball.add(seam);
+    }
     ball.castShadow = true;
     world.add(ball);
     const ballHalo = new THREE.Mesh(
@@ -563,27 +576,35 @@ export default function Stadium(props: Props) {
       const p = latest.current;
       for (const player of p.scene.players) {
         const actor = actors.get(player.id)!;
-        const pt = interpolate(p.scene.tracks[player.id], p.time),
-          next = interpolate(p.scene.tracks[player.id], Math.min(p.scene.duration, p.time + 0.1)),
-          prev = interpolate(p.scene.tracks[player.id], Math.max(0, p.time - 0.1));
-        actor.group.position.copy(xyz(pt.x, pt.y));
-        const dx = next.x - prev.x,
-          dz = next.y - prev.y;
-        actor.group.rotation.y = Math.atan2(dx, dz);
-        const stride =
-          Math.sin(p.time * 8 + player.number) * Math.min(0.65, Math.hypot(dx, dz) * 2);
+        const motion = playerMotion(p.scene, player.id, p.time);
+        actor.group.position.copy(xyz(motion.point.x, motion.point.y));
+        actor.group.rotation.y = motion.heading;
+        // Gait phase follows distance travelled, so paused or stationary players do not jog.
+        const phase = (motion.travel * Math.PI * 2) / 2.4;
+        const amplitude = Math.min(0.68, motion.speed * 0.12);
+        const stride = Math.sin(phase) * amplitude;
         actor.legs[0].rotation.x = stride;
-        actor.legs[1].rotation.x = -stride;
+        actor.legs[1].rotation.x = -stride - motion.kick * 0.95;
         actor.arms[0].rotation.x = -stride * 0.7;
         actor.arms[1].rotation.x = stride * 0.7;
+        actor.rig.position.y =
+          -0.12 + Math.abs(Math.sin(phase)) * Math.min(0.055, motion.speed * 0.009);
+        actor.rig.rotation.x = Math.min(0.12, motion.speed * 0.02);
+        actor.rig.rotation.z = motion.dive * 1.15;
+        if (motion.dive) {
+          actor.rig.position.y += motion.dive * 0.65;
+          actor.arms[0].rotation.x = -1.3 * motion.dive;
+          actor.arms[1].rotation.x = -1.3 * motion.dive;
+        }
         const selected = p.focus === player.id;
         actor.tag.visible =
           selected || player.id === p.event.player || player.id === p.event.recipient;
         actor.ring.scale.setScalar(selected ? 1.8 : 1);
       }
-      const bp = interpolate(p.scene.ball, p.time);
-      ball.position.copy(xyz(bp.x, bp.y, 0.4));
-      ball.rotation.z = p.time * 3;
+      const flight = ballMotion(p.scene, p.time),
+        bp = flight.point;
+      ball.position.copy(xyz(bp.x, bp.y, flight.height + 0.07));
+      ball.rotation.set(flight.spin, 0, flight.spin * 0.3);
       ballHalo.position.copy(xyz(bp.x, bp.y, 0.08));
       const overlayKey = [p.scene.id, p.event.id, p.layer, Math.round(p.time * 10)].join(':');
       if (overlayKey !== previousOverlay) {
@@ -637,6 +658,19 @@ export default function Stadium(props: Props) {
       renderer.domElement.remove();
     };
   }, []);
+  const ballState = ballMotion(props.scene, props.time);
+  const phaseLabel =
+    ballState.phase === 'pass'
+      ? ballState.flight?.loft
+        ? 'Lofted pass'
+        : 'Ground pass'
+      : ballState.phase === 'shot'
+        ? 'Shot in flight'
+        : ballState.phase === 'net'
+          ? 'Net contact'
+          : ballState.phase === 'parry'
+            ? 'Save · rebound'
+            : 'Possession · close control';
   return (
     <div className="stadium-shell">
       <div className="stadium-canvas" ref={mount} />
@@ -662,7 +696,9 @@ export default function Stadium(props: Props) {
       <div className="scene-caption">
         <span>SPATIAL REPLAY</span>
         <strong>{props.comparison ? 'Two seconds earlier.' : 'See the whole play.'}</strong>
-        <small>Original synthetic reconstruction</small>
+        <small>
+          <span className="motion-phase">{phaseLabel}</span> · Synthetic reconstruction
+        </small>
       </div>
       <div className="camera-deck">
         <span>CAMERA</span>
