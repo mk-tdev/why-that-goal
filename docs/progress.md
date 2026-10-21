@@ -48,3 +48,11 @@ Added a five-chapter director’s replay for each synthetic sequence: first pass
 The 3D view transitions between chapter-specific camera positions, respects reduced motion, and allows manual orbit. Pitch graphics show gold pass paths, cyan movement traces with an earlier-position marker, and dashed earlier/current receiving-distance rings. Source event IDs, versions and time windows appear in the chapter card. Space changes compare the same fixed receiving point and do not imply causation. The guide is retrospective, deterministic and English-only; Foundry remains disconnected.
 
 28 core tests pass. New tests cover chapter bounds and source references, off-ball possession exclusion, measured space changes and goal/save outcomes across all three scenarios. Desktop inspection confirmed automatic advancement and close camera framing; narrow-screen inspection confirmed the guide moves below the pitch. Existing Three.js bundle-size warning remains.
+
+## 21 October 2026 — Featured attacking sequence
+
+Refined the quick break with late timed runs from Vega and Okafor; the guided off-ball chapter now follows Vega before reception. Replaced capsule actors with articulated knees/elbows, fitted shirts, collars, crests, back numbers, socks, boots and distinct goalkeeper kits. Running animation adds knee recovery, bent arms and restrained body sway, driven by replay distance and speed.
+
+Added camera movement within guide chapters, a lower finish view and closer player inspection. Interactive pitch pins select pass, player and receiving-space evidence, pause playback and frame the subject. The inspector reports current geometry, speed, recent displacement, provenance and possession/flight status. Labels project from world coordinates and separate when nearby; player inspection isolates a recent movement trace. Camera/orbit interaction pauses the guide, and resuming restores the director camera. These remain procedural models and authored synthetic trajectories, not motion capture or a calibrated simulation. Foundry stays disconnected.
+
+Validation: production build and all 28 core tests pass, including bounded speeds, separation and ball-contact alignment after the run changes. Browser checks verified pitch selection, automatic camera transitions and guide pause on inspection. The existing large Three.js chunk warning remains.

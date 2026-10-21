@@ -545,6 +545,12 @@ export default function App() {
                     fallback={<div className="stadium-loading">Preparing the stadium…</div>}
                   >
                     <Stadium
+                      onInspect={(id) => {
+                        setPlaying(false);
+                        setGuideRunning(false);
+                        setFocus(id);
+                      }}
+                      guidePlaying={guideRunning}
                       guide={guide}
                       scene={scene}
                       time={displayTime}

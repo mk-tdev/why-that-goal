@@ -54,7 +54,16 @@ export function buildGuide(s: Scenario): GuideStep[] {
     .filter((p) => p.team === e.team && p.number !== 1 && !involved.has(p.id))
     .map((p) => ({ p, a: interpolate(s.tracks[p.id], start), b: interpolate(s.tracks[p.id], end) }))
     .sort((a, b) => distance(b.a, b.b) - distance(a.a, a.b));
-  const runner = runners[0];
+  const runEnd = s.id === 'quick-break' ? end - 0.15 : end;
+  const featured = s.players.find((p) => p.id === e.recipient)!;
+  const runner =
+    s.id === 'quick-break'
+      ? {
+          p: featured,
+          a: interpolate(s.tracks[featured.id], start),
+          b: interpolate(s.tracks[featured.id], runEnd),
+        }
+      : runners[0];
   const before = inspectSpace(s, e, start).receiver.receiverDistance;
   const after = inspectSpace(s, e, end).receiver.receiverDistance;
   const delta = after - before;
@@ -68,7 +77,7 @@ export function buildGuide(s: Scenario): GuideStep[] {
       title: `${name(runner.p.id)} moves off the ball`,
       event: e,
       start,
-      end,
+      end: runEnd,
       anchor: runner.b,
       player: runner.p.id,
       metric: `${distance(runner.a, runner.b).toFixed(1)} m displacement`,

@@ -126,6 +126,11 @@ export function buildMotion(s: Scenario, formation: Point[]) {
           y: first.point.y + (p.number % 2 ? 1 : -1) * Math.min(2, first.at * 0.4),
         },
       });
+      // In the featured counterattack, the winger and striker time their runs late
+      // rather than drifting toward reception throughout the entire buildup.
+      if (s.id === 'quick-break' && (p.id === 'N-7' || p.id === 'N-9')) {
+        anchors.splice(1, 0, { at: Math.max(0.1, first.at - 2.8), point: { ...anchors[0].point } });
+      }
       // Support after the action, never return to the kickoff formation.
       anchors.push({
         at: s.duration,

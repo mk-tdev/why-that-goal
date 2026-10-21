@@ -1,3 +1,4 @@
+import { footballer } from './Footballer';
 import type { GuideStep } from '../core/guide';
 import { ballMotion, playerMotion, flightFor } from '../core/motion';
 import { Select } from '../ui/Controls';
@@ -8,11 +9,13 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { interpolate, type Scenario, type MatchEvent } from '../core/model';
+import { distance, interpolate, type Scenario, type MatchEvent } from '../core/model';
 import { inspectSpace } from '../core/spatial';
 
 type Props = {
   guide?: GuideStep;
+  guidePlaying: boolean;
+  onInspect: (id: string | null) => void;
   scene: Scenario;
   time: number;
   event: MatchEvent;
@@ -23,6 +26,7 @@ type Props = {
   onFallback: () => void;
 };
 type View = 'broadcast' | 'tactical' | 'follow' | 'free';
+type Evidence = 'pass' | 'run' | 'space';
 const xyz = (x: number, y: number, height = 0) => new THREE.Vector3(x - 52.5, height, y - 34);
 
 function pitchTexture() {
@@ -117,6 +121,15 @@ function disposeObject(root: THREE.Object3D) {
 }
 
 export default function Stadium(props: Props) {
+  const [evidence, setEvidence] = useState<Evidence | null>(null);
+  const evidenceRef = useRef(evidence);
+  evidenceRef.current = evidence;
+  useEffect(() => {
+    if (props.guidePlaying) setEvidence(null);
+  }, [props.guidePlaying]);
+  const markerRefs = useRef<Partial<Record<Evidence, HTMLButtonElement | null>>>({});
+  const inspectRef = useRef<((kind: Evidence) => void) | null>(null);
+  useEffect(() => setEvidence(null), [props.scene.id, props.guide?.id]);
   const mount = useRef<HTMLDivElement>(null),
     latest = useRef(props);
   latest.current = props;
@@ -152,25 +165,28 @@ export default function Stadium(props: Props) {
     world.background = new THREE.Color('#070e17');
     world.fog = new THREE.FogExp2('#070e17', 0.0015);
     const camera = new THREE.PerspectiveCamera(43, 1, 0.1, 500);
-    camera.position.set(75, 87, 105);
+    camera.position.set(36, 48, 62);
     const orbit = new OrbitControls(camera, renderer.domElement);
     orbit.enableDamping = true;
     orbit.dampingFactor = 0.08;
     orbit.minDistance = 18;
     orbit.maxDistance = 330;
     orbit.maxPolarAngle = Math.PI / 2 - 0.07;
-    orbit.target.set(8, 0, 0);
+    orbit.target.set(20, 0, 0);
     orbit.enablePan = true;
     let transitioning = false;
+    let director = false;
     const goalCamera = new THREE.Vector3(),
       goalTarget = new THREE.Vector3();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function switchView(v: View) {
+      latest.current.onInspect(latest.current.focus);
+      director = false;
       cameraMode.current = v;
       transitioning = true;
       if (v === 'broadcast') {
-        goalCamera.set(75, 87, 105).multiplyScalar(Math.max(1, 1.1 / camera.aspect));
-        goalTarget.set(8, 0, 0);
+        goalCamera.set(36, 48, 62).multiplyScalar(Math.max(1, 1.1 / camera.aspect));
+        goalTarget.set(20, 0, 0);
       }
       if (v === 'tactical') {
         goalCamera.set(0, 138, 0.1).multiplyScalar(Math.max(1, 1.1 / camera.aspect));
@@ -183,7 +199,32 @@ export default function Stadium(props: Props) {
       }
     }
     controlsRef.current = { switchView };
+    inspectRef.current = (kind) => {
+      const p = latest.current,
+        id = p.event.recipient ?? p.event.player;
+      const target =
+        kind === 'run'
+          ? interpolate(p.scene.tracks[id], p.time)
+          : kind === 'space'
+            ? p.event.to
+            : { x: (p.event.from.x + p.event.to.x) / 2, y: (p.event.from.y + p.event.to.y) / 2 };
+      director = false;
+      cameraMode.current = 'free';
+      setView('free');
+      goalTarget.copy(xyz(target.x, target.y, 1));
+      goalCamera.copy(
+        xyz(
+          target.x - (kind === 'run' ? 7 : 10),
+          target.y + (kind === 'run' ? 14 : 22),
+          kind === 'space' ? 34 : kind === 'run' ? 9 : 18,
+        ),
+      );
+      transitioning = true;
+      p.onInspect(kind === 'run' ? id : null);
+    };
     const stopTransition = () => {
+      latest.current.onInspect(latest.current.focus);
+      director = false;
       transitioning = false;
       cameraMode.current = 'free';
       setView('free');
@@ -329,6 +370,8 @@ export default function Stadium(props: Props) {
         rig: THREE.Group;
         legs: THREE.Group[];
         arms: THREE.Group[];
+        knees: THREE.Group[];
+        elbows: THREE.Group[];
         ring: THREE.Mesh;
         tag: THREE.Sprite;
       }
@@ -336,60 +379,11 @@ export default function Stadium(props: Props) {
     const pickables: THREE.Object3D[] = [];
     for (const p of latest.current.scene.players) {
       const group = new THREE.Group();
-      const rig = new THREE.Group();
-      rig.scale.setScalar(0.76);
+      const home = p.team === 'home';
+      const { rig, legs, knees, arms, elbows } = footballer(p.number, home);
       group.add(rig);
       group.userData.playerId = p.id;
       world.add(group);
-      const home = p.team === 'home';
-      const kit = new THREE.MeshStandardMaterial({
-        color: home ? '#ffb659' : '#69e1e5',
-        roughness: 0.6,
-      });
-      const skin = new THREE.MeshStandardMaterial({
-        color: ['#b97b59', '#7e4f36', '#d8a17b'][p.number % 3],
-        roughness: 0.9,
-      });
-      const shorts = new THREE.MeshStandardMaterial({ color: home ? '#22364b' : '#e9f0e8' });
-      const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.37, 0.55, 4, 8), kit);
-      body.position.y = 1.48;
-      body.castShadow = true;
-      rig.add(body);
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8), skin);
-      head.position.y = 2.25;
-      head.castShadow = true;
-      rig.add(head);
-      const hair = new THREE.Mesh(
-        new THREE.SphereGeometry(0.245, 8, 6, 0, Math.PI * 2, 0, 1.5),
-        new THREE.MeshStandardMaterial({ color: '#202329' }),
-      );
-      hair.position.y = 2.28;
-      rig.add(hair);
-      const legs: THREE.Group[] = [],
-        arms: THREE.Group[] = [];
-      for (const side of [-1, 1]) {
-        const leg = new THREE.Group();
-        leg.position.set(side * 0.2, 1.1, 0);
-        const mesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.55, 3, 6), shorts);
-        mesh.position.y = -0.38;
-        mesh.castShadow = true;
-        leg.add(mesh);
-        const boot = new THREE.Mesh(
-          new THREE.BoxGeometry(0.25, 0.18, 0.43),
-          new THREE.MeshStandardMaterial({ color: '#f6e8c5' }),
-        );
-        boot.position.set(0, -0.85, 0.1);
-        leg.add(boot);
-        rig.add(leg);
-        legs.push(leg);
-        const arm = new THREE.Group();
-        arm.position.set(side * 0.43, 1.8, 0);
-        const sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.45, 3, 6), kit);
-        sleeve.position.y = -0.23;
-        arm.add(sleeve);
-        rig.add(arm);
-        arms.push(arm);
-      }
       const ring = new THREE.Mesh(
         new THREE.RingGeometry(1.05, 1.18, 40),
         new THREE.MeshBasicMaterial({
@@ -413,7 +407,7 @@ export default function Stadium(props: Props) {
       hit.userData.playerId = p.id;
       group.add(hit);
       pickables.push(hit);
-      actors.set(p.id, { group, rig, legs, arms, ring, tag });
+      actors.set(p.id, { group, rig, legs, knees, arms, elbows, ring, tag });
     }
     const ball = new THREE.Mesh(
       new THREE.IcosahedronGeometry(0.18, 2),
@@ -457,10 +451,21 @@ export default function Stadium(props: Props) {
         const curve = new THREE.CatmullRomCurve3(points);
         const mesh = new THREE.Mesh(
           new THREE.TubeGeometry(curve, 48, r, 6, false),
-          new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(1.7) }),
+          new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(1.15) }),
         );
         overlays.add(mesh);
       };
+      if (p.focus) {
+        const points = Array.from({ length: 25 }, (_, i) => {
+          const pt = interpolate(
+            p.scene.tracks[p.focus!],
+            Math.max(0, p.time - 2) + (Math.min(2, p.time) * i) / 24,
+          );
+          return xyz(pt.x, pt.y, 0.15);
+        });
+        if (p.time > 0.01) line(points, '#73e6de', 0.1);
+      }
+      if (evidenceRef.current === 'run') return;
       if (p.guide) {
         const g = p.guide,
           t = Math.max(g.start, Math.min(g.end, p.time));
@@ -585,7 +590,8 @@ export default function Stadium(props: Props) {
         const tag = label(`${m.lane.laneDistance.toFixed(1)} m · CLEARANCE`, '#ff718b');
         tag.position.copy(xyz(m.lane.projection.x, m.lane.projection.y, 7));
         tag.scale.set(12, 3, 1);
-        overlays.add(tag);
+        // HTML evidence pins provide the readable measurement for this view.
+        disposeObject(tag);
       }
       if (p.layer === 'trails')
         for (const player of p.scene.players.filter((q) => q.team === 'home')) {
@@ -612,7 +618,7 @@ export default function Stadium(props: Props) {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       if (initialSize) {
-        camera.position.set(75, 87, 105).multiplyScalar(Math.max(1, 1.1 / camera.aspect));
+        camera.position.set(36, 48, 62).multiplyScalar(Math.max(1, 1.1 / camera.aspect));
         initialSize = false;
       }
     };
@@ -638,7 +644,8 @@ export default function Stadium(props: Props) {
       const hit = raycaster.intersectObjects(pickables)[0];
       if (hit) {
         const id = hit.object.userData.playerId;
-        latest.current.onFocus(latest.current.focus === id ? null : id);
+        latest.current.onInspect(latest.current.focus === id ? null : id);
+        setEvidence('run');
       }
     };
     renderer.domElement.addEventListener('pointerdown', down);
@@ -666,21 +673,27 @@ export default function Stadium(props: Props) {
         const stride = Math.sin(phase) * amplitude;
         actor.legs[0].rotation.x = stride;
         actor.legs[1].rotation.x = -stride - motion.kick * 0.95;
+        actor.knees[0].rotation.x = Math.max(0, -Math.sin(phase)) * amplitude * 1.5;
+        actor.knees[1].rotation.x =
+          Math.max(0, Math.sin(phase)) * amplitude * 1.5 * (1 - motion.kick);
+        actor.elbows.forEach(
+          (elbow) => (elbow.rotation.x = -0.35 - Math.min(0.7, motion.speed * 0.1)),
+        );
         actor.arms[0].rotation.x = -stride * 0.7;
         actor.arms[1].rotation.x = stride * 0.7;
-        actor.rig.position.y =
-          -0.12 + Math.abs(Math.sin(phase)) * Math.min(0.055, motion.speed * 0.009);
+        actor.rig.position.y = Math.abs(Math.sin(phase)) * Math.min(0.035, motion.speed * 0.006);
         actor.rig.rotation.x = Math.min(0.12, motion.speed * 0.02);
-        actor.rig.rotation.z = motion.dive * 1.15;
+        actor.rig.rotation.z =
+          motion.dive * 1.15 + Math.sin(phase) * Math.min(0.035, motion.speed * 0.006);
         if (motion.dive) {
           actor.rig.position.y += motion.dive * 0.65;
           actor.arms[0].rotation.x = -1.3 * motion.dive;
           actor.arms[1].rotation.x = -1.3 * motion.dive;
         }
         const selected = p.focus === player.id;
-        actor.tag.visible =
-          selected || player.id === p.event.player || player.id === p.event.recipient;
-        actor.ring.scale.setScalar(selected ? 1.8 : 1);
+        actor.tag.visible = selected && p.event.type !== 'pass';
+        actor.ring.scale.setScalar(selected ? 1.3 : 0.65);
+        (actor.ring.material as THREE.MeshBasicMaterial).opacity = selected ? 0.9 : 0.25;
       }
       const flight = ballMotion(p.scene, p.time),
         bp = flight.point;
@@ -692,18 +705,22 @@ export default function Stadium(props: Props) {
         p.event.id,
         p.layer,
         p.guide?.id,
+        p.focus,
+        evidenceRef.current,
         Math.round(p.time * 10),
       ].join(':');
       if (overlayKey !== previousOverlay) {
         rebuildOverlays(p);
         previousOverlay = overlayKey;
       }
+      if (p.guidePlaying) director = true;
       const guideKey = p.guide ? `${p.scene.id}:${p.guide.id}` : '';
       if (guideKey !== previousGuide) {
         previousGuide = guideKey;
         if (p.guide) {
           const g = p.guide,
             wide = Math.max(1, 1.2 / camera.aspect);
+          director = true;
           cameraMode.current = 'free';
           setView('free');
           goalTarget.copy(xyz(g.anchor.x, g.anchor.y, 0));
@@ -716,6 +733,27 @@ export default function Stadium(props: Props) {
           );
           transitioning = true;
         }
+      }
+      if (director && p.guide) {
+        const g = p.guide,
+          u = THREE.MathUtils.clamp((p.time - g.start) / (g.end - g.start), 0, 1);
+        const subject =
+          g.kind === 'run'
+            ? interpolate(p.scene.tracks[g.player!], p.time)
+            : g.kind === 'finish'
+              ? bp
+              : g.anchor;
+        const wide = Math.max(1, 1.1 / camera.aspect);
+        const high = g.kind === 'space';
+        goalTarget.copy(xyz(subject.x, subject.y, high ? 0 : 1));
+        goalCamera.copy(
+          xyz(
+            subject.x + (high ? -3 : -16 + u * 4) * wide,
+            subject.y + (high ? 9 : 25 - u * 3) * wide,
+            (high ? 48 : g.kind === 'finish' ? 15 : 23) * wide,
+          ),
+        );
+        transitioning = true;
       }
       if (cameraMode.current === 'follow') {
         const subject = p.focus ? interpolate(p.scene.tracks[p.focus], p.time) : bp;
@@ -744,6 +782,42 @@ export default function Stadium(props: Props) {
           child.scale.set(12 * scale, 3 * scale, 1);
         }
       });
+      // Screen-space labels stay anchored to world evidence, with a small collision pass.
+      const anchors = {
+        pass: { x: (p.event.from.x + p.event.to.x) / 2, y: (p.event.from.y + p.event.to.y) / 2 },
+        run: interpolate(p.scene.tracks[p.focus ?? p.event.recipient ?? p.event.player], p.time),
+        space: {
+          x: p.event.to.x,
+          y: p.event.to.y + inspectSpace(p.scene, p.event, p.time).receiver.receiverDistance,
+        },
+      };
+      const placed: { x: number; y: number }[] = [];
+      for (const kind of ['pass', 'run', 'space'] as Evidence[]) {
+        const el = markerRefs.current[kind];
+        if (!el) continue;
+        const point = anchors[kind],
+          v = xyz(point.x, point.y, kind === 'run' ? 2.4 : 0.5).project(camera);
+        const anchorX = (v.x * 0.5 + 0.5) * host.clientWidth;
+        const originalY = (-v.y * 0.5 + 0.5) * host.clientHeight;
+        const x = THREE.MathUtils.clamp(anchorX, 85, host.clientWidth - 85);
+        let y = THREE.MathUtils.clamp(originalY - 35, 80, host.clientHeight - 110);
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const collision = placed.find(
+            (other) => Math.abs(x - other.x) < 155 && Math.abs(y - other.y) < 46,
+          );
+          if (!collision) break;
+          y = collision.y - 48;
+        }
+        placed.push({ x, y });
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        const dx = anchorX - x,
+          dy = originalY - y;
+        el.style.setProperty('--leader-length', `${Math.hypot(dx, dy)}px`);
+        el.style.setProperty('--leader-angle', `${Math.atan2(-dx, dy)}rad`);
+        el.style.visibility =
+          v.z > 1 || v.z < -1 || Math.abs(v.x) > 1 || Math.abs(v.y) > 1 ? 'hidden' : 'visible';
+      }
       composer.render();
     };
     frame = requestAnimationFrame(tick);
@@ -752,6 +826,7 @@ export default function Stadium(props: Props) {
       observer.disconnect();
       orbit.dispose();
       controlsRef.current = null;
+      inspectRef.current = null;
       renderer.domElement.removeEventListener('pointerdown', down);
       renderer.domElement.removeEventListener('pointerup', up);
       renderer.domElement.removeEventListener('webglcontextlost', lost);
@@ -764,6 +839,16 @@ export default function Stadium(props: Props) {
       renderer.domElement.remove();
     };
   }, []);
+  const inspectedId = props.focus ?? props.event.recipient ?? props.event.player;
+  const inspectedPlayer = props.scene.players.find((p) => p.id === inspectedId)!;
+  const inspectedMotion = playerMotion(props.scene, inspectedId, props.time);
+  const measurement = inspectSpace(props.scene, props.event, props.time);
+  const earlier = Math.max(0, props.time - 2);
+  const priorSpace = inspectSpace(props.scene, props.event, earlier).receiver.receiverDistance;
+  const displacement = distance(
+    interpolate(props.scene.tracks[inspectedId], earlier),
+    inspectedMotion.point,
+  );
   const ballState = ballMotion(props.scene, props.time);
   const phaseLabel =
     ballState.phase === 'pass'
@@ -781,13 +866,78 @@ export default function Stadium(props: Props) {
     <div className="stadium-shell">
       <div className="stadium-canvas" ref={mount} />
       <div className="stadium-vignette" />
+      {props.event.type === 'pass' && props.layer !== 'clean' && (
+        <div className="pitch-evidence" aria-label="Interactive pitch evidence">
+          {(['pass', 'run', 'space'] as Evidence[]).map((kind) => (
+            <button
+              key={kind}
+              ref={(el) => {
+                markerRefs.current[kind] = el;
+              }}
+              className={`pitch-pin pin-${kind}`}
+              aria-pressed={evidence === kind}
+              onClick={() => {
+                setEvidence(kind);
+                inspectRef.current?.(kind);
+              }}
+            >
+              <i />
+              {kind === 'pass'
+                ? `${measurement.length.toFixed(1)} m pass`
+                : kind === 'run'
+                  ? `${inspectedPlayer.number} · ${inspectedPlayer.name}`
+                  : `${measurement.receiver.receiverDistance.toFixed(1)} m space`}
+              <span>＋</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {evidence && (
+        <aside className="pitch-inspector" aria-label="Pitch evidence inspector">
+          <div className="inspector-kicker">
+            {evidence === 'run' ? 'PLAYER INSPECTOR' : 'FRAME EVIDENCE'}
+            <button aria-label="Close pitch inspector" onClick={() => setEvidence(null)}>
+              ×
+            </button>
+          </div>
+          <h3>
+            {evidence === 'pass'
+              ? 'The passing corridor'
+              : evidence === 'run'
+                ? `${inspectedPlayer.number} / ${inspectedPlayer.name}`
+                : 'Room to receive'}
+          </h3>
+          <strong>
+            {evidence === 'pass'
+              ? `${measurement.length.toFixed(1)} m`
+              : evidence === 'run'
+                ? `${inspectedMotion.speed.toFixed(1)} m/s`
+                : `${measurement.receiver.receiverDistance.toFixed(1)} m`}
+          </strong>
+          <p>
+            {evidence === 'pass'
+              ? `The nearest opponent to this pass segment is ${measurement.lane.player.name}, ${measurement.lane.laneDistance.toFixed(1)} m away at this frame.`
+              : evidence === 'run'
+                ? `${displacement.toFixed(1)} m displacement over the preceding ${(props.time - earlier).toFixed(1)} seconds. ${ballState.phase === 'pass' || ballState.phase === 'shot' ? 'Ball in flight.' : ballState.owner === inspectedId ? 'Currently in possession.' : 'Currently off the ball.'}`
+                : `Nearest opponent: ${measurement.receiver.player.name}. The same receiving point had ${priorSpace.toFixed(1)} m of clearance two seconds earlier.`}
+          </p>
+          <div className="inspector-source">
+            TRACKING FRAME {props.time.toFixed(2)}s<br />
+            {props.event.id} · v{props.event.version}
+          </div>
+          <small>Synthetic measurement · explore by scrubbing</small>
+        </aside>
+      )}
       <div className="scene-player-select">
         <span>PLAYER FOCUS</span>
         <Select
           compact
           label="Follow player in 3D"
           value={props.focus ?? ''}
-          onChange={(v) => props.onFocus(v || null)}
+          onChange={(v) => {
+            props.onInspect(v || null);
+            setEvidence(v ? 'run' : null);
+          }}
           options={[
             { value: '', label: 'All players', detail: 'Follow the ball' },
             ...props.scene.players.map((p) => ({
@@ -799,7 +949,7 @@ export default function Stadium(props: Props) {
           ]}
         />
       </div>
-      <div className="scene-caption" hidden={!!props.guide}>
+      <div className="scene-caption" hidden={!!props.guide || !!evidence}>
         <span>SPATIAL REPLAY</span>
         <strong>{props.comparison ? 'Two seconds earlier.' : 'See the whole play.'}</strong>
         <small>

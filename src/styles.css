@@ -2367,3 +2367,128 @@ h1 span {
     display: none;
   }
 }
+
+.pitch-evidence {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+.pitch-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 11px;
+  border: 1px solid #57717a;
+  border-radius: 4px;
+  background: #10242aef;
+  color: #e1eeef;
+  font: 10px monospace;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px #0006;
+}
+.pitch-pin:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 18px;
+  width: 1px;
+  background: #9ab8be;
+}
+.pitch-pin i {
+  width: 5px;
+  height: 5px;
+  background: #efc381;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #efc38177;
+}
+.pitch-pin span {
+  color: #a5b9be;
+}
+.pin-run i {
+  background: #73e6de;
+}
+.pitch-pin:hover,
+.pitch-pin[aria-pressed='true'] {
+  border-color: #f0c583;
+  background: #294048;
+}
+.pitch-inspector {
+  position: absolute;
+  z-index: 6;
+  right: 24px;
+  bottom: 90px;
+  width: 260px;
+  padding: 18px;
+  background: #0e2029f5;
+  border: 1px solid #496570;
+  border-top: 2px solid #79cfc8;
+  border-radius: 5px;
+  box-shadow: 0 12px 35px #0006;
+  color: #e1edf1;
+}
+.inspector-kicker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 9px monospace;
+  letter-spacing: 1.5px;
+  color: #8eafb7;
+}
+.inspector-kicker button {
+  background: none;
+  color: #c8dce1;
+  border: 0;
+  font-size: 20px;
+}
+.pitch-inspector h3 {
+  font:
+    500 26px 'Barlow Condensed',
+    sans-serif;
+  margin: 12px 0;
+}
+.pitch-inspector strong {
+  font: 25px monospace;
+  color: #b6e9de;
+}
+.pitch-inspector p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #bbced6;
+}
+.inspector-source {
+  padding-top: 12px;
+  border-top: 1px solid #334c59;
+  color: #94adb8;
+  font: 9px/1.7 monospace;
+}
+.pitch-inspector small {
+  display: block;
+  margin-top: 8px;
+  color: #758f9b;
+  font-size: 9px;
+}
+@media (max-width: 700px) {
+  .pitch-inspector {
+    right: 10px;
+    bottom: 80px;
+    width: 220px;
+    padding: 12px;
+  }
+  .pitch-pin {
+    font-size: 9px;
+    padding: 6px;
+    gap: 5px;
+  }
+}
+.pitch-pin:after {
+  height: var(--leader-length, 18px);
+  transform: rotate(var(--leader-angle, 0rad));
+  transform-origin: top;
+  pointer-events: none;
+  opacity: 0.65;
+}
