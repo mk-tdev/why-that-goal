@@ -2636,3 +2636,68 @@ h1 span {
     margin: 8px 0;
   }
 }
+
+.api-evidence {
+  margin: 20px 0;
+  padding: 16px 0;
+  border-top: 1px solid #ffffff18;
+  border-bottom: 1px solid #ffffff18;
+}
+.api-evidence > small {
+  display: block;
+  margin: 8px 0 12px;
+  color: #8fa4a9;
+  font-size: 10px;
+}
+.api-evidence-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  color: #bdd4d6;
+}
+.api-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dda350;
+}
+.api-dot.ready {
+  background: #79d7ba;
+}
+.evidence-retry,
+.evidence-fact,
+.evidence-moment {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ffffff15;
+  border-radius: 6px;
+  background: #112128;
+  color: #d6e3e4;
+  padding: 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.evidence-fact:hover,
+.evidence-moment:hover,
+.evidence-retry:hover {
+  border-color: #dda350;
+  background: #192c32;
+}
+.evidence-fact small,
+.evidence-moment small {
+  display: block;
+  color: #8fa4a9;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.evidence-fact b,
+.evidence-moment > span {
+  display: block;
+  color: #dda350;
+  font-size: 10px;
+  margin-top: 6px;
+}

@@ -168,3 +168,34 @@ test('real local HTTP service validates payloads and stays disconnected', async 
     );
   }
 });
+
+test('frontend HTTP client resolves the real backend and rejects mismatched snapshots', async () => {
+  const { fetchAnalysis, readAnalysis } = await import('../src/core/analysisClient');
+  const server = createApiServer();
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const address = server.address();
+  assert.ok(address && typeof address !== 'string');
+  try {
+    const data = await fetchAnalysis(
+      request,
+      new AbortController().signal,
+      `http://127.0.0.1:${address.port}`,
+    );
+    assert.equal(data.mode, 'deterministic');
+    assert.throws(() => readAnalysis(data, { ...request, language: 'es' }));
+    const invalid = structuredClone(data);
+    invalid.moments[0].replayAt = 999;
+    assert.throws(() => readAnalysis(invalid, request));
+    await assert.rejects(
+      fetchAnalysis(request, AbortSignal.abort(), `http://127.0.0.1:${address.port}`),
+    );
+    const browser = await fetch(`http://127.0.0.1:${address.port}/api/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:5173' },
+      body: JSON.stringify(request),
+    });
+    assert.equal(browser.status, 200);
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
+});

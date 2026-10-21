@@ -15,7 +15,16 @@ export function createApiServer() {
       return send(200, { status: 'ok', foundry: 'disconnected' });
     if (req.url !== '/api/analyze') return send(404, { error: 'not_found' });
     if (req.method !== 'POST') return send(405, { error: 'method_not_allowed' });
-    if (req.headers.origin) return send(403, { error: 'browser_origin_not_enabled' });
+    if (
+      req.headers.origin &&
+      ![
+        'http://127.0.0.1:5173',
+        'http://localhost:5173',
+        'http://127.0.0.1:4173',
+        'http://localhost:4173',
+      ].includes(req.headers.origin)
+    )
+      return send(403, { error: 'browser_origin_not_enabled' });
     if (req.headers['content-type']?.split(';')[0] !== 'application/json')
       return send(415, { error: 'json_required' });
     try {

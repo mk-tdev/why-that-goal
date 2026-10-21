@@ -3,11 +3,11 @@
   "info": {
     "title": "Why That Goal local evidence API",
     "version": "1.0.0",
-    "description": "Loopback-only developer API. Foundry disconnected. Browser Origin access disabled."
+    "description": "Loopback-only developer API. Foundry disconnected. Local Vite development and preview origins allowed; cross-origin CORS access disabled."
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:8787"
+      "url": "http://127.0.0.1:8791"
     }
   ],
   "paths": {
@@ -82,7 +82,7 @@
             }
           },
           "403": {
-            "description": "Browser Origin disabled",
+            "description": "Browser Origin not allowed",
             "content": {
               "application/json": {
                 "schema": {

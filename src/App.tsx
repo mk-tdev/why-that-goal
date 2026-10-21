@@ -1,3 +1,4 @@
+import { useAnalysis } from './hooks/useAnalysis';
 import { buildGuide } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
@@ -247,6 +248,25 @@ export default function App() {
   const scene = scenarios.find((s) => s.id === sceneId)!,
     event = scene.events[selected],
     displayTime = comparison ? Math.max(0, time - 2) : time;
+  // Request only when event visibility changes, not on every animation frame.
+  const evidenceThrough = Math.max(
+    0,
+    ...scene.events
+      .filter((e) => e.at <= displayTime && e.receivedAt <= displayTime)
+      .map((e) => Math.max(e.at, e.receivedAt)),
+  );
+  const analysis = useAnalysis({
+    scenarioId: scene.id,
+    through: evidenceThrough,
+    receivedThrough: evidenceThrough,
+    audience: analyst ? 'analyst' : 'fan',
+    language,
+  });
+  const eventFacts =
+    analysis.data?.evidence.facts.filter(
+      (f) => f.eventId === event.id && f.version === event.version,
+    ) ?? [];
+  const serverExplanation = eventFacts.find((f) => f.kind === 'event');
   const guideSteps = useMemo(() => buildGuide(scene), [scene]);
   const guide = guideIndex === null ? undefined : guideSteps[guideIndex];
   function endGuide() {
@@ -368,7 +388,7 @@ export default function App() {
       ? 'Progress through the pitch.'
       : sideways > 18
         ? 'Change the angle.'
-        : 'The final connection.'
+        : 'Connect the play.'
     : '';
   const subtitle = pass
     ? sideways > 18
@@ -839,10 +859,71 @@ export default function App() {
                 <p className="explanation">
                   {time < event.at && !comparison
                     ? 'The sequence is beginning. Play forward to inspect the first event.'
-                    : pass
-                      ? spatialStory
-                      : evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language)}
+                    : serverExplanation
+                      ? serverExplanation.text
+                      : pass
+                        ? spatialStory
+                        : evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language)}
                 </p>
+                <section className="api-evidence" aria-label="Replay intelligence">
+                  <div className="api-evidence-status" role="status">
+                    <span className={`api-dot ${analysis.status}`} />
+                    {analysis.status === 'loading'
+                      ? 'Loading replay evidence…'
+                      : analysis.status === 'offline'
+                        ? 'Local fallback · evidence API unavailable'
+                        : 'Backend evidence · deterministic'}
+                  </div>
+                  <small>Foundry disconnected · synthetic match data</small>
+                  {analysis.status === 'offline' && (
+                    <button className="evidence-retry" onClick={analysis.retry}>
+                      Retry connection ↗
+                    </button>
+                  )}
+                  {eventFacts
+                    .filter((f) => f.kind !== 'event')
+                    .map((f) => (
+                      <button
+                        className="evidence-fact"
+                        key={f.id}
+                        onClick={() => {
+                          jump(selected);
+                          setFocus(f.playerId);
+                          setLayer('space');
+                        }}
+                      >
+                        <span>{f.text}</span>
+                        <small>{f.method}</small>
+                        <b>Inspect at {clock(scene.baseClock, f.at)} ↗</b>
+                      </button>
+                    ))}
+                  {!!analysis.data?.moments.length && (
+                    <Disclosure title="Evidence-backed replay moments" open={analyst}>
+                      {analysis.data.moments.map((moment) => (
+                        <button
+                          className="evidence-moment"
+                          key={moment.id}
+                          onClick={() => {
+                            const index = scene.events.findIndex(
+                              (e) => e.id === moment.eventId && e.version === moment.version,
+                            );
+                            if (index >= 0) {
+                              jump(index);
+                              setFocus(moment.playerId);
+                              setLayer('space');
+                            }
+                          }}
+                        >
+                          <span>{clock(scene.baseClock, moment.replayAt)}</span>
+                          {moment.text}
+                          <small>
+                            {moment.eventId} · v{moment.version}
+                          </small>
+                        </button>
+                      ))}
+                    </Disclosure>
+                  )}
+                </section>
                 {pass && (
                   <>
                     <div className="connection">
@@ -943,7 +1024,8 @@ export default function App() {
               <div className="notebook-footer">
                 <span className="engine-dot" />
                 <span>
-                  Geometry engine <b>·</b> Local analysis
+                  Geometry engine <b>·</b>{' '}
+                  {analysis.status === 'ready' ? 'Backend evidence' : 'Local analysis'}
                 </span>
               </div>
             </aside>
