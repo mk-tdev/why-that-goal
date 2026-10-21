@@ -1,6 +1,7 @@
+import { placeLabel, type Rect } from '../core/labels';
 import { footballer } from './Footballer';
 import type { GuideStep } from '../core/guide';
-import { ballMotion, playerMotion, flightFor } from '../core/motion';
+import { ballMotion, playerMotion, flightFor, footPose } from '../core/motion';
 import { Select } from '../ui/Controls';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -410,7 +411,7 @@ export default function Stadium(props: Props) {
       actors.set(p.id, { group, rig, legs, knees, arms, elbows, ring, tag });
     }
     const ball = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.18, 2),
+      new THREE.IcosahedronGeometry(0.11, 3),
       new THREE.MeshStandardMaterial({
         color: '#ffffff',
         emissive: '#aec7df',
@@ -420,7 +421,7 @@ export default function Stadium(props: Props) {
     );
     for (let i = 0; i < 3; i++) {
       const seam = new THREE.Mesh(
-        new THREE.TorusGeometry(0.181, 0.012, 4, 24),
+        new THREE.TorusGeometry(0.111, 0.006, 4, 24),
         new THREE.MeshStandardMaterial({ color: '#243442', roughness: 0.8 }),
       );
       seam.rotation.set(i === 0 ? Math.PI / 2 : 0, i === 1 ? Math.PI / 2 : 0, 0);
@@ -429,7 +430,7 @@ export default function Stadium(props: Props) {
     ball.castShadow = true;
     world.add(ball);
     const ballHalo = new THREE.Mesh(
-      new THREE.RingGeometry(0.7, 0.82, 32),
+      new THREE.RingGeometry(0.3, 0.34, 32),
       new THREE.MeshBasicMaterial({
         color: '#ffffff',
         transparent: true,
@@ -671,17 +672,18 @@ export default function Stadium(props: Props) {
         const phase = (motion.travel * Math.PI * 2) / 2.4;
         const amplitude = Math.min(0.68, motion.speed * 0.12);
         const stride = Math.sin(phase) * amplitude;
-        actor.legs[0].rotation.x = stride;
-        actor.legs[1].rotation.x = -stride - motion.kick * 0.95;
-        actor.knees[0].rotation.x = Math.max(0, -Math.sin(phase)) * amplitude * 1.5;
-        actor.knees[1].rotation.x =
-          Math.max(0, Math.sin(phase)) * amplitude * 1.5 * (1 - motion.kick);
+        const leftFoot = footPose(motion.travel, motion.speed, 0),
+          rightFoot = footPose(motion.travel, motion.speed, 1);
+        actor.legs[0].rotation.x = leftFoot.hip;
+        actor.legs[1].rotation.x = rightFoot.hip + motion.swing - motion.receive * 0.12;
+        actor.knees[0].rotation.x = leftFoot.knee;
+        actor.knees[1].rotation.x = rightFoot.knee * (1 - motion.kick * 0.7);
         actor.elbows.forEach(
           (elbow) => (elbow.rotation.x = -0.35 - Math.min(0.7, motion.speed * 0.1)),
         );
         actor.arms[0].rotation.x = -stride * 0.7;
         actor.arms[1].rotation.x = stride * 0.7;
-        actor.rig.position.y = Math.abs(Math.sin(phase)) * Math.min(0.035, motion.speed * 0.006);
+        actor.rig.position.y = leftFoot.settle - motion.receive * 0.035;
         actor.rig.rotation.x = Math.min(0.12, motion.speed * 0.02);
         actor.rig.rotation.z =
           motion.dive * 1.15 + Math.sin(phase) * Math.min(0.035, motion.speed * 0.006);
@@ -697,7 +699,7 @@ export default function Stadium(props: Props) {
       }
       const flight = ballMotion(p.scene, p.time),
         bp = flight.point;
-      ball.position.copy(xyz(bp.x, bp.y, flight.height + 0.07));
+      ball.position.copy(xyz(bp.x, bp.y, flight.height));
       ball.rotation.set(flight.spin, 0, flight.spin * 0.3);
       ballHalo.position.copy(xyz(bp.x, bp.y, 0.08));
       const overlayKey = [
@@ -775,6 +777,7 @@ export default function Stadium(props: Props) {
       }
       overlays.children.forEach((child) => {
         if (child instanceof THREE.Sprite) {
+          child.visible = !p.guide;
           const scale = Math.min(
             1,
             Math.max(0.22, camera.position.distanceTo(child.position) / 100),
@@ -791,7 +794,31 @@ export default function Stadium(props: Props) {
           y: p.event.to.y + inspectSpace(p.scene, p.event, p.time).receiver.receiverDistance,
         },
       };
-      const placed: { x: number; y: number }[] = [];
+      const blocked: Rect[] = [];
+      for (const actor of actors.values()) {
+        const feet = actor.group.position.clone().project(camera);
+        const head = actor.group.position
+          .clone()
+          .add(new THREE.Vector3(0, 2.1, 0))
+          .project(camera);
+        if (feet.z > 1 || feet.z < -1) continue;
+        const x = (feet.x * 0.5 + 0.5) * host.clientWidth;
+        const top = (-head.y * 0.5 + 0.5) * host.clientHeight;
+        const bottom = (-feet.y * 0.5 + 0.5) * host.clientHeight;
+        blocked.push({
+          x: x - 18,
+          y: top - 10,
+          width: 36,
+          height: Math.max(30, bottom - top + 20),
+        });
+      }
+      const ballScreen = ball.position.clone().project(camera);
+      blocked.push({
+        x: (ballScreen.x * 0.5 + 0.5) * host.clientWidth - 26,
+        y: (-ballScreen.y * 0.5 + 0.5) * host.clientHeight - 26,
+        width: 52,
+        height: 52,
+      });
       for (const kind of ['pass', 'run', 'space'] as Evidence[]) {
         const el = markerRefs.current[kind];
         if (!el) continue;
@@ -799,16 +826,25 @@ export default function Stadium(props: Props) {
           v = xyz(point.x, point.y, kind === 'run' ? 2.4 : 0.5).project(camera);
         const anchorX = (v.x * 0.5 + 0.5) * host.clientWidth;
         const originalY = (-v.y * 0.5 + 0.5) * host.clientHeight;
-        const x = THREE.MathUtils.clamp(anchorX, 85, host.clientWidth - 85);
-        let y = THREE.MathUtils.clamp(originalY - 35, 80, host.clientHeight - 110);
-        for (let attempt = 0; attempt < 4; attempt++) {
-          const collision = placed.find(
-            (other) => Math.abs(x - other.x) < 155 && Math.abs(y - other.y) < 46,
-          );
-          if (!collision) break;
-          y = collision.y - 48;
+        const box = placeLabel(
+          { x: anchorX, y: originalY },
+          { x: 12, y: 100, width: host.clientWidth - 24, height: host.clientHeight - 200 },
+          blocked,
+          el.offsetWidth,
+          el.offsetHeight,
+        );
+        if (!box) {
+          el.style.visibility = 'hidden';
+          continue;
         }
-        placed.push({ x, y });
+        blocked.push({
+          x: box.x - 8,
+          y: box.y - 8,
+          width: box.width + 16,
+          height: box.height + 16,
+        });
+        const x = box.x + box.width / 2,
+          y = box.y + box.height;
         el.style.left = `${x}px`;
         el.style.top = `${y}px`;
         const dx = anchorX - x,

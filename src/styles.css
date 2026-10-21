@@ -2492,3 +2492,147 @@ h1 span {
   pointer-events: none;
   opacity: 0.65;
 }
+
+/* Evidence lives beside the replay; the playing surface keeps its own viewport. */
+.match-stage:has(.guide-card) {
+  padding-bottom: 0;
+}
+.guide-card {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  border: 0;
+  border-top: 1px solid #3b515b;
+  border-radius: 0;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: 200px minmax(180px, 1fr) auto;
+  column-gap: 24px;
+  padding: 16px 24px;
+  backdrop-filter: none;
+}
+.guide-eyebrow,
+.guide-chapters {
+  grid-column: 1;
+}
+.guide-card h2 {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 24px;
+  margin: 0;
+  align-self: center;
+}
+.guide-metric {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.guide-card p {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+  margin: 0;
+}
+.guide-card small {
+  grid-column: 1;
+}
+.guide-actions {
+  grid-column: 3;
+  grid-row: 3;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.guide-status {
+  grid-column: 3;
+  grid-row: 4;
+}
+.stadium-shell:has(.pitch-inspector) .stadium-canvas,
+.stadium-shell:has(.pitch-inspector) .pitch-evidence,
+.stadium-shell:has(.pitch-inspector) .stadium-vignette {
+  right: 290px;
+}
+.stadium-shell:has(.pitch-inspector) .scene-player-select {
+  right: 310px;
+}
+.pitch-inspector {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 290px;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 0;
+  border-left: 1px solid #3a525d;
+  box-shadow: none;
+  padding: 110px 22px 24px;
+  overflow: auto;
+  background: #101e28;
+}
+.stadium-shell:has(.pitch-inspector) .orbit-hint {
+  display: none;
+}
+@media (max-width: 800px) {
+  .guide-card {
+    grid-template-columns: 1fr auto;
+    padding: 14px;
+    gap: 8px 16px;
+  }
+  .guide-eyebrow {
+    grid-column: 1 / -1;
+  }
+  .guide-chapters {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .guide-card h2 {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .guide-metric {
+    grid-column: 2;
+    grid-row: auto;
+    font-size: 16px;
+  }
+  .guide-card p,
+  .guide-card small,
+  .guide-actions,
+  .guide-status {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .stadium-shell:has(.pitch-inspector) {
+    height: 800px;
+    min-height: 0;
+  }
+  .stadium-shell:has(.pitch-inspector) .stadium-canvas,
+  .stadium-shell:has(.pitch-inspector) .pitch-evidence,
+  .stadium-shell:has(.pitch-inspector) .stadium-vignette {
+    right: 0;
+    height: 500px;
+    bottom: auto;
+  }
+  .stadium-shell:has(.pitch-inspector) .scene-player-select {
+    right: 14px;
+  }
+  .stadium-shell:has(.pitch-inspector) .camera-deck {
+    bottom: 320px;
+  }
+  .pitch-inspector {
+    top: 500px;
+    height: 300px;
+    width: 100%;
+    border-left: 0;
+    border-top: 1px solid #3a525d;
+    padding: 16px 22px;
+  }
+  .pitch-inspector h3 {
+    margin: 6px 0;
+  }
+  .pitch-inspector p {
+    margin: 8px 0;
+  }
+}

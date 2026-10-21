@@ -56,3 +56,11 @@ Refined the quick break with late timed runs from Vega and Okafor; the guided of
 Added camera movement within guide chapters, a lower finish view and closer player inspection. Interactive pitch pins select pass, player and receiving-space evidence, pause playback and frame the subject. The inspector reports current geometry, speed, recent displacement, provenance and possession/flight status. Labels project from world coordinates and separate when nearby; player inspection isolates a recent movement trace. Camera/orbit interaction pauses the guide, and resuming restores the director camera. These remain procedural models and authored synthetic trajectories, not motion capture or a calibrated simulation. Foundry stays disconnected.
 
 Validation: production build and all 28 core tests pass, including bounded speeds, separation and ball-contact alignment after the run changes. Browser checks verified pitch selection, automatic camera transitions and guide pause on inspection. The existing large Three.js chunk warning remains.
+
+## 21 October 2026 — Clear playing surface and contact polish
+
+Docked the director rundown below the pitch and the inspector beside it (below on narrow screens). The WebGL viewport resizes to the available playing surface. Pitch-label placement now searches for free boxes around projected anchors, avoiding player silhouettes, the ball and other labels; crowded labels are omitted. Removed duplicate guide sprite text over the action.
+
+Added a two-link planted/recovery leg solve, kick preparation and follow-through, and a receiving pose. Smoothed close-control offsets around movement, reception and release; a new continuity test caught and eliminated a near-target direction-switch jump. The rendered ball now uses the model’s 11 cm radius and ground-pass rotation follows travelled distance. Added boot soles, sock trim, ears and goalkeeper gloves. Motion remains procedural and synthetic; Foundry is disconnected.
+
+Validation: 32 tests and production build pass. Four new checks cover bounded, non-overlapping labels, completely occupied viewports, ankle clearance through the gait cycle, and millisecond carry continuity across all scenarios. Browser inspection confirmed desktop side docking and 390px stacked layout, plus live player measurements. Existing Three.js chunk-size warning remains.

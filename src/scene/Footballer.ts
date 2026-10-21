@@ -19,6 +19,8 @@ export function footballer(number: number, home: boolean) {
     color: home ? '#e7b668' : '#407c88',
     roughness: 0.9,
   });
+  const trim = new THREE.MeshStandardMaterial({ color: '#e8e9df', roughness: 0.85 });
+  const sole = new THREE.MeshStandardMaterial({ color: '#14202b', roughness: 0.8 });
   const boot = new THREE.MeshStandardMaterial({
     color: number % 2 ? '#e7e8df' : '#ef7957',
     roughness: 0.55,
@@ -43,6 +45,8 @@ export function footballer(number: number, home: boolean) {
   mesh(rig, new THREE.CylinderGeometry(0.075, 0.09, 0.12, 10), skin, 0, 1.55);
   const head = mesh(rig, new THREE.SphereGeometry(0.135, 16, 12), skin, 0, 1.72);
   head.scale.set(0.9, 1.15, 0.95);
+  for (const side of [-1, 1])
+    mesh(rig, new THREE.SphereGeometry(0.026, 8, 6), skin, side * 0.12, 1.72);
   mesh(
     rig,
     new THREE.SphereGeometry(0.139, 12, 8, 0, Math.PI * 2, 0, 1.5),
@@ -92,6 +96,8 @@ export function footballer(number: number, home: boolean) {
     mesh(knee, new THREE.CapsuleGeometry(0.063, 0.24, 5, 10), sock, 0, -0.17);
     mesh(knee, new THREE.CapsuleGeometry(0.065, 0.13, 4, 10), boot, 0, -0.4, 0.055).rotation.x =
       Math.PI / 2;
+    mesh(knee, new THREE.CylinderGeometry(0.065, 0.065, 0.025, 12), trim, 0, -0.07);
+    mesh(knee, new THREE.BoxGeometry(0.125, 0.018, 0.24), sole, 0, -0.45, 0.055);
     const arm = new THREE.Group();
     arm.position.set(side * 0.24, 1.43, 0);
     rig.add(arm);
@@ -104,7 +110,13 @@ export function footballer(number: number, home: boolean) {
     arm.add(elbow);
     elbows.push(elbow);
     mesh(elbow, new THREE.CapsuleGeometry(0.047, 0.18, 4, 10), skin, 0, -0.12);
-    mesh(elbow, new THREE.SphereGeometry(0.052, 10, 8), skin, 0, -0.25);
+    mesh(
+      elbow,
+      new THREE.SphereGeometry(number === 1 ? 0.073 : 0.052, 10, 8),
+      number === 1 ? trim : skin,
+      0,
+      -0.25,
+    );
   }
   return { rig, legs, knees, arms, elbows };
 }

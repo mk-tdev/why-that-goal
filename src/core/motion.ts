@@ -200,7 +200,7 @@ export function ballMotion(s: Scenario, time: number, prepared?: BallFlight[]) {
         height: 0.11 + 4 * f.loft * u * (1 - u) + (f.kind === 'shot' ? 0.65 * u : 0),
         phase: f.kind,
         owner: null,
-        spin: (t - f.start) * (f.kind === 'shot' ? 65 : 40),
+        spin: (progress * d) / 0.11,
         flight: f,
       };
     }
@@ -237,15 +237,23 @@ export function ballMotion(s: Scenario, time: number, prepared?: BallFlight[]) {
   const v = { x: target.x - pos.x, y: target.y - pos.y };
   const len = Math.hypot(v.x, v.y);
   const before = interpolate(s.tracks[owner], Math.max(0, t - 0.08));
-  const moving = distance(before, pos) > 0.008;
+  const speed = distance(before, pos) / Math.max(0.001, Math.min(0.08, t));
+  const movement = ease(clamp(speed / 0.8, 0, 1));
+  const previousFlight = flights.filter((f) => f.end < t).at(-1);
+  const received = previousFlight ? ease(clamp((t - previousFlight.end) / 0.28, 0, 1)) : 1;
   const remaining = next ? Math.min(1, (next.start - t) / 0.3) : 1;
-  const offset = moving ? (0.25 + 0.22 * (0.5 + 0.5 * Math.sin(t * 9))) * remaining : 0;
+  const offset =
+    (0.23 + 0.16 * (0.5 + 0.5 * Math.sin(t * 9))) *
+    movement *
+    remaining *
+    received *
+    ease(clamp(len / 0.4, 0, 1));
   return {
     point: {
       x: pos.x + (len > 0.01 ? v.x / len : 1) * offset,
       y: pos.y + (len > 0.01 ? v.y / len : 0) * offset,
     },
-    height: 0.11 + (moving ? 0.04 * Math.abs(Math.sin(t * 9)) : 0),
+    height: 0.11 + 0.015 * movement * remaining * received * Math.abs(Math.sin(t * 9)),
     phase: 'carry',
     owner,
     spin: t * 8,
@@ -282,5 +290,31 @@ export function playerMotion(s: Scenario, id: string, t: number) {
   const finish = s.events.find((e) => e.type === 'goal' || e.type === 'save')!;
   const dive =
     id === 'A-1' ? Math.sin((clamp((t - (finish.at - 0.35)) / 0.7, 0, 1) * Math.PI) / 2) : 0;
-  return { point, speed, heading, travel, kick, dive };
+  const contacts = s.events.map((e) => flightFor(e, s.events)).filter((f): f is BallFlight => !!f);
+  const strike = contacts.find((f) => f.owner === id && t >= f.start - 0.32 && t <= f.start + 0.4);
+  const strikeTime = strike ? t - strike.start : 0;
+  const swing = strike
+    ? strikeTime < 0
+      ? Math.sin(((strikeTime + 0.32) / 0.32) * Math.PI) * 0.45
+      : -Math.sin(Math.min(1, strikeTime / 0.4) * Math.PI) * 0.85
+    : 0;
+  const receive = contacts
+    .filter((f) => f.receiver === id)
+    .reduce((v, f) => Math.max(v, Math.max(0, 1 - Math.abs(t - f.end) / 0.3)), 0);
+  return { point, speed, heading, travel, kick, dive, swing, receive };
+}
+
+/** Two-link leg solve: ground-contact phase followed by a lifted recovery step. */
+export function footPose(travel: number, speed: number, side: number) {
+  const active = ease(clamp(speed / 0.8, 0, 1));
+  const phase = (((travel / 1.8 + side * 0.5) % 1) + 1) % 1;
+  const stance = phase < 0.45;
+  const u = stance ? phase / 0.45 : (phase - 0.45) / 0.55;
+  const z = (stance ? 0.405 - 0.81 * u : -0.405 + 0.81 * ease(u)) * active;
+  const lift = stance ? 0 : Math.sin(Math.PI * u) * 0.16 * active;
+  const drop = 0.8 - 0.12 * active - lift;
+  const reach = Math.min(0.8, Math.hypot(z, drop));
+  const knee = 2 * Math.acos(reach / 0.8);
+  const hip = -Math.atan2(z, drop) - knee / 2;
+  return { hip, knee, lift, settle: -0.12 * active };
 }

@@ -78,3 +78,5 @@ Possession follows the carrier with small settling touches that taper to the exa
 ### Player craft and direct evidence interaction
 
 `src/scene/Footballer.ts` constructs the articulated procedural player and kit materials. Replay-derived pose drives hips, knees, arms and elbows deterministically. `Stadium.tsx` projects semantic HTML evidence buttons into screen coordinates and uses a small separation pass to reduce label overlap. Selecting a pin pauses playback through `onInspect`, frames the subject, and reveals measurements computed from the same scenario tracks. The featured quick-break runner timings are authored in `buildMotion`; reception and shot endpoints remain constrained by the event data.
+
+`src/core/labels.ts` places projected evidence labels in available screen rectangles, excluding player/ball bounds and already placed labels. The guide and inspector reserve layout space rather than overlaying the render viewport. `footPose` solves hip/knee angles for a planted stance and lifted recovery; receiving and kicking add separate procedural poses. The carry model smoothly attenuates offsets near contact to preserve positional continuity.
