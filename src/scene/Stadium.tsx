@@ -1,7 +1,8 @@
+import { finishState, netDisplacement, NET_CONTACT_DELAY } from '../core/finish';
 import { placeLabel, type Rect } from '../core/labels';
 import { footballer } from './Footballer';
 import type { GuideStep } from '../core/guide';
-import { ballMotion, playerMotion, flightFor, footPose } from '../core/motion';
+import { ballMotion, playerMotion, footPose } from '../core/motion';
 import { Select } from '../ui/Controls';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -334,23 +335,39 @@ export default function Stadium(props: Props) {
         lamp.position.set(x, 30, z);
         world.add(lamp);
       }
+    const goalNets: { geometry: THREE.BufferGeometry; base: Float32Array; side: number }[] = [];
     // Both goals are constructed from posts and a transparent net lattice.
     for (const side of [-1, 1]) {
       const goal = new THREE.Group();
       goal.position.x = side * 52.5;
       world.add(goal);
       const netPoints: THREE.Vector3[] = [];
-      for (let z = -3.66; z <= 3.67; z += 0.4)
-        netPoints.push(new THREE.Vector3(side * 2.2, 0, z), new THREE.Vector3(side * 2.2, 2.44, z));
-      for (let y = 0; y <= 2.45; y += 0.4)
-        netPoints.push(
-          new THREE.Vector3(side * 2.2, y, -3.66),
-          new THREE.Vector3(side * 2.2, y, 3.66),
-        );
+      // Short segments allow the net to deform locally rather than move as a sheet.
+      const segment = (a: THREE.Vector3, b: THREE.Vector3) => {
+        const count = Math.ceil(a.distanceTo(b) / 0.16);
+        for (let i = 0; i < count; i++)
+          netPoints.push(a.clone().lerp(b, i / count), a.clone().lerp(b, (i + 1) / count));
+      };
+      for (let z = -3.66; z <= 3.67; z += 0.244) {
+        segment(new THREE.Vector3(side * 2.2, 0, z), new THREE.Vector3(side * 2.2, 2.44, z));
+        segment(new THREE.Vector3(0, 2.44, z), new THREE.Vector3(side * 2.2, 2.44, z));
+      }
+      for (let y = 0; y <= 2.45; y += 0.244) {
+        segment(new THREE.Vector3(side * 2.2, y, -3.66), new THREE.Vector3(side * 2.2, y, 3.66));
+        for (const z of [-3.66, 3.66])
+          segment(new THREE.Vector3(0, y, z), new THREE.Vector3(side * 2.2, y, z));
+      }
+      for (let x = 0; x <= 2.21; x += 0.22) {
+        segment(new THREE.Vector3(side * x, 2.44, -3.66), new THREE.Vector3(side * x, 2.44, 3.66));
+        for (const z of [-3.66, 3.66])
+          segment(new THREE.Vector3(side * x, 0, z), new THREE.Vector3(side * x, 2.44, z));
+      }
+      const geometry = new THREE.BufferGeometry().setFromPoints(netPoints);
+      goalNets.push({ geometry, base: new Float32Array(geometry.attributes.position.array), side });
       goal.add(
         new THREE.LineSegments(
-          new THREE.BufferGeometry().setFromPoints(netPoints),
-          new THREE.LineBasicMaterial({ color: '#b1c9d0', transparent: true, opacity: 0.3 }),
+          geometry,
+          new THREE.LineBasicMaterial({ color: '#c8dadc', transparent: true, opacity: 0.42 }),
         ),
       );
       const postMat = new THREE.MeshStandardMaterial({ color: '#effaff' });
@@ -447,6 +464,7 @@ export default function Stadium(props: Props) {
     function rebuildOverlays(p: Props) {
       disposeObject(overlays);
       overlays.clear();
+      if (p.guide?.kind === 'finish') return;
       if (p.layer === 'clean' && !p.guide) return;
       const line = (points: THREE.Vector3[], color: string, r = 0.08) => {
         const curve = new THREE.CatmullRomCurve3(points);
@@ -538,7 +556,7 @@ export default function Stadium(props: Props) {
           );
         } else {
           const a = g.event.from,
-            b = g.kind === 'finish' ? flightFor(g.event, p.scene.events)!.to : g.event.to;
+            b = g.event.to;
           line([xyz(a.x, a.y, 0.2), xyz(b.x, b.y, 0.2)], '#ffc579', 0.12);
           ringAt(b, 1.5, '#ffc579');
           tagAt(g.metric.toUpperCase(), g.anchor, '#ffc579', 5);
@@ -663,6 +681,7 @@ export default function Stadium(props: Props) {
       if (document.hidden || stamp - lastRender < 30) return;
       lastRender = stamp;
       const p = latest.current;
+      const finish = finishState(p.scene, p.time);
       for (const player of p.scene.players) {
         const actor = actors.get(player.id)!;
         const motion = playerMotion(p.scene, player.id, p.time);
@@ -687,15 +706,62 @@ export default function Stadium(props: Props) {
         actor.rig.rotation.x = Math.min(0.12, motion.speed * 0.02);
         actor.rig.rotation.z =
           motion.dive * 1.15 + Math.sin(phase) * Math.min(0.035, motion.speed * 0.006);
-        if (motion.dive) {
-          actor.rig.position.y += motion.dive * 0.65;
-          actor.arms[0].rotation.x = -1.3 * motion.dive;
-          actor.arms[1].rotation.x = -1.3 * motion.dive;
+        if (player.id === 'A-1') {
+          actor.group.rotation.y = -Math.PI / 2;
+          actor.rig.rotation.z = finish.keeperRoll;
+          actor.rig.rotation.x = 0;
+          actor.rig.position.y = finish.keeperLift + 0.08 * finish.extension;
+          actor.arms.forEach((arm, i) => {
+            arm.rotation.z = (i ? 1 : -1) * (2.7 * finish.extension) * (1 - 0.65 * finish.landing);
+            arm.rotation.x = -0.15 * finish.extension;
+          });
+          actor.elbows.forEach((elbow) => (elbow.rotation.x = -0.2));
+          actor.legs[0].rotation.x = 0.35 * finish.extension;
+          actor.legs[1].rotation.x = -0.25 * finish.extension;
+          actor.knees.forEach((knee) => (knee.rotation.x = 0.35 * finish.extension));
+        } else {
+          actor.arms.forEach((arm, i) => (arm.rotation.z = (i ? 1 : -1) * 0.13));
+          if (finish.reaction > 0) {
+            if (player.team === 'home') {
+              const scorer = player.id === finish.shot.player;
+              const involved = scorer || player.id === 'N-7' || player.id === 'N-8';
+              if (involved) {
+                actor.arms.forEach((arm, i) => {
+                  arm.rotation.z = (i ? 1 : -1) * (scorer ? 2.2 : 1.3) * finish.reaction;
+                  arm.rotation.x = -0.3 * finish.reaction;
+                });
+                actor.elbows.forEach((elbow) => (elbow.rotation.x = -0.4));
+                if (scorer)
+                  actor.rig.position.y +=
+                    Math.max(0, Math.sin((p.time - finish.outcome.at - 0.4) * 5)) *
+                    0.12 *
+                    finish.reaction;
+              }
+            } else {
+              actor.rig.rotation.x += 0.12 * finish.reaction;
+              actor.arms.forEach((arm) => (arm.rotation.x = -0.6 * finish.reaction));
+            }
+          }
         }
         const selected = p.focus === player.id;
         actor.tag.visible = selected && p.event.type !== 'pass';
         actor.ring.scale.setScalar(selected ? 1.3 : 0.65);
         (actor.ring.material as THREE.MeshBasicMaterial).opacity = selected ? 0.9 : 0.25;
+      }
+      for (const net of goalNets) {
+        const positions = net.geometry.attributes.position as THREE.BufferAttribute;
+        const hitHeight = ballMotion(p.scene, finish.outcome.at + NET_CONTACT_DELAY).height;
+        for (let i = 0; i < positions.count; i++) {
+          const x = net.base[i * 3],
+            y = net.base[i * 3 + 1],
+            z = net.base[i * 3 + 2];
+          const ripple =
+            net.side === 1 && finish.outcome.type === 'goal' && Math.abs(x - 2.2) < 0.01
+              ? netDisplacement(finish.impact, y, z, hitHeight, finish.outcome.from.y - 34)
+              : 0;
+          positions.setX(i, x + ripple);
+        }
+        positions.needsUpdate = true;
       }
       const flight = ballMotion(p.scene, p.time),
         bp = flight.point;
@@ -755,6 +821,23 @@ export default function Stadium(props: Props) {
             (high ? 48 : g.kind === 'finish' ? 15 : 23) * wide,
           ),
         );
+        if (g.kind === 'finish') {
+          const after = THREE.MathUtils.smoothstep(
+            p.time,
+            finish.outcome.at + 0.25,
+            finish.outcome.at + 1.7,
+          );
+          goalTarget.copy(xyz(100 + after * 3, 34, 1));
+          goalCamera
+            .copy(goalTarget)
+            .add(
+              new THREE.Vector3(
+                (-12 + after * 7) * wide,
+                (8 - after * 3) * wide,
+                (18 - after * 5) * wide,
+              ),
+            );
+        }
         transitioning = true;
       }
       if (cameraMode.current === 'follow') {

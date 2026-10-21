@@ -110,7 +110,7 @@ export function buildGuide(s: Scenario): GuideStep[] {
       title: finish.type === 'goal' ? 'The finish' : 'The goalkeeper intervenes',
       event: shot,
       start: Math.max(0, shot.at - 0.7),
-      end: Math.min(s.duration, finish.at + 0.7),
+      end: Math.min(s.duration, finish.at + 2.8),
       anchor: shot.to,
       metric: finish.type === 'goal' ? 'Goal' : 'Saved',
       detail: `${name(shot.player)} shoots. The replay follows the recorded ${finish.type === 'goal' ? 'goal' : 'save'} outcome; it does not estimate scoring probability.`,

@@ -1,3 +1,4 @@
+import { NET_CONTACT_DELAY } from './finish';
 import {
   distance,
   interpolate,
@@ -104,9 +105,12 @@ export function buildMotion(s: Scenario, formation: Point[]) {
     if (p.id === 'A-1') {
       anchors = [
         { at: 0, point: { x: 100, y: 34 } },
-        { at: shot.at - 0.35, point: { x: 100.5, y: 34 } },
         {
-          at: finish.at,
+          at: finish.type === 'goal' ? shot.at + 0.12 : shot.at - 0.35,
+          point: { x: 100.5, y: 34 },
+        },
+        {
+          at: finish.type === 'goal' ? finish.at + 0.55 : finish.at,
           point: finish.type === 'save' ? finish.from : { x: 102, y: finish.from.y + 0.5 },
         },
         {
@@ -210,7 +214,10 @@ export function ballMotion(s: Scenario, time: number, prepared?: BallFlight[]) {
   if (t >= finish.at) {
     const dt = t - finish.at;
     if (finish.type === 'goal') {
-      const x = dt < 0.18 ? 105 + dt * 9 : 106.62 - 0.8 * (1 - Math.exp(-(dt - 0.18) * 3));
+      const x =
+        dt < NET_CONTACT_DELAY
+          ? 105 + dt * 24
+          : 107.09 - 0.65 * (1 - Math.exp(-(dt - NET_CONTACT_DELAY) * 3));
       return {
         point: { x, y: finish.from.y },
         height: 0.11 + 0.65 * Math.exp(-dt * 3) * Math.abs(Math.cos(dt * 10)),

@@ -64,3 +64,11 @@ Docked the director rundown below the pitch and the inspector beside it (below o
 Added a two-link planted/recovery leg solve, kick preparation and follow-through, and a receiving pose. Smoothed close-control offsets around movement, reception and release; a new continuity test caught and eliminated a near-target direction-switch jump. The rendered ball now uses the model’s 11 cm radius and ground-pass rotation follows travelled distance. Added boot soles, sock trim, ears and goalkeeper gloves. Motion remains procedural and synthetic; Foundry is disconnected.
 
 Validation: 32 tests and production build pass. Four new checks cover bounded, non-overlapping labels, completely occupied viewports, ankle clearance through the gait cycle, and millisecond carry continuity across all scenarios. Browser inspection confirmed desktop side docking and 390px stacked layout, plus live player measurements. Existing Three.js chunk-size warning remains.
+
+## 21 October 2026 — Cinematic finish
+
+Added a dedicated Replay finish entry point and extended the final chapter through the goal aftermath. The camera holds the strike/keeper in view, then moves closer to the goalmouth; the finish uses a clean pitch without trajectory graphics and retains the guide below the viewport. The goalkeeper now has a delayed takeoff, extension, flight and landing pose; goal scenarios use a later, speed-bounded goalkeeper route. Scorer/supporter celebrations and subdued defender poses begin only after a recorded goal, never after a save.
+
+Rebuilt both nets with subdivided back, roof and side mesh lines. The ball continues into the goal before rebounding at the back net; a local damped net ripple begins at that contact time and stays pinned to the frame. The poses, rebound and net ripple are authored approximations rather than a full rigid-body/cloth simulation. Foundry remains disconnected.
+
+Validation: 36 tests and production build pass. New checks cover keeper reaction/landing timing, goal-only reactions, back-net contact/rebound continuity and localised net deformation/settling. Browser inspection verified the finish entry point, clean goalmouth framing, visible reactions and extended aftermath. Existing Three.js chunk warning remains.

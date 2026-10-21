@@ -466,6 +466,9 @@ export default function App() {
                   >
                     ✦ {guide ? 'Exit guided replay' : 'Guided replay'}
                   </button>
+                  <button onClick={() => enterGuide(guideSteps.length - 1)}>
+                    Replay finish ↗
+                  </button>
                   <button
                     aria-pressed={threeD}
                     onClick={() => {
