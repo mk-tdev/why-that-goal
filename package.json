@@ -10,7 +10,8 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --import tsx --test src/core/*.test.ts"
+    "test": "node --import tsx --test src/core/*.test.ts server/*.test.ts",
+    "dev:api": "node --import tsx server/index.ts"
   },
   "dependencies": {
     "react": "19.3.1",

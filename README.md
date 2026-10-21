@@ -77,3 +77,9 @@ docs/architecture.md   Data contract, boundaries and next milestones
 ```
 
 Registration correspondence, account screenshots and private planning notes are excluded from the public repository. No credentials belong in this repository or in frontend environment variables.
+
+## Local evidence backend
+
+Run `npm run dev:api` alongside the frontend to start the loopback-only API on port 8787. It provides validated evidence snapshots and replay moments without model calls. The browser is not connected to this API yet.
+
+See [backend contract and Foundry handoff](docs/api/intelligence.md) and [OpenAPI specification](docs/api/openapi.json). The server accepts only known scenario IDs and bounded timestamps; a future model adapter can select versioned facts, while trusted code supplies numbers, text and replay coordinates. Foundry setup remains deferred.

@@ -72,3 +72,9 @@ Added a dedicated Replay finish entry point and extended the final chapter throu
 Rebuilt both nets with subdivided back, roof and side mesh lines. The ball continues into the goal before rebounding at the back net; a local damped net ripple begins at that contact time and stays pinned to the frame. The poses, rebound and net ripple are authored approximations rather than a full rigid-body/cloth simulation. Foundry remains disconnected.
 
 Validation: 36 tests and production build pass. New checks cover keeper reaction/landing timing, goal-only reactions, back-net contact/rebound continuity and localised net deformation/settling. Browser inspection verified the finish entry point, clean goalmouth framing, visible reactions and extended aftermath. Existing Three.js chunk warning remains.
+
+## 21 October 2026 — Disconnected intelligence backend
+
+Added a loopback HTTP API, strict request/output contracts, bounded snapshot evidence tools, revision-aware citations and server-derived replay targets. An optional adapter interface supports validated fact selection, deadline/abort signaling and explicit fallback reasons. The runtime does not instantiate an adapter or make model calls. The frontend remains independent. Published a local OpenAPI contract and Foundry handoff instructions; free-form explanation validation and live provider integration remain pending.
+
+Validation: 46 tests pass, including 10 backend tests covering real HTTP requests, body/content-type limits, time/receipt boundaries, corrections, missing tracking, malicious selections, timeouts, provider errors and multilingual numeric consistency. The initial sandbox denied local socket binding; the full suite passed with loopback permission. Typecheck and production build pass; existing Three.js chunk warning remains. No Azure resources or external integration were used.

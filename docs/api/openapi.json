@@ -1,0 +1,417 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Why That Goal local evidence API",
+    "version": "1.0.0",
+    "description": "Loopback-only developer API. Foundry disconnected. Browser Origin access disabled."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8787"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Service state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["status", "foundry"],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["ok"]
+                    },
+                    "foundry": {
+                      "type": "string",
+                      "enum": ["disconnected"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analyze": {
+      "post": {
+        "operationId": "analyze",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              },
+              "example": {
+                "scenarioId": "quick-break",
+                "through": 19,
+                "receivedThrough": 19,
+                "audience": "analyst",
+                "language": "en"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Offline evidence analysis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request, unknown scenario or timestamp outside duration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Browser Origin disabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Body exceeds 8192 bytes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["scenarioId", "through", "receivedThrough", "audience", "language"],
+        "properties": {
+          "scenarioId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]{1,64}$"
+          },
+          "through": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 7200
+          },
+          "receivedThrough": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 7200
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["fan", "analyst"]
+          },
+          "language": {
+            "type": "string",
+            "enum": ["en", "es"]
+          }
+        }
+      },
+      "Fact": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "eventId",
+          "version",
+          "at",
+          "playerId",
+          "kind",
+          "target",
+          "text",
+          "method"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "at": {
+            "type": "number"
+          },
+          "playerId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["event", "pass-distance", "receiver-space"]
+          },
+          "target": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["m"]
+          }
+        }
+      },
+      "Moment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "eventId",
+          "version",
+          "at",
+          "playerId",
+          "kind",
+          "target",
+          "text",
+          "method",
+          "replayAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "at": {
+            "type": "number"
+          },
+          "playerId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["event", "pass-distance", "receiver-space"]
+          },
+          "target": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["m"]
+          },
+          "replayAt": {
+            "type": "number"
+          }
+        }
+      },
+      "EvidencePacket": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schemaVersion", "source", "request", "score", "facts", "limitations"],
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "enum": ["1.0"]
+          },
+          "source": {
+            "type": "string",
+            "enum": ["synthetic"]
+          },
+          "request": {
+            "$ref": "#/components/schemas/AnalysisRequest"
+          },
+          "score": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["home", "away"],
+            "properties": {
+              "home": {
+                "type": "integer"
+              },
+              "away": {
+                "type": "integer"
+              }
+            }
+          },
+          "facts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fact"
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AnalysisResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schemaVersion", "mode", "provider", "reason", "evidence", "moments", "trace"],
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "enum": ["1.0"]
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["deterministic", "model-selected", "fallback"]
+          },
+          "provider": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["disconnected", "validated", "invalid-output", "provider-error", "timeout"]
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/EvidencePacket"
+          },
+          "moments": {
+            "type": "array",
+            "maxItems": 6,
+            "items": {
+              "$ref": "#/components/schemas/Moment"
+            }
+          },
+          "trace": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["elapsedMs", "calls", "validated"],
+            "properties": {
+              "elapsedMs": {
+                "type": "number"
+              },
+              "calls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "validated": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "Selection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["factIds"],
+        "properties": {
+          "factIds": {
+            "type": "array",
+            "maxItems": 6,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
