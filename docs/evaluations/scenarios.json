@@ -2,6 +2,7 @@
   "scope": "Authored regression fixtures; not a held-out generalization or model-quality benchmark.",
   "results": [
     {
+      "recap": "A buildup converted",
       "scenario": "quick-break",
       "outcome": "goal",
       "events": 6,
@@ -12,6 +13,7 @@
       "checks": "passed"
     },
     {
+      "recap": "A buildup converted",
       "scenario": "switch-play",
       "outcome": "goal",
       "events": 6,
@@ -22,6 +24,7 @@
       "checks": "passed"
     },
     {
+      "recap": "A chance denied",
       "scenario": "no-finish",
       "outcome": "save",
       "events": 6,
@@ -32,6 +35,7 @@
       "checks": "passed"
     },
     {
+      "recap": "A chance denied",
       "scenario": "cutback-save",
       "outcome": "save",
       "events": 6,
@@ -42,6 +46,7 @@
       "checks": "passed"
     },
     {
+      "recap": "An attack interrupted",
       "scenario": "counter-cut-out",
       "outcome": "interception",
       "events": 5,
@@ -52,6 +57,7 @@
       "checks": "passed"
     },
     {
+      "recap": "An attack interrupted",
       "scenario": "switch-intercepted",
       "outcome": "interception",
       "events": 4,

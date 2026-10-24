@@ -386,7 +386,8 @@
           "evidence",
           "moments",
           "trace",
-          "buildup"
+          "buildup",
+          "recap"
         ],
         "properties": {
           "schemaVersion": {
@@ -453,6 +454,16 @@
                 }
               }
             }
+          },
+          "recap": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/SequenceRecap"
+              }
+            ]
           }
         }
       },
@@ -478,6 +489,64 @@
         "properties": {
           "error": {
             "type": "string"
+          }
+        }
+      },
+      "SequenceRecap": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "outcome",
+          "title",
+          "summary",
+          "through",
+          "terminalFactId",
+          "cards",
+          "limitation"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": ["goal", "save", "failed-attack"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "terminalFactId": {
+            "type": "string"
+          },
+          "limitation": {
+            "type": "string"
+          },
+          "through": {
+            "type": "number"
+          },
+          "cards": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["title", "text", "factIds"],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "factIds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -27,7 +27,14 @@ for (const scene of scenarios) {
         : 'Where the attack broke down',
   );
   assert.ok(result.buildup.factIds.every((id) => result.evidence.facts.some((f) => f.id === id)));
+  assert.equal(result.recap?.outcome, outcome === 'interception' ? 'failed-attack' : outcome);
+  assert.ok(
+    result.recap?.cards.every((c) =>
+      c.factIds.every((id) => result.evidence.facts.some((f) => f.id === id)),
+    ),
+  );
   results.push({
+    recap: result.recap!.title,
     scenario: scene.id,
     outcome,
     events: scene.events.length,

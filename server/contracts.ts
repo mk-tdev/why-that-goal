@@ -40,7 +40,17 @@ export type EvidencePacket = {
 };
 /** Models select facts; trusted code supplies prose, measurements and replay coordinates. */
 export type Selection = { factIds: string[] };
+export type SequenceRecap = {
+  outcome: 'goal' | 'save' | 'failed-attack';
+  title: string;
+  summary: string;
+  through: number;
+  terminalFactId: string;
+  cards: { title: string; text: string; factIds: string[] }[];
+  limitation: string;
+};
 export type AnalysisResponse = {
+  recap: SequenceRecap | null;
   schemaVersion: '1.0';
   mode: 'deterministic' | 'model-selected' | 'fallback';
   provider: string;

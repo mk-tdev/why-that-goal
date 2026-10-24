@@ -2727,3 +2727,80 @@ h1 span {
   line-height: 1.6;
   margin-top: 12px;
 }
+.sequence-recap {
+  padding: 28px;
+  margin-top: 24px;
+  border-top: 1px solid #dca55655;
+  background: #102027;
+}
+.sequence-recap header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #dbad68;
+  font: 10px monospace;
+  letter-spacing: 0.12em;
+}
+.sequence-recap h2 {
+  margin: 16px 0 8px;
+  font-size: 28px;
+}
+.sequence-recap p {
+  color: #b8cccf;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.recap-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+.recap-cards article {
+  padding: 18px;
+  border: 1px solid #ffffff18;
+  border-radius: 8px;
+  background: #14272e;
+}
+.recap-number {
+  color: #dca556;
+  font: 11px monospace;
+}
+.recap-cards h3 {
+  font-size: 15px;
+  margin: 8px 0;
+}
+.recap-cards button,
+.recap-return {
+  border: 1px solid #dca55655;
+  border-radius: 5px;
+  background: #1b3037;
+  color: #e2ba7c;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  font: 11px inherit;
+  margin-top: 8px;
+}
+.recap-cards button:hover,
+.recap-return:hover {
+  background: #29404a;
+}
+.recap-cards button small,
+.sequence-recap > small {
+  display: block;
+  color: #8da6ab;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.recap-return {
+  margin: 16px;
+}
+@media (max-width: 650px) {
+  .recap-cards {
+    grid-template-columns: 1fr;
+  }
+  .sequence-recap {
+    padding: 18px;
+  }
+}

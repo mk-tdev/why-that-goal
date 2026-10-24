@@ -1,3 +1,4 @@
+import type { Fact } from '../server/contracts';
 import { useAnalysis } from './hooks/useAnalysis';
 import { buildGuide, type GuideStep } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
@@ -228,6 +229,7 @@ function Field({
 }
 
 export default function App() {
+  const [recapReturn, setRecapReturn] = useState(false);
   const [evidenceGuide, setEvidenceGuide] = useState<GuideStep | undefined>();
   const [guideIndex, setGuideIndex] = useState<number | null>(null);
   const [guideRunning, setGuideRunning] = useState(false);
@@ -348,7 +350,54 @@ export default function App() {
     setPlaying(false);
     setComparison(false);
   }
+  function inspectFact(fact: Fact) {
+    const index = scene.events.findIndex(
+      (e) => e.id === fact.eventId && e.version === fact.version,
+    );
+    if (index < 0) return;
+    if (scene.events[index].type === 'goal' || scene.events[index].type === 'save') {
+      enterGuide(guideSteps.length - 1);
+      return;
+    }
+    const start = fact.fromTime ?? Math.max(0, fact.at - 1);
+    const end = fact.toTime ?? fact.at;
+    endGuide();
+    setSelected(index);
+    setComparison(false);
+    setPlaying(false);
+    setFocus(fact.playerId);
+    setThreeD(true);
+    setLayer('space');
+    setTime(start);
+    setEvidenceGuide({
+      id: fact.id,
+      kind: fact.kind === 'off-ball-run' ? 'run' : fact.kind === 'space-change' ? 'space' : 'pass',
+      title:
+        fact.kind === 'off-ball-run'
+          ? 'The receiving run'
+          : fact.kind === 'space-change'
+            ? 'The changing gap'
+            : 'The connection',
+      detail: fact.text,
+      event: scene.events[index],
+      start,
+      end,
+      anchor: fact.target,
+      player: fact.playerId,
+      before: fact.before,
+      after: fact.after,
+      metric:
+        fact.before !== undefined
+          ? `${fact.before} → ${fact.after} m`
+          : fact.value !== undefined
+            ? `${fact.value} m`
+            : 'Recorded event',
+    });
+    setGuideRunning(true);
+    setGuideReplay((n) => n + 1);
+  }
   function changeScene(id: string) {
+    setRecapReturn(false);
     endGuide();
     const next = scenarios.find((s) => s.id === id)!;
     setSceneId(id);
@@ -361,6 +410,12 @@ export default function App() {
   function download() {
     const payload = {
       ...exportOverlay(scene, time, analyst ? 'analyst' : 'fan', language),
+      recap: analysis.data?.recap ?? null,
+      recapEvidence: analysis.data?.recap
+        ? analysis.data.evidence.facts.filter((f) =>
+            analysis.data!.recap!.cards.some((c) => c.factIds.includes(f.id)),
+          )
+        : [],
       selectedAnalysis:
         event.at <= time
           ? {
@@ -806,6 +861,55 @@ export default function App() {
                   </button>
                 ))}
               </div>
+              {recapReturn && !analysis.data?.recap && (
+                <button
+                  className="recap-return"
+                  onClick={() => {
+                    jump(scene.events.length - 1);
+                    setRecapReturn(false);
+                  }}
+                >
+                  {language === 'en' ? 'Return to sequence recap ↗' : 'Volver al resumen ↗'}
+                </button>
+              )}
+              {analysis.data?.recap && (
+                <section className="sequence-recap" aria-label="Automatic sequence recap">
+                  <header>
+                    <span>{language === 'en' ? 'SEQUENCE RECAP' : 'RESUMEN DE LA JUGADA'}</span>
+                    <b>{analysis.data.recap.outcome.replace('-', ' ').toUpperCase()}</b>
+                  </header>
+                  <h2>{analysis.data.recap.title}</h2>
+                  <p>{analysis.data.recap.summary}</p>
+                  <div className="recap-cards">
+                    {analysis.data.recap.cards.map((card, i) => (
+                      <article key={card.title}>
+                        <span className="recap-number">0{i + 1}</span>
+                        <h3>{card.title}</h3>
+                        <p>{card.text}</p>
+                        {card.factIds.map((id) => {
+                          const fact = analysis.data!.evidence.facts.find((f) => f.id === id)!;
+                          return (
+                            <button
+                              key={id}
+                              onClick={() => {
+                                setRecapReturn(true);
+                                inspectFact(fact);
+                              }}
+                            >
+                              {language === 'en' ? 'Replay evidence' : 'Ver evidencia'} ·{' '}
+                              {clock(scene.baseClock, fact.at)} ↗
+                              <small>
+                                {fact.eventId} · v{fact.version}
+                              </small>
+                            </button>
+                          );
+                        })}
+                      </article>
+                    ))}
+                  </div>
+                  <small>{analysis.data.recap.limitation}</small>
+                </section>
+              )}
             </section>
             <aside
               className={`notebook ${drawer ? 'notebook-open' : ''}`}
@@ -895,51 +999,7 @@ export default function App() {
                         <button
                           className="evidence-fact"
                           key={id}
-                          onClick={() => {
-                            const index = scene.events.findIndex(
-                              (e) => e.id === fact.eventId && e.version === fact.version,
-                            );
-                            if (index < 0) return;
-                            const start = fact.fromTime ?? Math.max(0, fact.at - 1);
-                            const end = fact.toTime ?? fact.at;
-                            endGuide();
-                            setSelected(index);
-                            setComparison(false);
-                            setPlaying(false);
-                            setFocus(fact.playerId);
-                            setThreeD(true);
-                            setLayer('space');
-                            setTime(start);
-                            setEvidenceGuide({
-                              id: fact.id,
-                              kind:
-                                fact.kind === 'off-ball-run'
-                                  ? 'run'
-                                  : fact.kind === 'space-change'
-                                    ? 'space'
-                                    : 'pass',
-                              title:
-                                fact.kind === 'off-ball-run'
-                                  ? 'The receiving run'
-                                  : fact.kind === 'space-change'
-                                    ? 'The changing gap'
-                                    : 'The connection',
-                              detail: fact.text,
-                              event: scene.events[index],
-                              start,
-                              end,
-                              anchor: fact.target,
-                              player: fact.playerId,
-                              before: fact.before,
-                              after: fact.after,
-                              metric:
-                                fact.before !== undefined
-                                  ? `${fact.before} → ${fact.after} m`
-                                  : `${fact.value} m`,
-                            });
-                            setGuideRunning(true);
-                            setGuideReplay((n) => n + 1);
-                          }}
+                          onClick={() => inspectFact(fact)}
                         >
                           <small>
                             {fact.kind === 'off-ball-run'

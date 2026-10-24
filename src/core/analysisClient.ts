@@ -65,6 +65,31 @@ export function readAnalysis(value: unknown, request: AnalysisRequest): Analysis
     )
       throw new Error('Invalid evidence interval');
   }
+  if (data.recap !== null) {
+    const recap = data.recap;
+    const exists = (id: string) => data.evidence.facts.some((f) => f.id === id);
+    if (
+      !recap ||
+      !['goal', 'save', 'failed-attack'].includes(recap.outcome) ||
+      typeof recap.title !== 'string' ||
+      typeof recap.summary !== 'string' ||
+      typeof recap.limitation !== 'string' ||
+      recap.through !== request.through ||
+      !exists(recap.terminalFactId) ||
+      !Array.isArray(recap.cards) ||
+      !recap.cards.length ||
+      recap.cards.some(
+        (c) =>
+          !c ||
+          typeof c.title !== 'string' ||
+          typeof c.text !== 'string' ||
+          !Array.isArray(c.factIds) ||
+          !c.factIds.length ||
+          c.factIds.some((id) => !exists(id)),
+      )
+    )
+      throw new Error('Invalid recap evidence');
+  }
   return data;
 }
 export async function fetchAnalysis(request: AnalysisRequest, signal: AbortSignal, base = '') {

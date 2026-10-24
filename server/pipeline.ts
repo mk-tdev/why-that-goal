@@ -1,3 +1,4 @@
+import { createRecap } from './recap';
 import { scenarios } from '../src/core/scenarios';
 import {
   ContractError,
@@ -99,6 +100,7 @@ export async function analyze(
     ).values(),
   ].sort((a, b) => a.at - b.at);
   return {
+    recap: createRecap(scenario, packet),
     buildup: {
       title: failed
         ? en
