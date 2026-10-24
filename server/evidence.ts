@@ -1,3 +1,4 @@
+import { buildupFacts } from './buildup';
 import { distance, evidenceFor, matchState, visibleEvents, type Scenario } from '../src/core/model';
 import { inspectSpace } from '../src/core/spatial';
 import { ContractError, type AnalysisRequest, type EvidencePacket, type Fact } from './contracts';
@@ -79,6 +80,7 @@ export function createEvidenceTools(scenario: Scenario, request: AnalysisRequest
         'Nearest opponent distance at reception from synthetic tracking; not pressure, pass difficulty or causation.',
     });
   }
+  facts.push(...buildupFacts(scenario, events, request));
   const state = matchState(scenario.events, request.through, request.receivedThrough);
   const packet: EvidencePacket = {
     schemaVersion: '1.0',

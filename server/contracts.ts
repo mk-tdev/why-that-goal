@@ -13,7 +13,17 @@ export type Fact = {
   version: number;
   at: number;
   playerId: string;
-  kind: 'event' | 'pass-distance' | 'receiver-space';
+  kind:
+    | 'event'
+    | 'pass-distance'
+    | 'receiver-space'
+    | 'pass-progress'
+    | 'off-ball-run'
+    | 'space-change';
+  fromTime?: number;
+  toTime?: number;
+  before?: number;
+  after?: number;
   value?: number;
   unit?: 'm';
   target: Point;
@@ -36,6 +46,7 @@ export type AnalysisResponse = {
   provider: string;
   reason: 'disconnected' | 'validated' | 'invalid-output' | 'provider-error' | 'timeout';
   evidence: EvidencePacket;
+  buildup: { title: string; summary: string; limitation: string; factIds: string[] };
   moments: (Fact & { replayAt: number })[];
   trace: { elapsedMs: number; calls: number; validated: boolean };
 };

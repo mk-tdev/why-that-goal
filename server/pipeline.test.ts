@@ -199,3 +199,53 @@ test('frontend HTTP client resolves the real backend and rejects mismatched snap
     await new Promise<void>((resolve) => server.close(() => resolve()));
   }
 });
+
+test('buildup claims cite visible evidence and distinguish goals from saves', async () => {
+  for (const scene of scenarios) {
+    const result = await analyze({
+      ...request,
+      scenarioId: scene.id,
+      through: scene.duration,
+      receivedThrough: scene.duration,
+    });
+    for (const id of result.buildup.factIds) {
+      const fact = result.evidence.facts.find((f) => f.id === id)!;
+      assert.ok(fact);
+      assert.ok(fact.at <= scene.duration);
+      assert.ok(fact.fromTime! <= fact.toTime!);
+      assert.ok(fact.toTime! <= fact.at);
+    }
+    if (scene.events.some((e) => e.type === 'save')) {
+      assert.equal(result.buildup.title, 'How the chance was built');
+      assert.match(result.buildup.summary, /saved/);
+    }
+  }
+  const early = await analyze({ ...request, through: 8, receivedThrough: 8 });
+  assert.equal(early.buildup.title, 'The buildup so far');
+  assert.ok(early.evidence.facts.every((f) => f.at <= 8));
+});
+test('space change measures one fixed destination and reports closing as well as opening', async () => {
+  const { buildupFacts } = await import('./buildup');
+  const { inspectSpace } = await import('../src/core/spatial');
+  const facts = buildupFacts(scenario, scenario.events, request);
+  assert.ok(facts.some((f) => f.kind === 'off-ball-run'));
+  for (const fact of facts.filter((f) => f.kind === 'space-change')) {
+    const e = scenario.events.find((e) => e.id === fact.eventId)!;
+    const before = inspectSpace(scenario, e, fact.fromTime!).receiver.receiverDistance;
+    const after = inspectSpace(scenario, e, fact.toTime!).receiver.receiverDistance;
+    assert.equal(fact.value, Math.round((after - before) * 10) / 10);
+    assert.match(
+      fact.text,
+      fact.value! > 0.1 ? /opened/ : fact.value! < -0.1 ? /closed/ : /steady/,
+    );
+  }
+});
+test('missing tracking omits runs and gap changes; withdrawn passes have no buildup claims', () => {
+  const changed = structuredClone(scenario);
+  changed.tracks = {};
+  const pass = changed.events.find((e) => e.type === 'pass')!;
+  changed.events.push({ ...pass, version: pass.version + 1, outcome: 'voided' });
+  const facts = createEvidenceTools(changed, request).snapshot().facts;
+  assert.ok(facts.every((f) => f.kind !== 'off-ball-run' && f.kind !== 'space-change'));
+  assert.ok(facts.every((f) => f.eventId !== pass.id));
+});

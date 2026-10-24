@@ -42,6 +42,29 @@ export function readAnalysis(value: unknown, request: AnalysisRequest): Analysis
     )
       throw new Error('Invalid replay target');
   }
+  if (
+    !data.buildup ||
+    typeof data.buildup.title !== 'string' ||
+    typeof data.buildup.summary !== 'string' ||
+    typeof data.buildup.limitation !== 'string' ||
+    !Array.isArray(data.buildup.factIds) ||
+    data.buildup.factIds.some((id) => !data.evidence.facts.some((f) => f.id === id))
+  )
+    throw new Error('Invalid buildup evidence');
+  for (const fact of data.evidence.facts) {
+    if (
+      fact.fromTime !== undefined &&
+      (!Number.isFinite(fact.fromTime) || fact.fromTime < 0 || fact.fromTime > fact.at)
+    )
+      throw new Error('Invalid evidence interval');
+    if (
+      fact.toTime !== undefined &&
+      (!Number.isFinite(fact.toTime) ||
+        fact.toTime < (fact.fromTime ?? 0) ||
+        fact.toTime > request.through)
+    )
+      throw new Error('Invalid evidence interval');
+  }
   return data;
 }
 export async function fetchAnalysis(request: AnalysisRequest, signal: AbortSignal, base = '') {

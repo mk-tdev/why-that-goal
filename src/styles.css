@@ -2701,3 +2701,29 @@ h1 span {
   font-size: 10px;
   margin-top: 6px;
 }
+.buildup-story {
+  margin: 24px 0;
+  padding: 16px 0;
+  border-top: 1px solid #dda35044;
+}
+.buildup-kicker {
+  font: 10px monospace;
+  letter-spacing: 0.12em;
+  color: #dda350;
+}
+.buildup-story h3 {
+  font-size: 20px;
+  margin: 10px 0;
+}
+.buildup-story p {
+  color: #c3d1d3;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.buildup-story > small {
+  display: block;
+  color: #91a4a8;
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 12px;
+}

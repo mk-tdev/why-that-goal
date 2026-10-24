@@ -198,7 +198,14 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["event", "pass-distance", "receiver-space"]
+            "enum": [
+              "event",
+              "pass-distance",
+              "receiver-space",
+              "pass-progress",
+              "off-ball-run",
+              "space-change"
+            ]
           },
           "target": {
             "type": "object",
@@ -225,6 +232,18 @@
           "unit": {
             "type": "string",
             "enum": ["m"]
+          },
+          "fromTime": {
+            "type": "number"
+          },
+          "toTime": {
+            "type": "number"
+          },
+          "before": {
+            "type": "number"
+          },
+          "after": {
+            "type": "number"
           }
         }
       },
@@ -261,7 +280,14 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["event", "pass-distance", "receiver-space"]
+            "enum": [
+              "event",
+              "pass-distance",
+              "receiver-space",
+              "pass-progress",
+              "off-ball-run",
+              "space-change"
+            ]
           },
           "target": {
             "type": "object",
@@ -290,6 +316,18 @@
             "enum": ["m"]
           },
           "replayAt": {
+            "type": "number"
+          },
+          "fromTime": {
+            "type": "number"
+          },
+          "toTime": {
+            "type": "number"
+          },
+          "before": {
+            "type": "number"
+          },
+          "after": {
             "type": "number"
           }
         }
@@ -340,7 +378,16 @@
       "AnalysisResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["schemaVersion", "mode", "provider", "reason", "evidence", "moments", "trace"],
+        "required": [
+          "schemaVersion",
+          "mode",
+          "provider",
+          "reason",
+          "evidence",
+          "moments",
+          "trace",
+          "buildup"
+        ],
         "properties": {
           "schemaVersion": {
             "type": "string",
@@ -382,6 +429,28 @@
               },
               "validated": {
                 "type": "boolean"
+              }
+            }
+          },
+          "buildup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "summary", "limitation", "factIds"],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "limitation": {
+                "type": "string"
+              },
+              "factIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               }
             }
           }

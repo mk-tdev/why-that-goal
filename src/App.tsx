@@ -1,5 +1,5 @@
 import { useAnalysis } from './hooks/useAnalysis';
-import { buildGuide } from './core/guide';
+import { buildGuide, type GuideStep } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 const Stadium = lazy(() => import('./scene/Stadium'));
@@ -228,6 +228,7 @@ function Field({
 }
 
 export default function App() {
+  const [evidenceGuide, setEvidenceGuide] = useState<GuideStep | undefined>();
   const [guideIndex, setGuideIndex] = useState<number | null>(null);
   const [guideRunning, setGuideRunning] = useState(false);
   const [guideReplay, setGuideReplay] = useState(0);
@@ -268,12 +269,14 @@ export default function App() {
     ) ?? [];
   const serverExplanation = eventFacts.find((f) => f.kind === 'event');
   const guideSteps = useMemo(() => buildGuide(scene), [scene]);
-  const guide = guideIndex === null ? undefined : guideSteps[guideIndex];
+  const guide = evidenceGuide ?? (guideIndex === null ? undefined : guideSteps[guideIndex]);
   function endGuide() {
+    setEvidenceGuide(undefined);
     setGuideIndex(null);
     setGuideRunning(false);
   }
   function enterGuide(index: number) {
+    setEvidenceGuide(undefined);
     const step = guideSteps[index];
     setGuideIndex(index);
     setGuideRunning(true);
@@ -301,7 +304,7 @@ export default function App() {
         hold += elapsed;
         if (hold >= 3.5) {
           clearInterval(timer);
-          if (guideIndex! < guideSteps.length - 1) enterGuide(guideIndex! + 1);
+          if (!evidenceGuide && guideIndex! < guideSteps.length - 1) enterGuide(guideIndex! + 1);
           else setGuideRunning(false);
         }
       }
@@ -604,7 +607,7 @@ export default function App() {
                     <div className="guide-eyebrow">
                       DIRECTOR’S REPLAY{' '}
                       <span>
-                        {guideIndex! + 1} / {guideSteps.length}
+                        {evidenceGuide ? 'EVIDENCE' : `${guideIndex! + 1} / ${guideSteps.length}`}
                       </span>
                     </div>
                     <div className="guide-chapters">
@@ -629,7 +632,7 @@ export default function App() {
                     <div className="guide-actions">
                       <button
                         aria-label="Previous guide chapter"
-                        disabled={guideIndex === 0}
+                        disabled={!!evidenceGuide || guideIndex === 0}
                         onClick={() => enterGuide(guideIndex! - 1)}
                       >
                         ←
@@ -637,10 +640,20 @@ export default function App() {
                       <button onClick={() => setGuideRunning(!guideRunning)}>
                         {guideRunning ? 'Pause guide' : 'Resume guide'}
                       </button>
-                      <button onClick={() => enterGuide(guideIndex!)}>Replay moment</button>
+                      <button
+                        onClick={() => {
+                          if (evidenceGuide) {
+                            setTime(evidenceGuide.start);
+                            setGuideRunning(true);
+                            setGuideReplay((n) => n + 1);
+                          } else enterGuide(guideIndex!);
+                        }}
+                      >
+                        Replay moment
+                      </button>
                       <button
                         aria-label="Next guide chapter"
-                        disabled={guideIndex === guideSteps.length - 1}
+                        disabled={!!evidenceGuide || guideIndex === guideSteps.length - 1}
                         onClick={() => enterGuide(guideIndex! + 1)}
                       >
                         →
@@ -857,14 +870,96 @@ export default function App() {
                   />
                 </div>
                 <p className="explanation">
-                  {time < event.at && !comparison
-                    ? 'The sequence is beginning. Play forward to inspect the first event.'
-                    : serverExplanation
-                      ? serverExplanation.text
-                      : pass
-                        ? spatialStory
-                        : evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language)}
+                  {evidenceGuide
+                    ? evidenceGuide.detail
+                    : time < event.at && !comparison
+                      ? 'The sequence is beginning. Play forward to inspect the first event.'
+                      : serverExplanation
+                        ? serverExplanation.text
+                        : pass
+                          ? spatialStory
+                          : evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language)}
                 </p>
+                {analysis.data?.buildup && (
+                  <section className="buildup-story" aria-label="Why this attack worked">
+                    <span className="buildup-kicker">
+                      {language === 'en' ? 'READ THE BUILDUP' : 'LEE LA JUGADA'}
+                    </span>
+                    <h3>{analysis.data.buildup.title}</h3>
+                    <p>{analysis.data.buildup.summary}</p>
+                    {analysis.data.buildup.factIds.map((id) => {
+                      const fact = analysis.data!.evidence.facts.find((f) => f.id === id)!;
+                      return (
+                        <button
+                          className="evidence-fact"
+                          key={id}
+                          onClick={() => {
+                            const index = scene.events.findIndex(
+                              (e) => e.id === fact.eventId && e.version === fact.version,
+                            );
+                            if (index < 0) return;
+                            const start = fact.fromTime ?? fact.at;
+                            const end = fact.toTime ?? fact.at;
+                            endGuide();
+                            setSelected(index);
+                            setComparison(false);
+                            setPlaying(false);
+                            setFocus(fact.playerId);
+                            setThreeD(true);
+                            setLayer('space');
+                            setTime(start);
+                            setEvidenceGuide({
+                              id: fact.id,
+                              kind:
+                                fact.kind === 'off-ball-run'
+                                  ? 'run'
+                                  : fact.kind === 'space-change'
+                                    ? 'space'
+                                    : 'pass',
+                              title:
+                                fact.kind === 'off-ball-run'
+                                  ? 'The receiving run'
+                                  : fact.kind === 'space-change'
+                                    ? 'The changing gap'
+                                    : 'The connection',
+                              detail: fact.text,
+                              event: scene.events[index],
+                              start,
+                              end,
+                              anchor: fact.target,
+                              player: fact.playerId,
+                              before: fact.before,
+                              after: fact.after,
+                              metric:
+                                fact.before !== undefined
+                                  ? `${fact.before} → ${fact.after} m`
+                                  : `${fact.value} m`,
+                            });
+                            setGuideRunning(true);
+                            setGuideReplay((n) => n + 1);
+                          }}
+                        >
+                          <small>
+                            {fact.kind === 'off-ball-run'
+                              ? 'RUN'
+                              : fact.kind === 'space-change'
+                                ? 'SPACE'
+                                : 'PASS'}{' '}
+                            · {clock(scene.baseClock, fact.at)}
+                          </small>
+                          <span>{fact.text}</span>
+                          <b>
+                            {language === 'en' ? 'Show the evidence ↗' : 'Ver la evidencia ↗'}
+                          </b>
+                          <small>
+                            {analyst ? fact.method : `${fact.eventId} · v${fact.version}`}
+                          </small>
+                        </button>
+                      );
+                    })}
+                    <small>{analysis.data.buildup.limitation}</small>
+                  </section>
+                )}
                 <section className="api-evidence" aria-label="Replay intelligence">
                   <div className="api-evidence-status" role="status">
                     <span className={`api-dot ${analysis.status}`} />
@@ -881,7 +976,7 @@ export default function App() {
                     </button>
                   )}
                   {eventFacts
-                    .filter((f) => f.kind !== 'event')
+                    .filter((f) => f.kind === 'pass-distance' || f.kind === 'receiver-space')
                     .map((f) => (
                       <button
                         className="evidence-fact"

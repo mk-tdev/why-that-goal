@@ -59,3 +59,9 @@ No Foundry endpoint, model version or SDK API is assumed to be verified by this 
 ## Validation boundaries
 
 Tests exercise the real local HTTP server, strict input parsing, temporal and receipt cutoffs, corrections/voided goals, missing tracking, defensive copies, selection validation, timeout cancellation, provider errors and EN/ES numeric consistency. Provider behavior is exercised through test-only in-process adapters, not a Foundry emulator or live Foundry deployment. This is backend readiness groundwork, not completed AI reasoning or a final hackathon submission.
+
+## Evidence-based buildup narratives
+
+The response now includes `buildup` (title, summary, limitation and exact fact IDs). Trusted rules generate signed pass progress, receiving-run displacement and nearest-opponent gap change at a fixed destination. Each interval is covered by tracking within the request snapshot. Missing coverage omits the claim; withdrawn events remain excluded. Runs exclude the previous recorded carrier and intervening recorded ball actions, but are not derived from an independently measured possession feed. Home attacks toward x=105 and away toward x=0 in these fixtures.
+
+Fan view selects the first and final passing connections, the largest measured receiving run and the greatest gap change. Analyst view retains all available buildup facts. Selection is a transparent heuristic, not a learned importance score. Space may close or stay steady; run/gap coincidence is not presented as proven causation. EN/ES outputs use the same numeric evidence. Evidence buttons play the cited interval through the existing cinematic run, space or pass renderer. Foundry remains disconnected.

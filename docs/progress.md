@@ -84,3 +84,9 @@ Validation: 46 tests pass, including 10 backend tests covering real HTTP request
 Connected the notebook to the backend through a same-origin Vite proxy on API port 8791 (8787 was occupied by an unrelated SSH tunnel). Requests follow event visibility, audience and language; cancelled/older requests cannot populate the current snapshot. Backend event explanations and measured evidence are selectable directly in the notebook, with replay timestamp and player-focus actions. Loading, unavailable-service fallback and explicit retry states keep the replay usable. Foundry remains disconnected.
 
 Validation: 47 tests pass, including the frontend HTTP client against the real local server, response snapshot mismatch rejection, invalid replay targets, aborts and local-origin acceptance. Browser inspection verified backend measurements and an evidence jump to 72:04, then stopped the API and confirmed visible local fallback with retry. Production build passes; existing Three.js chunk warning remains.
+
+## 24 October 2026 — Explain the buildup
+
+Added rule-based goal/chance summaries with versioned pass-progress, receiving-run and before/after space evidence. Fan view selects up to four key observations; analyst view retains the full chain. Clicking a claim plays its measured interval with the appropriate on-pitch trace/circle and camera. Saved shots and incomplete sequences have distinct narratives. Closing gaps are reported honestly; interpretations explicitly avoid counterfactual causality claims. Foundry remains disconnected.
+
+Validation: 50 tests pass, including narrative citation scope, goal/save differentiation, independent gap calculations, missing tracks and withdrawn passes. Production build passes (existing chunk warning). Browser verification confirmed goal explanation and a receiving-run evidence replay. Local preview uses port 5174 because another application occupies 5173; both local origins are allowed.
