@@ -1,91 +1,79 @@
 # Why That Goal?
 
-**Rewind the goal. Reveal the buildup. Inspect the evidence.**
+**The goal is the ending. Discover the play that made it possible.**
 
-A visual football match companion built for Microsoft + Premier League's Inside the Game developer hackathon.
+Why That Goal? is an interactive football companion built for Microsoft and the Premier League’s **Inside the Game: Developer Hackathon**, tackling **The Synthetic Match Insights Engine for Premier League Studio** challenge.
 
-[Innovation Studio project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704)
+It turns fictional match events into a story you can explore: follow the attack, understand the key passes and runs, and click an explanation to see the evidence directly on the pitch.
 
-![Interactive 3D stadium](docs/screenshots/stadium-3d.jpg)
+[Our hackathon project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704) · [The challenge](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/executive_challenge_details/5078/about)
 
-## Current milestone: interactive 3D replay
+![Why That Goal? interactive football replay](docs/screenshots/stadium-3d.jpg)
 
-This first implementation runs locally without credentials. It includes:
+## Why we’re building it
 
-- Six fictional match sequences: two goals, two saves and two intercepted attacks with no shot.
-- A Three.js stadium with procedural kits, articulated players, goals, instanced seating, floodlights, shadows and bloom.
-- Broadcast, overhead and follow-play cameras; drag to orbit and scroll to zoom.
-- Full-width stadium mode, expandable analysis notebook, accessible player selector and 2D fallback.
-- Custom sequence/player/language menus with keyboard navigation and typeahead; custom pointer/keyboard replay slider and evidence disclosure.
-- Smooth player runs, distance-driven gait, settling touches, timed kicks and goalkeeper reactions.
-- Ground-pass deceleration, lofted switches, shot flight and goal/save rebounds.
-- Half-speed playback, player focus, trails and replay controls.
-- A scoreboard and statistics computed from events visible at the selected time.
-- Clickable, versioned event evidence and coordinate-derived passing distances.
-- Rule-based fan/analyst explanations in English and Spanish.
-- Finite-segment defender clearance and receiving-point space, drawn directly on the pitch.
-- Earlier-frame comparison with recomputed spatial measurements.
-- Timed JSON overlay and selected-analysis export.
-- A revision-aware state engine with duplicate, delayed-arrival and corrected-goal tests.
+A highlight shows the finish, but often leaves the most interesting questions unanswered. Which pass changed the attack? Where did the receiver move? Did space open up, or did the defender close it down?
 
-**No language model is connected in this milestone.** Text is generated from deterministic templates, and the app labels that explicitly. Microsoft Foundry integration, AI evaluation, dedicated Azure hosting and the final video remain work in progress. This is not a final competition submission.
+We want fans to understand more of the game and give analysts and presenters a visual way to explain a moment. Every explanation should lead back to something the viewer can inspect.
 
-## Run
+## How it answers the challenge
 
-Use Node.js 22.12+ (Node 24 recommended).
+The hackathon asks teams to turn synthetic football data into understandable match insights, live stories and automatic recaps for studio, broadcast and streaming experiences.
+
+Why That Goal? brings those ideas together:
+
+- **Follow the match as it unfolds.** Events arrive one by one, and explanations update as the play develops.
+- **Understand what mattered.** See the key passes, receiving runs and changes in space around the attack.
+- **See the evidence.** Click an observation to replay the relevant moment, with markings on the pitch.
+- **Get the story at the end.** An automatic recap explains the buildup and whether it ended in a goal, save or intercepted attack.
+- **Choose your view.** Switch between fan and analyst explanations, English and Spanish, different cameras and player focus.
+
+## Try the experience
+
+Choose one of six sequences: two goals, two saves and two attacks stopped by interceptions.
+
+1. Select **Start live feed** to watch the sequence unfold.
+2. Follow the explanations in the notebook beside the 3D pitch.
+3. When the sequence ends, read the automatic recap and click **Replay evidence** to revisit a key moment.
+4. Explore further with guided replay, slow motion, player focus and the broadcast, overhead or follow-play cameras.
+
+The explanations describe what the available evidence shows. A run or a gap can help explain the buildup, but it does not prove that the same action would always produce a goal.
+
+## Where the project stands
+
+The replay, live synthetic feed, clickable explanations and automatic sequence recaps work locally today.
+
+**Microsoft Foundry is not connected yet.** Current explanations use measured match information and predefined wording. The next step is to connect Foundry so it can help select the most useful observations, while keeping every claim tied to the match evidence. Azure hosting, AI evaluation and the final demo video are also still to complete.
+
+All teams, players and match data are fictional and created for this project. This is a hackathon prototype, not a live Premier League data service.
+
+## Run locally
+
+Install Node.js 22.12 or later, then install the project:
 
 ```sh
 npm ci
+```
+
+Start the match and explanation service in one terminal:
+
+```sh
+npm run dev:api
+```
+
+Start the app in a second terminal:
+
+```sh
 npm run dev
 ```
 
-Open the Local URL printed by Vite. No Azure key or sports-data subscription is needed.
+Open the local address printed in that terminal. No Azure credentials or paid football data subscription are needed for the current demo.
 
-```sh
-npm test
-npm run build
-npm run preview
-```
+## Further details
 
-## Read the play
+- [Foundry setup guide](docs/foundry-setup.md)
+- [How the app is built](docs/architecture.md)
+- [Explanation service and evidence checks](docs/api/intelligence.md)
+- [Development progress](docs/progress.md)
 
-1. Open into the 3D stadium; select Broadcast, Overhead or Follow play. Drag the scene to orbit, or scroll to zoom.
-2. Select another moment in the buildup strip, or use play and the scrubber.
-3. Compare positions two seconds earlier; lane and receiving-space distances update.
-4. Select a player on the field or with the player-focus dropdown. Follow play tracks that player when selected. Use Show analysis to inspect their coordinates.
-5. Switch the geometric layers, audience detail or explanation language.
-6. Inspect the evidence or export the analysis. Earlier-frame comparisons are retrospective inspections of the selected event.
-
-## Data and interpretation
-
-All teams, players, events and tracking are fictional, authored in this repository. The pitch uses metres in a 105 × 68 coordinate system. Authored routes are baked into smooth, speed-bounded tracking. Passes have explicit release/arrival timing, ground deceleration or a gravity-based arc; shots terminate at the recorded outcome. Goal and save rebounds are authored damped responses. The seed field is retained as a fixture identifier. This is not a physics-calibrated match simulator or a licensed live feed.
-
-Distance is computed from coordinates. No xG, success probabilities, measured pressing intensity, or causal claims about off-ball movement are presented. Interpolated animation is illustrative; a real event reference does not prove a tactical interpretation.
-
-## Structure
-
-```text
-src/core/model.ts       Event visibility, revisions, metrics, templates, exports
-src/core/scenarios.ts   Original synthetic match fixtures
-src/core/model.test.ts  Event integrity and temporal tests
-src/core/spatial.ts     Finite-segment and receiving-point measurements
-src/core/spatial.test.ts Geometry edge cases and opponent selection
-src/App.tsx            Pitch, replay, evidence and personalization
-src/styles.css         Responsive tactical workspace
-src/scene/Stadium.tsx   Three.js renderer, procedural scene and camera controls
-docs/architecture.md   Data contract, boundaries and next milestones
-```
-
-Registration correspondence, account screenshots and private planning notes are excluded from the public repository. No credentials belong in this repository or in frontend environment variables.
-
-## Local evidence backend
-
-Run `npm run dev:api` alongside the frontend to start the loopback-only API on port 8791. It provides validated evidence snapshots and replay moments without model calls. The replay fetches evidence through the Vite `/api` proxy. Start both `npm run dev` and `npm run dev:api`; if the API is unavailable, the notebook shows local fallback and a retry button.
-
-See [backend contract and Foundry handoff](docs/api/intelligence.md) and [OpenAPI specification](docs/api/openapi.json). The server accepts only known scenario IDs and bounded timestamps; a future model adapter can select versioned facts, while trusted code supplies numbers, text and replay coordinates. Foundry setup remains deferred.
-
-## Live synthetic sequence feed
-
-Start both local servers, select a sequence and choose **Start live feed**. The backend streams events at real-time pace; the notebook updates as evidence becomes available. Future filmstrip events stay hidden, replay controls wait for completion, and the recap appears automatically after the final frame. Its evidence links then reopen the relevant play. Restart begins again at zero; Exit to replay returns to manual inspection. An interrupted stream holds its last state and offers restart.
-
-This is a seeded synthetic event stream over SSE, not an external match provider. Tracking routes are preloaded for rendering; event availability is streamed. All six scenarios are supported, including goals, saves and interceptions. Foundry remains disconnected. See [Foundry preparation and integration checklist](docs/foundry-setup.md).
+For development checks, run `npm test` and `npm run build`.
