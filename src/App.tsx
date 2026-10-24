@@ -3,7 +3,7 @@ import type { Fact } from '../server/contracts';
 import { useAnalysis } from './hooks/useAnalysis';
 import { buildGuide, type GuideStep } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from 'react';
 const Stadium = lazy(() => import('./scene/Stadium'));
 import { scenarios } from './core/scenarios';
 import {
@@ -536,7 +536,9 @@ export default function App() {
             <div>
               <span className="crumb">MATCH LIBRARY / SYNTHETIC SERIES</span>
               <h1>
+                <i className="crest home" aria-hidden="true" />
                 Northstar <span>vs</span> Atlas Athletic
+                <i className="crest away" aria-hidden="true" />
               </h1>
             </div>
             <div className="scenario-select">
@@ -555,7 +557,17 @@ export default function App() {
             </div>
           </div>
           <div className="working-area">
-            <div className="live-feed-bar" role="region" aria-label="Live synthetic feed">
+            <div
+              className={`live-feed-bar ${live.enabled ? `feed-${live.status}` : 'feed-idle'}`}
+              role="region"
+              aria-label="Live synthetic feed"
+              style={
+                {
+                  '--feed-progress': `${live.enabled ? (live.ids.length / scene.events.length) * 100 : 0}%`,
+                } as CSSProperties
+              }
+            >
+              <i className="feed-pulse" aria-hidden="true" />
               <div>
                 <b>
                   {live.enabled
@@ -593,6 +605,7 @@ export default function App() {
                   exit to replay.
                 </small>
               )}
+              {live.enabled && <span className="feed-progress" aria-hidden="true" />}
             </div>
             <section className="replay-surface" aria-label="Match replay">
               <fieldset className="live-control-lock" disabled={feedLocked}>
@@ -669,12 +682,15 @@ export default function App() {
                   <div className="broadcast-score">
                     <b>NSF</b>
                     <strong>
-                      {state.home} <span>—</span> {state.away}
+                      <em key={`h${state.home}`}>{state.home}</em> <span>—</span>{' '}
+                      <em key={`a${state.away}`}>{state.away}</em>
                     </strong>
                     <b>ATL</b>
                     <time>{clock(scene.baseClock, displayTime)}</time>
                   </div>
-                  <span className="replay-indicator">
+                  <span
+                    className={`replay-indicator ${feedLocked || guide || playing ? 'is-active' : ''}`}
+                  >
                     {feedLocked
                       ? live.status === 'error'
                         ? 'FEED INTERRUPTED'
@@ -725,7 +741,7 @@ export default function App() {
                     />
                   )}
                   {guide && (
-                    <aside className="guide-card" aria-label="Guided replay chapter">
+                    <aside className="guide-card" aria-label="Guided replay chapter" key={guide.id}>
                       <div className="guide-eyebrow">
                         DIRECTOR’S REPLAY{' '}
                         <span>
@@ -946,7 +962,11 @@ export default function App() {
                   </button>
                 )}
                 {analysis.data?.recap && (!live.enabled || live.status === 'complete') && (
-                  <section className="sequence-recap" aria-label="Automatic sequence recap">
+                  <section
+                    className="sequence-recap"
+                    data-outcome={analysis.data.recap.outcome}
+                    aria-label="Automatic sequence recap"
+                  >
                     <header>
                       <span>{language === 'en' ? 'SEQUENCE RECAP' : 'RESUMEN DE LA JUGADA'}</span>
                       <b>{analysis.data.recap.outcome.replace('-', ' ').toUpperCase()}</b>
@@ -1000,7 +1020,7 @@ export default function App() {
                 </button>
                 <span className="note-dot" />
               </div>
-              <div className="note-body">
+              <div className="note-body" key={`${scene.id}-${selected}`}>
                 <div className="note-number">
                   {live.enabled && live.ids.length === 0
                     ? '00'
@@ -1082,6 +1102,7 @@ export default function App() {
                       return (
                         <button
                           className="evidence-fact"
+                          data-kind={fact.kind}
                           key={id}
                           onClick={() => inspectFact(fact)}
                         >
