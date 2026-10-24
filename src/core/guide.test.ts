@@ -15,7 +15,14 @@ for (const scene of scenarios) {
       assert.ok(Number.isFinite(step.anchor.x) && Number.isFinite(step.anchor.y));
     }
     const finish = steps.at(-1)!;
-    assert.equal(finish.metric, scene.events.some((e) => e.type === 'goal') ? 'Goal' : 'Saved');
+    assert.equal(
+      finish.metric,
+      scene.events.some((e) => e.type === 'goal')
+        ? 'Goal'
+        : scene.events.some((e) => e.type === 'save')
+          ? 'Saved'
+          : 'Intercepted',
+    );
   });
   test(`${scene.id}: highlighted runner never carries the ball in the chapter`, () => {
     const run = buildGuide(scene).find((s) => s.kind === 'run')!;

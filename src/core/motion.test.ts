@@ -48,11 +48,14 @@ test('long switches rise above the field while ground passes stay low', () => {
     }
 });
 test('shots travel at the intended horizontal speed and terminate at their outcome', () => {
-  for (const s of scenarios) {
+  for (const s of scenarios.filter((s) => s.events.some((e) => e.type === 'shot'))) {
     const shot = s.events.find((e) => e.type === 'shot')!,
       f = flightFor(shot, s.events)!;
     assert.ok(Math.abs(distance(f.from, f.to) / (f.end - f.start) - 24) < 1e-8);
-    assert.equal(ballMotion(s, f.end + 0.2).phase, s.id === 'no-finish' ? 'parry' : 'net');
+    assert.equal(
+      ballMotion(s, f.end + 0.2).phase,
+      s.events.some((e) => e.type === 'save') ? 'parry' : 'net',
+    );
   }
 });
 test('motion is deterministic when scrubbing backwards and does not depend on render history', () => {

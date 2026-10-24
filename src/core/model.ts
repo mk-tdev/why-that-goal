@@ -106,6 +106,14 @@ export function evidenceFor(
     return language === 'en'
       ? 'This event was withdrawn. Its earlier interpretation is no longer valid.'
       : 'Este evento fue anulado. Su interpretación anterior ya no es válida.';
+  if (event.type === 'recovery' && event.team === 'away')
+    return language === 'en'
+      ? `${name} takes possession for the opposition. The attack has broken down.`
+      : `${name} recupera para el rival. El ataque termina.`;
+  if (event.outcome === 'failed')
+    return language === 'en'
+      ? `${name}'s attempted pass was intercepted. The attack lost possession before this connection could be completed.`
+      : `El pase de ${name} fue interceptado. El ataque perdió la posesión.`;
   if (event.type === 'pass') {
     return language === 'en'
       ? audience === 'analyst'

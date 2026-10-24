@@ -12,7 +12,7 @@ A visual football match companion built for Microsoft + Premier League's Inside 
 
 This first implementation runs locally without credentials. It includes:
 
-- Three original fictional match sequences, including a sequence that ends in a save.
+- Six fictional match sequences: two goals, two saves and two intercepted attacks with no shot.
 - A Three.js stadium with procedural kits, articulated players, goals, instanced seating, floodlights, shadows and bloom.
 - Broadcast, overhead and follow-play cameras; drag to orbit and scroll to zoom.
 - Full-width stadium mode, expandable analysis notebook, accessible player selector and 2D fallback.

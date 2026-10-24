@@ -6,9 +6,9 @@ const smooth = (n: number) => {
 };
 export const NET_CONTACT_DELAY = 2.09 / 24;
 export function finishState(s: Scenario, t: number) {
-  const shot = s.events.find((e) => e.type === 'shot')!;
-  const outcome = s.events.find((e) => e.type === 'goal' || e.type === 'save')!;
-  const launch = shot.at + 0.12;
+  const shot = s.events.find((e) => e.type === 'shot') ?? s.events.at(-1)!;
+  const outcome = s.events.find((e) => e.type === 'goal' || e.type === 'save') ?? s.events.at(-1)!;
+  const launch = shot.type === 'shot' ? shot.at + 0.12 : Infinity;
   const elapsed = t - launch;
   const extension = smooth(elapsed / 0.32);
   const landing = smooth((elapsed - 0.42) / 0.48);

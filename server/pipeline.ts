@@ -75,6 +75,11 @@ export async function analyze(
     (f) =>
       f.kind === 'event' && scenario.events.some((e) => e.id === f.eventId && e.type === 'save'),
   );
+  const failed = packet.facts.find(
+    (f) =>
+      f.kind === 'event' &&
+      scenario.events.some((e) => e.id === f.eventId && e.outcome === 'failed'),
+  );
   const en = request.language === 'en';
   const chain = packet.facts.filter((f) =>
     ['pass-progress', 'off-ball-run', 'space-change'].includes(f.kind),
@@ -95,30 +100,41 @@ export async function analyze(
   ].sort((a, b) => a.at - b.at);
   return {
     buildup: {
-      title: en
-        ? goal
-          ? 'How the goal was built'
-          : save
-            ? 'How the chance was built'
-            : 'The buildup so far'
-        : goal
-          ? 'Cómo se construyó el gol'
-          : 'La construcción de la jugada',
-      summary: en
-        ? goal
-          ? 'The completed passes moved the attack into a shooting position. Receiver movement and the changing gaps below show how the ball reached the finish; the goal is the recorded outcome.'
-          : save
-            ? 'The buildup produced a shot, but the goalkeeper saved it. The same passing and movement patterns do not guarantee a goal.'
-            : 'Follow the completed connections and the movement around them. The outcome is not yet available at this replay time.'
-        : goal
-          ? 'Los pases completados llevaron el ataque a una posición de remate. Los movimientos y espacios muestran cómo llegó el balón; el gol es el resultado registrado.'
-          : save
-            ? 'La jugada produjo un remate, pero el portero lo detuvo. Estos patrones no garantizan un gol.'
-            : 'Sigue los pases completados y los movimientos. El resultado aún no está disponible.',
+      title: failed
+        ? en
+          ? 'Where the attack broke down'
+          : 'Dónde se perdió el ataque'
+        : en
+          ? goal
+            ? 'How the goal was built'
+            : save
+              ? 'How the chance was built'
+              : 'The buildup so far'
+          : goal
+            ? 'Cómo se construyó el gol'
+            : 'La construcción de la jugada',
+      summary: failed
+        ? en
+          ? 'The attempted pass was intercepted. Earlier passes progressed the ball, but the attack lost possession before producing a shot.'
+          : 'El pase fue interceptado. El ataque perdió la posesión antes de rematar.'
+        : en
+          ? goal
+            ? 'The completed passes moved the attack into a shooting position. Receiver movement and the changing gaps below show how the ball reached the finish; the goal is the recorded outcome.'
+            : save
+              ? 'The buildup produced a shot, but the goalkeeper saved it. The same passing and movement patterns do not guarantee a goal.'
+              : 'Follow the completed connections and the movement around them. The outcome is not yet available at this replay time.'
+          : goal
+            ? 'Los pases completados llevaron el ataque a una posición de remate. Los movimientos y espacios muestran cómo llegó el balón; el gol es el resultado registrado.'
+            : save
+              ? 'La jugada produjo un remate, pero el portero lo detuvo. Estos patrones no garantizan un gol.'
+              : 'Sigue los pases completados y los movimientos. El resultado aún no está disponible.',
       limitation: en
-        ? 'Rule-based explanation of synthetic tracking. These observations support a buildup interpretation, not proof that a run or gap caused the goal.'
-        : 'Explicación por reglas con datos sintéticos. Las observaciones no prueban que un movimiento o espacio causara el gol.',
-      factIds: (request.audience === 'analyst' ? chain : featured).map((f) => f.id),
+        ? 'Rule-based explanation of synthetic tracking. These observations support a buildup interpretation, not proof that a run or gap caused the outcome.'
+        : 'Explicación por reglas con datos sintéticos. Las observaciones no prueban que un movimiento o espacio causara el resultado.',
+      factIds: [
+        ...(request.audience === 'analyst' ? chain : featured),
+        ...(failed ? [failed] : []),
+      ].map((f) => f.id),
     },
     schemaVersion: '1.0',
     mode,

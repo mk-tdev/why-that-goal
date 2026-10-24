@@ -64,7 +64,7 @@ function Field({
 }) {
   const metric = inspectSpace(scene, event, time);
   const ball = interpolate(scene.ball, time);
-  const pass = event.type === 'pass';
+  const pass = event.type === 'pass' && event.outcome === 'success';
   return (
     <svg
       className="field"
@@ -384,7 +384,7 @@ export default function App() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setNotice('Replay evidence exported');
   }
-  const pass = event.type === 'pass';
+  const pass = event.type === 'pass' && event.outcome === 'success';
   const sideways = Math.abs(event.to.y - event.from.y);
   const headline = pass
     ? spatial.progress > 20
@@ -490,7 +490,9 @@ export default function App() {
                     ✦ {guide ? 'Exit guided replay' : 'Guided replay'}
                   </button>
                   <button onClick={() => enterGuide(guideSteps.length - 1)}>
-                    Replay finish ↗
+                    {scene.events.some((e) => e.type === 'shot')
+                      ? 'Replay finish ↗'
+                      : 'Replay breakdown ↗'}
                   </button>
                   <button
                     aria-pressed={threeD}
@@ -759,7 +761,7 @@ export default function App() {
               <div className="sequence-title">
                 <span>THE BUILDUP</span>
                 <span>
-                  06 moments <span>·</span> Select to inspect
+                  {scene.events.length} moments <span>·</span> Select to inspect
                 </span>
               </div>
               <div className="filmstrip">
@@ -823,7 +825,7 @@ export default function App() {
               <div className="note-body">
                 <div className="note-number">
                   {String(selected + 1).padStart(2, '0')}
-                  <span> / 06</span>
+                  <span> / {scene.events.length}</span>
                 </div>
                 <div className="event-tag">
                   {event.type.toUpperCase()} <span>·</span> {clock(scene.baseClock, event.at)}
@@ -881,7 +883,7 @@ export default function App() {
                           : evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language)}
                 </p>
                 {analysis.data?.buildup && (
-                  <section className="buildup-story" aria-label="Why this attack worked">
+                  <section className="buildup-story" aria-label="Explain this attack">
                     <span className="buildup-kicker">
                       {language === 'en' ? 'READ THE BUILDUP' : 'LEE LA JUGADA'}
                     </span>
@@ -898,7 +900,7 @@ export default function App() {
                               (e) => e.id === fact.eventId && e.version === fact.version,
                             );
                             if (index < 0) return;
-                            const start = fact.fromTime ?? fact.at;
+                            const start = fact.fromTime ?? Math.max(0, fact.at - 1);
                             const end = fact.toTime ?? fact.at;
                             endGuide();
                             setSelected(index);

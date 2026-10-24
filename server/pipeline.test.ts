@@ -212,8 +212,8 @@ test('buildup claims cite visible evidence and distinguish goals from saves', as
       const fact = result.evidence.facts.find((f) => f.id === id)!;
       assert.ok(fact);
       assert.ok(fact.at <= scene.duration);
-      assert.ok(fact.fromTime! <= fact.toTime!);
-      assert.ok(fact.toTime! <= fact.at);
+      assert.ok((fact.fromTime ?? fact.at) <= (fact.toTime ?? fact.at));
+      assert.ok((fact.toTime ?? fact.at) <= fact.at);
     }
     if (scene.events.some((e) => e.type === 'save')) {
       assert.equal(result.buildup.title, 'How the chance was built');
@@ -248,4 +248,36 @@ test('missing tracking omits runs and gap changes; withdrawn passes have no buil
   const facts = createEvidenceTools(changed, request).snapshot().facts;
   assert.ok(facts.every((f) => f.kind !== 'off-ball-run' && f.kind !== 'space-change'));
   assert.ok(facts.every((f) => f.eventId !== pass.id));
+});
+
+test('interceptions produce a cited breakdown, no completed-pass metrics, shot or celebration', async () => {
+  const { ballMotion } = await import('../src/core/motion');
+  const { finishState } = await import('../src/core/finish');
+  for (const s of scenarios.filter((s) => s.events.some((e) => e.outcome === 'failed'))) {
+    const failed = s.events.find((e) => e.outcome === 'failed')!;
+    const result = await analyze({
+      ...request,
+      scenarioId: s.id,
+      through: s.duration,
+      receivedThrough: s.duration,
+    });
+    assert.equal(result.buildup.title, 'Where the attack broke down');
+    assert.match(result.buildup.summary, /before producing a shot/);
+    assert.ok(result.buildup.factIds.includes(`${failed.id}@1:event`));
+    assert.ok(
+      result.evidence.facts.filter((f) => f.eventId === failed.id).every((f) => f.kind === 'event'),
+    );
+    assert.equal(result.evidence.score.home, 0);
+    assert.ok(!s.events.some((e) => e.type === 'shot' || e.type === 'goal'));
+    assert.equal(ballMotion(s, s.duration).owner, failed.recipient);
+    assert.equal(finishState(s, s.duration).reaction, 0);
+    assert.equal(finishState(s, s.duration).extension, 0);
+    const earlier = await analyze({
+      ...request,
+      scenarioId: s.id,
+      through: failed.at - 0.01,
+      receivedThrough: failed.at - 0.01,
+    });
+    assert.equal(earlier.buildup.title, 'The buildup so far');
+  }
 });

@@ -211,7 +211,7 @@ export function ballMotion(s: Scenario, time: number, prepared?: BallFlight[]) {
     owner = f.receiver ?? f.owner;
     lastPoint = f.to;
   }
-  if (t >= finish.at) {
+  if (finish && t >= finish.at) {
     const dt = t - finish.at;
     if (finish.type === 'goal') {
       const x =
@@ -296,7 +296,9 @@ export function playerMotion(s: Scenario, id: string, t: number) {
     .reduce((v, f) => Math.max(v, Math.max(0, 1 - Math.abs(t - f.start) / 0.22)), 0);
   const finish = s.events.find((e) => e.type === 'goal' || e.type === 'save')!;
   const dive =
-    id === 'A-1' ? Math.sin((clamp((t - (finish.at - 0.35)) / 0.7, 0, 1) * Math.PI) / 2) : 0;
+    id === 'A-1' && finish
+      ? Math.sin((clamp((t - (finish.at - 0.35)) / 0.7, 0, 1) * Math.PI) / 2)
+      : 0;
   const contacts = s.events.map((e) => flightFor(e, s.events)).filter((f): f is BallFlight => !!f);
   const strike = contacts.find((f) => f.owner === id && t >= f.start - 0.32 && t <= f.start + 0.4);
   const strikeTime = strike ? t - strike.start : 0;

@@ -30,7 +30,10 @@ export function buildGuide(s: Scenario): GuideStep[] {
       start: Math.max(0, f.start - 0.5),
       end: e.at + 0.3,
       anchor: { x: (e.from.x + e.to.x) / 2, y: (e.from.y + e.to.y) / 2 },
-      detail: `${name(e.player)} → ${name(e.recipient)}. Follow the gold line from release to reception.`,
+      detail:
+        e.outcome === 'failed'
+          ? 'The attempted pass reaches an opponent; this is not a completed connection.'
+          : `${name(e.player)} → ${name(e.recipient)}. Follow the gold line from release to reception.`,
       metric: `${distance(e.from, e.to).toFixed(1)} m pass`,
     };
   };
@@ -67,8 +70,8 @@ export function buildGuide(s: Scenario): GuideStep[] {
   const before = inspectSpace(s, e, start).receiver.receiverDistance;
   const after = inspectSpace(s, e, end).receiver.receiverDistance;
   const delta = after - before;
-  const shot = s.events.find((e) => e.type === 'shot')!;
-  const finish = s.events.find((e) => e.type === 'goal' || e.type === 'save')!;
+  const shot = s.events.find((e) => e.type === 'shot') ?? passes.at(-1)!;
+  const finish = s.events.find((e) => e.type === 'goal' || e.type === 'save') ?? s.events.at(-1)!;
   return [
     passStep(passes[0], 'The first connection'),
     {
@@ -103,17 +106,28 @@ export function buildGuide(s: Scenario): GuideStep[] {
       detail:
         'Nearest-opponent distance to the same receiving point. Dashed white is the earlier gap; gold is the current gap. This comparison does not establish causation.',
     },
-    passStep(passes[passes.length - 1], 'The final connection'),
+    passStep(
+      passes[passes.length - 1],
+      passes.at(-1)!.outcome === 'failed' ? 'The intercepted pass' : 'The final connection',
+    ),
     {
       id: finish.id,
-      kind: 'finish',
-      title: finish.type === 'goal' ? 'The finish' : 'The goalkeeper intervenes',
+      kind: shot.type === 'shot' ? 'finish' : 'pass',
+      title:
+        finish.type === 'goal'
+          ? 'The finish'
+          : finish.type === 'save'
+            ? 'The goalkeeper intervenes'
+            : 'The attack breaks down',
       event: shot,
       start: Math.max(0, shot.at - 0.7),
       end: Math.min(s.duration, finish.at + 2.8),
       anchor: shot.to,
-      metric: finish.type === 'goal' ? 'Goal' : 'Saved',
-      detail: `${name(shot.player)} shoots. The replay follows the recorded ${finish.type === 'goal' ? 'goal' : 'save'} outcome; it does not estimate scoring probability.`,
+      metric: finish.type === 'goal' ? 'Goal' : finish.type === 'save' ? 'Saved' : 'Intercepted',
+      detail:
+        shot.type !== 'shot'
+          ? 'The pass is intercepted. Possession changes before a shot can be taken.'
+          : `${name(shot.player)} shoots. The replay follows the recorded ${finish.type === 'goal' ? 'goal' : 'save'} outcome; it does not estimate scoring probability.`,
     },
   ];
 }

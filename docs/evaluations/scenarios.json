@@ -1,0 +1,65 @@
+{
+  "scope": "Authored regression fixtures; not a held-out generalization or model-quality benchmark.",
+  "results": [
+    {
+      "scenario": "quick-break",
+      "outcome": "goal",
+      "events": 6,
+      "shots": 1,
+      "title": "How the goal was built",
+      "claims": 9,
+      "modelCalls": 0,
+      "checks": "passed"
+    },
+    {
+      "scenario": "switch-play",
+      "outcome": "goal",
+      "events": 6,
+      "shots": 1,
+      "title": "How the goal was built",
+      "claims": 7,
+      "modelCalls": 0,
+      "checks": "passed"
+    },
+    {
+      "scenario": "no-finish",
+      "outcome": "save",
+      "events": 6,
+      "shots": 1,
+      "title": "How the chance was built",
+      "claims": 7,
+      "modelCalls": 0,
+      "checks": "passed"
+    },
+    {
+      "scenario": "cutback-save",
+      "outcome": "save",
+      "events": 6,
+      "shots": 1,
+      "title": "How the chance was built",
+      "claims": 7,
+      "modelCalls": 0,
+      "checks": "passed"
+    },
+    {
+      "scenario": "counter-cut-out",
+      "outcome": "interception",
+      "events": 5,
+      "shots": 0,
+      "title": "Where the attack broke down",
+      "claims": 7,
+      "modelCalls": 0,
+      "checks": "passed"
+    },
+    {
+      "scenario": "switch-intercepted",
+      "outcome": "interception",
+      "events": 4,
+      "shots": 0,
+      "title": "Where the attack broke down",
+      "claims": 4,
+      "modelCalls": 0,
+      "checks": "passed"
+    }
+  ]
+}

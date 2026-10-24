@@ -14,7 +14,7 @@ test('keeper reacts after the strike, extends, then lands', () => {
 });
 test('goal celebrations never precede the goal and never occur after a save', () => {
   for (const s of scenarios) {
-    const e = s.events.find((e) => e.type === 'goal' || e.type === 'save')!;
+    const e = s.events.find((e) => e.type === 'goal' || e.type === 'save') ?? s.events.at(-1)!;
     assert.equal(finishState(s, e.at).reaction, 0);
     assert.equal(finishState(s, e.at + 2).reaction, e.type === 'goal' ? 1 : 0);
   }

@@ -25,11 +25,15 @@ export function createEvidenceTools(scenario: Scenario, request: AnalysisRequest
       id: `${key}:event`,
       kind: 'event',
       text:
-        event.outcome === 'failed'
+        event.type === 'recovery' && events.some((e) => e.at < event.at && e.outcome === 'failed')
           ? request.language === 'en'
-            ? 'This action is recorded as unsuccessful.'
-            : 'Esta acción está registrada como fallida.'
-          : evidenceFor(scenario, event, request.audience, request.language),
+            ? 'The opponent takes possession after the interception. The attack ends without a shot.'
+            : 'El rival recupera después de la intercepción. El ataque termina sin remate.'
+          : event.outcome === 'failed'
+            ? request.language === 'en'
+              ? 'The attempted pass was intercepted by the opponent. This connection was not completed.'
+              : 'Esta acción está registrada como fallida.'
+            : evidenceFor(scenario, event, request.audience, request.language),
       method: 'Recorded synthetic event; not causal evidence.',
     });
     if (event.type !== 'pass' || event.outcome !== 'success') continue;

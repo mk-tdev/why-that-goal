@@ -1,5 +1,5 @@
 import { buildMotion } from './motion';
-import type { EventType, MatchEvent, Player, Point, Scenario } from './model';
+import { interpolate, type EventType, MatchEvent, Player, Point, Scenario } from './model';
 
 const names = [
   'Mora',
@@ -299,3 +299,140 @@ export const scenarios: Scenario[] = [
     },
   ),
 ];
+
+/** Derived regression fixtures reuse valid motion, then transform the entire coordinate system. */
+function variation(source: Scenario, id: string, title: string, chapter: string): Scenario {
+  const s = structuredClone(source);
+  s.id = id;
+  s.title = title;
+  s.chapter = chapter;
+  s.seed += 1000;
+  s.events.forEach((e, i) => {
+    e.id = `${id}-${String(i + 1).padStart(2, '0')}`;
+    e.from.y = 68 - e.from.y;
+    e.to.y = 68 - e.to.y;
+  });
+  for (const frames of [...Object.values(s.tracks), s.ball])
+    for (const f of frames) f.point.y = 68 - f.point.y;
+  return s;
+}
+
+// A longer switch followed by a close-range save, with a different passing route.
+scenarios.push(
+  makeScenario(
+    'cutback-save',
+    'The cutback denied',
+    'A switch, a cutback, a goalkeeper intervention.',
+    '04',
+    842,
+    63 * 60,
+    [
+      [
+        1,
+        'recovery',
+        3,
+        { x: 38, y: 52 },
+        { x: 38, y: 52 },
+        undefined,
+        'Build from deep',
+        'Desde atrás',
+      ],
+      [
+        5,
+        'pass',
+        3,
+        { x: 38, y: 52 },
+        { x: 60, y: 18 },
+        8,
+        'Switch to the left',
+        'Cambio a la izquierda',
+      ],
+      [
+        9,
+        'pass',
+        8,
+        { x: 60, y: 18 },
+        { x: 85, y: 12 },
+        11,
+        'Release the winger',
+        'Pase al extremo',
+      ],
+      [14, 'pass', 11, { x: 85, y: 12 }, { x: 93, y: 31 }, 9, 'The cutback', 'Pase atrás'],
+      [
+        17,
+        'shot',
+        9,
+        { x: 93, y: 31 },
+        { x: 100, y: 34 },
+        undefined,
+        'Close-range attempt',
+        'Remate cercano',
+      ],
+      [
+        18,
+        'save',
+        1,
+        { x: 100, y: 34 },
+        { x: 100, y: 34 },
+        undefined,
+        'Keeper denies the finish',
+        'El portero evita el gol',
+      ],
+    ],
+    {
+      en: 'A clear passing route can still end with a save.',
+      es: 'Una buena combinación también puede terminar en parada.',
+    },
+  ),
+);
+
+function intercepted(
+  source: Scenario,
+  id: string,
+  title: string,
+  chapter: string,
+  passIndex: number,
+) {
+  const s = variation(source, id, title, chapter);
+  const failed = s.events.filter((e) => e.type === 'pass')[passIndex];
+  const intended = failed.recipient!;
+  // Swap complete tracks so the defender meets the ball without introducing a collision or teleport.
+  const defender = 'A-6';
+  [s.tracks[intended], s.tracks[defender]] = [s.tracks[defender], s.tracks[intended]];
+  failed.recipient = defender;
+  failed.outcome = 'failed';
+  failed.label = { en: 'Pass intercepted', es: 'Pase interceptado' };
+  s.events = s.events.filter((e) => e.at <= failed.at);
+  s.events.push({
+    ...failed,
+    id: `${id}-turnover`,
+    at: failed.at + 0.1,
+    receivedAt: failed.at + 0.1,
+    type: 'recovery',
+    team: 'away',
+    player: defender,
+    recipient: undefined,
+    from: { ...failed.to },
+    to: { ...failed.to },
+    outcome: 'success',
+    label: { en: 'Atlas takes possession', es: 'Atlas recupera el balón' },
+  });
+  s.duration = failed.at + 2;
+  for (const [player, frames] of Object.entries(s.tracks)) {
+    const point = interpolate(frames, failed.at);
+    s.tracks[player] = [
+      ...frames.filter((f) => f.at < failed.at),
+      { at: failed.at, point },
+      { at: s.duration, point: { ...point } },
+    ];
+  }
+  s.ball = s.ball.filter((f) => f.at <= failed.at);
+  s.subtitle = 'An intercepted pass. No shot. No goal.';
+  s.thesis = {
+    en: 'The intended connection never arrived. The opponent recovered possession before a shot.',
+    es: 'El pase no llegó al compañero. El rival recuperó antes del remate.',
+  };
+  return s;
+}
+scenarios.push(intercepted(scenarios[0], 'counter-cut-out', 'The counter cut out', '05', 2));
+scenarios.push(intercepted(scenarios[1], 'switch-intercepted', 'The switch intercepted', '06', 1));
