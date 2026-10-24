@@ -1,3 +1,4 @@
+import { useLiveFeed } from './hooks/useLiveFeed';
 import type { Fact } from '../server/contracts';
 import { useAnalysis } from './hooks/useAnalysis';
 import { buildGuide, type GuideStep } from './core/guide';
@@ -251,11 +252,27 @@ export default function App() {
   const scene = scenarios.find((s) => s.id === sceneId)!,
     event = scene.events[selected],
     displayTime = comparison ? Math.max(0, time - 2) : time;
+  const live = useLiveFeed(scene.id, scene.duration);
+  const feedLocked = live.enabled && live.status !== 'complete';
+  useEffect(() => {
+    if (!live.enabled) return;
+    setTime(live.time);
+    const index = scene.events.reduce(
+      (last, e, i) => (live.ids.includes(`${e.id}@${e.version}`) ? i : last),
+      0,
+    );
+    setSelected(index);
+  }, [live.time, live.enabled, live.ids, scene]);
   // Request only when event visibility changes, not on every animation frame.
   const evidenceThrough = Math.max(
     0,
     ...scene.events
-      .filter((e) => e.at <= displayTime && e.receivedAt <= displayTime)
+      .filter(
+        (e) =>
+          e.at <= displayTime &&
+          e.receivedAt <= displayTime &&
+          (!live.enabled || live.ids.includes(`${e.id}@${e.version}`)),
+      )
       .map((e) => Math.max(e.at, e.receivedAt)),
   );
   const analysis = useAnalysis({
@@ -278,6 +295,7 @@ export default function App() {
     setGuideRunning(false);
   }
   function enterGuide(index: number) {
+    if (feedLocked) return;
     setEvidenceGuide(undefined);
     const step = guideSteps[index];
     setGuideIndex(index);
@@ -344,6 +362,7 @@ export default function App() {
     return () => clearTimeout(id);
   }, [notice]);
   function jump(index: number) {
+    if (feedLocked) return;
     endGuide();
     setSelected(index);
     setTime(scene.events[index].at);
@@ -351,6 +370,7 @@ export default function App() {
     setComparison(false);
   }
   function inspectFact(fact: Fact) {
+    if (feedLocked) return;
     const index = scene.events.findIndex(
       (e) => e.id === fact.eventId && e.version === fact.version,
     );
@@ -397,6 +417,7 @@ export default function App() {
     setGuideReplay((n) => n + 1);
   }
   function changeScene(id: string) {
+    live.stop();
     setRecapReturn(false);
     endGuide();
     const next = scenarios.find((s) => s.id === id)!;
@@ -534,107 +555,166 @@ export default function App() {
             </div>
           </div>
           <div className="working-area">
-            <section className="replay-surface" aria-label="Match replay">
-              <div className="canvas-toolbar">
-                <div className="scene-view-controls">
-                  <button
-                    className="guide-launch"
-                    aria-pressed={!!guide}
-                    onClick={() => (guide ? endGuide() : enterGuide(0))}
-                  >
-                    ✦ {guide ? 'Exit guided replay' : 'Guided replay'}
-                  </button>
-                  <button onClick={() => enterGuide(guideSteps.length - 1)}>
-                    {scene.events.some((e) => e.type === 'shot')
-                      ? 'Replay finish ↗'
-                      : 'Replay breakdown ↗'}
-                  </button>
-                  <button
-                    aria-pressed={threeD}
-                    onClick={() => {
-                      endGuide();
-                      setThreeD(!threeD);
-                    }}
-                  >
-                    {threeD ? '◈  3D Stadium' : '◇  Switch to 3D'}
-                  </button>
-                  <button aria-pressed={!immersive} onClick={() => setImmersive(!immersive)}>
-                    {immersive ? 'Show analysis ↗' : 'Expand stadium ↗'}
-                  </button>
-                </div>
-                <div className="view-tabs">
-                  <button
-                    className={layer === 'space' ? 'active' : ''}
-                    onClick={() => {
-                      endGuide();
-                      setLayer('space');
-                    }}
-                  >
-                    Passing lanes
-                  </button>
-                  <button
-                    className={layer === 'trails' ? 'active' : ''}
-                    onClick={() => {
-                      endGuide();
-                      setLayer('trails');
-                    }}
-                  >
-                    Movement
-                  </button>
-                  <button
-                    className={layer === 'clean' ? 'active' : ''}
-                    onClick={() => {
-                      endGuide();
-                      setLayer('clean');
-                    }}
-                  >
-                    Clean feed
-                  </button>
-                </div>
-                <button
-                  className={`compare-button ${comparison ? 'active' : ''}`}
-                  aria-pressed={comparison}
-                  onClick={() => {
-                    endGuide();
-                    setComparison(!comparison);
-                    setPlaying(false);
-                  }}
-                >
-                  <Glyph kind="compare" />
-                  <span>{comparison ? 'Return to moment' : 'Compare −2s'}</span>
-                </button>
-              </div>
-              <div className="match-stage">
-                <div className="broadcast-score">
-                  <b>NSF</b>
-                  <strong>
-                    {state.home} <span>—</span> {state.away}
-                  </strong>
-                  <b>ATL</b>
-                  <time>{clock(scene.baseClock, displayTime)}</time>
-                </div>
-                <span className="replay-indicator">
-                  {guide
-                    ? 'GUIDED REPLAY'
-                    : comparison
-                      ? 'EARLIER FRAME'
-                      : playing
-                        ? 'REPLAYING'
-                        : 'PAUSED'}{' '}
-                  <i />
+            <div className="live-feed-bar" role="region" aria-label="Live synthetic feed">
+              <div>
+                <b>
+                  {live.enabled
+                    ? live.status === 'complete'
+                      ? 'FEED COMPLETE'
+                      : live.status === 'error'
+                        ? 'FEED INTERRUPTED'
+                        : 'LIVE SYNTHETIC FEED'
+                    : 'SYNTHETIC MATCH STREAM'}
+                </b>
+                <span role="status">
+                  {live.enabled
+                    ? `${live.ids.length} / ${scene.events.length} events received · ${live.time.toFixed(1)}s`
+                    : 'Server-delivered events · real-time pacing · Foundry disconnected'}
                 </span>
-                {threeD ? (
-                  <Suspense
-                    fallback={<div className="stadium-loading">Preparing the stadium…</div>}
-                  >
-                    <Stadium
-                      onInspect={(id) => {
-                        setPlaying(false);
-                        setGuideRunning(false);
-                        setFocus(id);
+              </div>
+              <button
+                onClick={() => {
+                  endGuide();
+                  setPlaying(false);
+                  setComparison(false);
+                  setRecapReturn(false);
+                  setTime(0);
+                  setSelected(0);
+                  setImmersive(false);
+                  live.start();
+                }}
+              >
+                {live.enabled ? 'Restart feed' : 'Start live feed'}
+              </button>
+              {live.enabled && <button onClick={live.stop}>Exit to replay</button>}
+              {live.status === 'error' && (
+                <small>
+                  Connection lost. Playback is held at the last received event. Restart the feed or
+                  exit to replay.
+                </small>
+              )}
+            </div>
+            <section className="replay-surface" aria-label="Match replay">
+              <fieldset className="live-control-lock" disabled={feedLocked}>
+                <div className="canvas-toolbar">
+                  <div className="scene-view-controls">
+                    <button
+                      className="guide-launch"
+                      aria-pressed={!!guide}
+                      onClick={() => (guide ? endGuide() : enterGuide(0))}
+                    >
+                      ✦ {guide ? 'Exit guided replay' : 'Guided replay'}
+                    </button>
+                    <button onClick={() => enterGuide(guideSteps.length - 1)}>
+                      {scene.events.some((e) => e.type === 'shot')
+                        ? 'Replay finish ↗'
+                        : 'Replay breakdown ↗'}
+                    </button>
+                    <button
+                      aria-pressed={threeD}
+                      onClick={() => {
+                        endGuide();
+                        setThreeD(!threeD);
                       }}
-                      guidePlaying={guideRunning}
-                      guide={guide}
+                    >
+                      {threeD ? '◈  3D Stadium' : '◇  Switch to 3D'}
+                    </button>
+                    <button aria-pressed={!immersive} onClick={() => setImmersive(!immersive)}>
+                      {immersive ? 'Show analysis ↗' : 'Expand stadium ↗'}
+                    </button>
+                  </div>
+                  <div className="view-tabs">
+                    <button
+                      className={layer === 'space' ? 'active' : ''}
+                      onClick={() => {
+                        endGuide();
+                        setLayer('space');
+                      }}
+                    >
+                      Passing lanes
+                    </button>
+                    <button
+                      className={layer === 'trails' ? 'active' : ''}
+                      onClick={() => {
+                        endGuide();
+                        setLayer('trails');
+                      }}
+                    >
+                      Movement
+                    </button>
+                    <button
+                      className={layer === 'clean' ? 'active' : ''}
+                      onClick={() => {
+                        endGuide();
+                        setLayer('clean');
+                      }}
+                    >
+                      Clean feed
+                    </button>
+                  </div>
+                  <button
+                    className={`compare-button ${comparison ? 'active' : ''}`}
+                    aria-pressed={comparison}
+                    onClick={() => {
+                      endGuide();
+                      setComparison(!comparison);
+                      setPlaying(false);
+                    }}
+                  >
+                    <Glyph kind="compare" />
+                    <span>{comparison ? 'Return to moment' : 'Compare −2s'}</span>
+                  </button>
+                </div>
+                <div className="match-stage">
+                  <div className="broadcast-score">
+                    <b>NSF</b>
+                    <strong>
+                      {state.home} <span>—</span> {state.away}
+                    </strong>
+                    <b>ATL</b>
+                    <time>{clock(scene.baseClock, displayTime)}</time>
+                  </div>
+                  <span className="replay-indicator">
+                    {feedLocked
+                      ? live.status === 'error'
+                        ? 'FEED INTERRUPTED'
+                        : 'LIVE SYNTHETIC'
+                      : guide
+                        ? 'GUIDED REPLAY'
+                        : comparison
+                          ? 'EARLIER FRAME'
+                          : playing
+                            ? 'REPLAYING'
+                            : 'PAUSED'}{' '}
+                    <i />
+                  </span>
+                  {threeD ? (
+                    <Suspense
+                      fallback={<div className="stadium-loading">Preparing the stadium…</div>}
+                    >
+                      <Stadium
+                        onInspect={(id) => {
+                          setPlaying(false);
+                          setGuideRunning(false);
+                          setFocus(id);
+                        }}
+                        guidePlaying={guideRunning}
+                        guide={guide}
+                        scene={scene}
+                        time={displayTime}
+                        event={event}
+                        layer={layer}
+                        focus={focus}
+                        onFocus={setFocus}
+                        comparison={comparison}
+                        onFallback={() => {
+                          endGuide();
+                          setThreeD(false);
+                        }}
+                      />
+                    </Suspense>
+                  ) : (
+                    <Field
                       scene={scene}
                       time={displayTime}
                       event={event}
@@ -642,274 +722,268 @@ export default function App() {
                       focus={focus}
                       onFocus={setFocus}
                       comparison={comparison}
-                      onFallback={() => {
-                        endGuide();
-                        setThreeD(false);
-                      }}
                     />
-                  </Suspense>
-                ) : (
-                  <Field
-                    scene={scene}
-                    time={displayTime}
-                    event={event}
-                    layer={layer}
-                    focus={focus}
-                    onFocus={setFocus}
-                    comparison={comparison}
-                  />
-                )}
-                {guide && (
-                  <aside className="guide-card" aria-label="Guided replay chapter">
-                    <div className="guide-eyebrow">
-                      DIRECTOR’S REPLAY{' '}
-                      <span>
-                        {evidenceGuide ? 'EVIDENCE' : `${guideIndex! + 1} / ${guideSteps.length}`}
-                      </span>
-                    </div>
-                    <div className="guide-chapters">
-                      {guideSteps.map((step, i) => (
+                  )}
+                  {guide && (
+                    <aside className="guide-card" aria-label="Guided replay chapter">
+                      <div className="guide-eyebrow">
+                        DIRECTOR’S REPLAY{' '}
+                        <span>
+                          {evidenceGuide ? 'EVIDENCE' : `${guideIndex! + 1} / ${guideSteps.length}`}
+                        </span>
+                      </div>
+                      <div className="guide-chapters">
+                        {guideSteps.map((step, i) => (
+                          <button
+                            key={step.id}
+                            aria-label={`Guide chapter ${i + 1}: ${step.title}`}
+                            aria-current={i === guideIndex ? 'step' : undefined}
+                            onClick={() => enterGuide(i)}
+                          >
+                            <span />
+                          </button>
+                        ))}
+                      </div>
+                      <h2>{guide.title}</h2>
+                      <strong className="guide-metric">{guide.metric}</strong>
+                      <p>{guide.detail}</p>
+                      <small>
+                        Synthetic tracks · {guide.start.toFixed(1)}–{guide.end.toFixed(1)}s ·{' '}
+                        {guide.event.id} v{guide.event.version}
+                      </small>
+                      <div className="guide-actions">
                         <button
-                          key={step.id}
-                          aria-label={`Guide chapter ${i + 1}: ${step.title}`}
-                          aria-current={i === guideIndex ? 'step' : undefined}
-                          onClick={() => enterGuide(i)}
+                          aria-label="Previous guide chapter"
+                          disabled={!!evidenceGuide || guideIndex === 0}
+                          onClick={() => enterGuide(guideIndex! - 1)}
                         >
-                          <span />
+                          ←
                         </button>
-                      ))}
-                    </div>
-                    <h2>{guide.title}</h2>
-                    <strong className="guide-metric">{guide.metric}</strong>
-                    <p>{guide.detail}</p>
-                    <small>
-                      Synthetic tracks · {guide.start.toFixed(1)}–{guide.end.toFixed(1)}s ·{' '}
-                      {guide.event.id} v{guide.event.version}
-                    </small>
-                    <div className="guide-actions">
-                      <button
-                        aria-label="Previous guide chapter"
-                        disabled={!!evidenceGuide || guideIndex === 0}
-                        onClick={() => enterGuide(guideIndex! - 1)}
-                      >
-                        ←
-                      </button>
-                      <button onClick={() => setGuideRunning(!guideRunning)}>
-                        {guideRunning ? 'Pause guide' : 'Resume guide'}
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (evidenceGuide) {
-                            setTime(evidenceGuide.start);
-                            setGuideRunning(true);
-                            setGuideReplay((n) => n + 1);
-                          } else enterGuide(guideIndex!);
-                        }}
-                      >
-                        Replay moment
-                      </button>
-                      <button
-                        aria-label="Next guide chapter"
-                        disabled={!!evidenceGuide || guideIndex === guideSteps.length - 1}
-                        onClick={() => enterGuide(guideIndex! + 1)}
-                      >
-                        →
-                      </button>
-                    </div>
-                    <span className="guide-status">
-                      {!guideRunning
-                        ? 'Paused · explore the evidence'
-                        : time >= guide.end
-                          ? 'Hold frame · reading the play'
-                          : '½ speed · following the action'}
+                        <button onClick={() => setGuideRunning(!guideRunning)}>
+                          {guideRunning ? 'Pause guide' : 'Resume guide'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (evidenceGuide) {
+                              setTime(evidenceGuide.start);
+                              setGuideRunning(true);
+                              setGuideReplay((n) => n + 1);
+                            } else enterGuide(guideIndex!);
+                          }}
+                        >
+                          Replay moment
+                        </button>
+                        <button
+                          aria-label="Next guide chapter"
+                          disabled={!!evidenceGuide || guideIndex === guideSteps.length - 1}
+                          onClick={() => enterGuide(guideIndex! + 1)}
+                        >
+                          →
+                        </button>
+                      </div>
+                      <span className="guide-status">
+                        {!guideRunning
+                          ? 'Paused · explore the evidence'
+                          : time >= guide.end
+                            ? 'Hold frame · reading the play'
+                            : '½ speed · following the action'}
+                      </span>
+                    </aside>
+                  )}
+                  <div className="stage-bottom">
+                    <span>
+                      <i className="team-dot home" /> Northstar <i className="team-dot away" />{' '}
+                      Atlas
                     </span>
-                  </aside>
-                )}
-                <div className="stage-bottom">
-                  <span>
-                    <i className="team-dot home" /> Northstar <i className="team-dot away" /> Atlas
-                  </span>
-                  <span>
-                    {focus
-                      ? `Following ${focused?.name} · click again to clear`
-                      : 'Select any player to inspect'}
-                  </span>
+                    <span>
+                      {focus
+                        ? `Following ${focused?.name} · click again to clear`
+                        : 'Select any player to inspect'}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="transport">
-                <button
-                  className="transport-back"
-                  aria-label="Rewind sequence"
-                  onClick={() => {
-                    endGuide();
-                    setTime(0);
-                    setSelected(0);
-                    setPlaying(false);
-                    setComparison(false);
-                  }}
-                >
-                  <Glyph kind="back" />
-                </button>
-                <button
-                  className="play"
-                  aria-label={playing ? 'Pause replay' : 'Play replay'}
-                  onClick={() => {
-                    endGuide();
-                    setComparison(false);
-                    if (time >= scene.duration) {
+                <div className="transport">
+                  <button
+                    className="transport-back"
+                    aria-label="Rewind sequence"
+                    onClick={() => {
                       endGuide();
                       setTime(0);
                       setSelected(0);
-                    }
-                    setPlaying(!playing);
-                  }}
-                >
-                  <Glyph kind={playing ? 'pause' : 'play'} />
-                </button>
-                <time>{clock(scene.baseClock, displayTime)}</time>
-                <div className="scrub">
-                  <Slider
-                    label="Replay time"
-                    valueText={clock(scene.baseClock, time)}
-                    max={scene.duration}
-                    value={time}
-                    onChange={(t) => {
-                      endGuide();
-                      setTime(t);
-                      setSelected(
-                        Math.max(
-                          0,
-                          scene.events.reduce((last, ev, i) => (ev.at <= t ? i : last), -1),
-                        ),
-                      );
                       setPlaying(false);
                       setComparison(false);
                     }}
-                  />
-                  <div className="scrub-marks">
-                    {scene.events.map((e) => (
-                      <i key={e.id} style={{ left: `${(e.at / scene.duration) * 100}%` }} />
-                    ))}
-                  </div>
-                </div>
-                <button
-                  className="speed-control"
-                  aria-label="Toggle slow motion"
-                  disabled={!!guide}
-                  aria-pressed={!!guide || playbackRate === 0.5}
-                  onClick={() => setPlaybackRate(playbackRate === 1 ? 0.5 : 1)}
-                >
-                  {guide || playbackRate === 0.5 ? '.5×' : '1×'}
-                  <span>{guide ? 'Guide' : playbackRate === 1 ? 'Speed' : 'Slow'}</span>
-                </button>
-                <span className="transport-divider" />
-                <button
-                  className="small-button"
-                  onClick={() => {
-                    jump(0);
-                    setPlaying(true);
-                  }}
-                >
-                  Play buildup <Glyph kind="arrow" />
-                </button>
-              </div>
-              <div className="sequence-title">
-                <span>THE BUILDUP</span>
-                <span>
-                  {scene.events.length} moments <span>·</span> Select to inspect
-                </span>
-              </div>
-              <div className="filmstrip">
-                {scene.events.map((e, i) => (
-                  <button
-                    key={e.id}
-                    className={`film-frame ${selected === i ? 'selected' : ''}`}
-                    aria-label={`Inspect ${e.label.en}`}
-                    aria-pressed={selected === i}
-                    onClick={() => jump(i)}
                   >
-                    <div className="mini-pitch">
-                      <svg viewBox="0 0 105 68" aria-hidden="true">
-                        <path d="M0 0h105v68H0ZM52.5 0v68M105 14H88v40h17" />
-                        <circle cx="52.5" cy="34" r="9" />
-                        {scene.players
-                          .filter((p) => p.team === 'home')
-                          .map((p) => {
-                            const pt = interpolate(scene.tracks[p.id], e.at);
+                    <Glyph kind="back" />
+                  </button>
+                  <button
+                    className="play"
+                    aria-label={playing ? 'Pause replay' : 'Play replay'}
+                    onClick={() => {
+                      endGuide();
+                      setComparison(false);
+                      if (time >= scene.duration) {
+                        endGuide();
+                        setTime(0);
+                        setSelected(0);
+                      }
+                      setPlaying(!playing);
+                    }}
+                  >
+                    <Glyph kind={playing ? 'pause' : 'play'} />
+                  </button>
+                  <time>{clock(scene.baseClock, displayTime)}</time>
+                  <div className="scrub">
+                    <Slider
+                      label="Replay time"
+                      valueText={clock(scene.baseClock, time)}
+                      max={scene.duration}
+                      value={time}
+                      onChange={(t) => {
+                        if (feedLocked) return;
+                        endGuide();
+                        setTime(t);
+                        setSelected(
+                          Math.max(
+                            0,
+                            scene.events.reduce((last, ev, i) => (ev.at <= t ? i : last), -1),
+                          ),
+                        );
+                        setPlaying(false);
+                        setComparison(false);
+                      }}
+                    />
+                    <div className="scrub-marks">
+                      {scene.events.map((e) => (
+                        <i key={e.id} style={{ left: `${(e.at / scene.duration) * 100}%` }} />
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    className="speed-control"
+                    aria-label="Toggle slow motion"
+                    disabled={!!guide}
+                    aria-pressed={!!guide || playbackRate === 0.5}
+                    onClick={() => setPlaybackRate(playbackRate === 1 ? 0.5 : 1)}
+                  >
+                    {guide || playbackRate === 0.5 ? '.5×' : '1×'}
+                    <span>{guide ? 'Guide' : playbackRate === 1 ? 'Speed' : 'Slow'}</span>
+                  </button>
+                  <span className="transport-divider" />
+                  <button
+                    className="small-button"
+                    onClick={() => {
+                      jump(0);
+                      setPlaying(true);
+                    }}
+                  >
+                    Play buildup <Glyph kind="arrow" />
+                  </button>
+                </div>
+                <div className="sequence-title">
+                  <span>THE BUILDUP</span>
+                  <span>
+                    {scene.events.length} moments <span>·</span> Select to inspect
+                  </span>
+                </div>
+                <div className="filmstrip">
+                  {scene.events.map((e, i) =>
+                    live.enabled && !live.ids.includes(`${e.id}@${e.version}`) ? (
+                      <div className="film-frame pending-event" key={e.id}>
+                        <span>Awaiting event {i + 1}</span>
+                      </div>
+                    ) : (
+                      <button
+                        key={e.id}
+                        className={`film-frame ${selected === i ? 'selected' : ''}`}
+                        aria-label={`Inspect ${e.label.en}`}
+                        aria-pressed={selected === i}
+                        onClick={() => jump(i)}
+                      >
+                        <div className="mini-pitch">
+                          <svg viewBox="0 0 105 68" aria-hidden="true">
+                            <path d="M0 0h105v68H0ZM52.5 0v68M105 14H88v40h17" />
+                            <circle cx="52.5" cy="34" r="9" />
+                            {scene.players
+                              .filter((p) => p.team === 'home')
+                              .map((p) => {
+                                const pt = interpolate(scene.tracks[p.id], e.at);
+                                return (
+                                  <circle
+                                    key={p.id}
+                                    cx={pt.x}
+                                    cy={pt.y}
+                                    r="1.5"
+                                    className="mini-player"
+                                  />
+                                );
+                              })}
+                            <path
+                              className="mini-pass"
+                              d={`M${e.from.x} ${e.from.y}L${e.to.x} ${e.to.y}`}
+                            />
+                            <circle className="mini-ball" cx={e.to.x} cy={e.to.y} r="2" />
+                          </svg>
+                          <span>{clock(scene.baseClock, e.at)}</span>
+                        </div>
+                        <div className="frame-label">
+                          <b>{String(i + 1).padStart(2, '0')}</b>
+                          <span>{e.label[language]}</span>
+                        </div>
+                      </button>
+                    ),
+                  )}
+                </div>
+                {recapReturn && !analysis.data?.recap && (
+                  <button
+                    className="recap-return"
+                    onClick={() => {
+                      jump(scene.events.length - 1);
+                      setRecapReturn(false);
+                    }}
+                  >
+                    {language === 'en' ? 'Return to sequence recap ↗' : 'Volver al resumen ↗'}
+                  </button>
+                )}
+                {analysis.data?.recap && (!live.enabled || live.status === 'complete') && (
+                  <section className="sequence-recap" aria-label="Automatic sequence recap">
+                    <header>
+                      <span>{language === 'en' ? 'SEQUENCE RECAP' : 'RESUMEN DE LA JUGADA'}</span>
+                      <b>{analysis.data.recap.outcome.replace('-', ' ').toUpperCase()}</b>
+                    </header>
+                    <h2>{analysis.data.recap.title}</h2>
+                    <p>{analysis.data.recap.summary}</p>
+                    <div className="recap-cards">
+                      {analysis.data.recap.cards.map((card, i) => (
+                        <article key={card.title}>
+                          <span className="recap-number">0{i + 1}</span>
+                          <h3>{card.title}</h3>
+                          <p>{card.text}</p>
+                          {card.factIds.map((id) => {
+                            const fact = analysis.data!.evidence.facts.find((f) => f.id === id)!;
                             return (
-                              <circle
-                                key={p.id}
-                                cx={pt.x}
-                                cy={pt.y}
-                                r="1.5"
-                                className="mini-player"
-                              />
+                              <button
+                                key={id}
+                                onClick={() => {
+                                  setRecapReturn(true);
+                                  inspectFact(fact);
+                                }}
+                              >
+                                {language === 'en' ? 'Replay evidence' : 'Ver evidencia'} ·{' '}
+                                {clock(scene.baseClock, fact.at)} ↗
+                                <small>
+                                  {fact.eventId} · v{fact.version}
+                                </small>
+                              </button>
                             );
                           })}
-                        <path
-                          className="mini-pass"
-                          d={`M${e.from.x} ${e.from.y}L${e.to.x} ${e.to.y}`}
-                        />
-                        <circle className="mini-ball" cx={e.to.x} cy={e.to.y} r="2" />
-                      </svg>
-                      <span>{clock(scene.baseClock, e.at)}</span>
+                        </article>
+                      ))}
                     </div>
-                    <div className="frame-label">
-                      <b>{String(i + 1).padStart(2, '0')}</b>
-                      <span>{e.label[language]}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              {recapReturn && !analysis.data?.recap && (
-                <button
-                  className="recap-return"
-                  onClick={() => {
-                    jump(scene.events.length - 1);
-                    setRecapReturn(false);
-                  }}
-                >
-                  {language === 'en' ? 'Return to sequence recap ↗' : 'Volver al resumen ↗'}
-                </button>
-              )}
-              {analysis.data?.recap && (
-                <section className="sequence-recap" aria-label="Automatic sequence recap">
-                  <header>
-                    <span>{language === 'en' ? 'SEQUENCE RECAP' : 'RESUMEN DE LA JUGADA'}</span>
-                    <b>{analysis.data.recap.outcome.replace('-', ' ').toUpperCase()}</b>
-                  </header>
-                  <h2>{analysis.data.recap.title}</h2>
-                  <p>{analysis.data.recap.summary}</p>
-                  <div className="recap-cards">
-                    {analysis.data.recap.cards.map((card, i) => (
-                      <article key={card.title}>
-                        <span className="recap-number">0{i + 1}</span>
-                        <h3>{card.title}</h3>
-                        <p>{card.text}</p>
-                        {card.factIds.map((id) => {
-                          const fact = analysis.data!.evidence.facts.find((f) => f.id === id)!;
-                          return (
-                            <button
-                              key={id}
-                              onClick={() => {
-                                setRecapReturn(true);
-                                inspectFact(fact);
-                              }}
-                            >
-                              {language === 'en' ? 'Replay evidence' : 'Ver evidencia'} ·{' '}
-                              {clock(scene.baseClock, fact.at)} ↗
-                              <small>
-                                {fact.eventId} · v{fact.version}
-                              </small>
-                            </button>
-                          );
-                        })}
-                      </article>
-                    ))}
-                  </div>
-                  <small>{analysis.data.recap.limitation}</small>
-                </section>
-              )}
+                    <small>{analysis.data.recap.limitation}</small>
+                  </section>
+                )}
+              </fieldset>
             </section>
             <aside
               className={`notebook ${drawer ? 'notebook-open' : ''}`}
@@ -928,14 +1002,24 @@ export default function App() {
               </div>
               <div className="note-body">
                 <div className="note-number">
-                  {String(selected + 1).padStart(2, '0')}
+                  {live.enabled && live.ids.length === 0
+                    ? '00'
+                    : String(selected + 1).padStart(2, '0')}
                   <span> / {scene.events.length}</span>
                 </div>
                 <div className="event-tag">
-                  {event.type.toUpperCase()} <span>·</span> {clock(scene.baseClock, event.at)}
+                  {live.enabled && live.ids.length === 0 ? (
+                    'WAITING FOR FIRST EVENT'
+                  ) : (
+                    <>
+                      {event.type.toUpperCase()} <span>·</span> {clock(scene.baseClock, event.at)}
+                    </>
+                  )}
                 </div>
                 <h2>
-                  {pass ? (
+                  {live.enabled && live.ids.length === 0 ? (
+                    'The play is starting.'
+                  ) : pass ? (
                     <>
                       {headline}
                       <br />

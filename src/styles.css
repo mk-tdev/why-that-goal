@@ -2804,3 +2804,47 @@ h1 span {
     padding: 18px;
   }
 }
+.live-feed-bar {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #13272d;
+  border: 1px solid #6cbbab40;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.live-feed-bar div {
+  flex: 1;
+  min-width: 220px;
+}
+.live-feed-bar b {
+  display: block;
+  color: #83d7bc;
+  font: 10px monospace;
+  letter-spacing: 0.12em;
+}
+.live-feed-bar span,
+.live-feed-bar small {
+  display: block;
+  color: #a6bec2;
+  font-size: 11px;
+  margin-top: 5px;
+}
+.live-feed-bar button {
+  padding: 10px 14px;
+  border: 1px solid #dca55666;
+  border-radius: 5px;
+  background: #21373c;
+  color: #ebc384;
+  cursor: pointer;
+}
+.live-control-lock {
+  display: contents;
+}
+.live-control-lock:disabled button {
+  cursor: default;
+}
+.pending-event { min-height:110px; display:grid; place-items:center; opacity:.45; font-size:11px; border:1px dashed #70969a55; }

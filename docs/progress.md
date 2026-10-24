@@ -102,3 +102,9 @@ Validation: 60 tests pass across all six fixtures, including ball contact/contin
 Added an automatic, rule-based recap for every completed sequence, with outcome-specific goal/save/interception wording and cited cards for the final passing connection, receiving movement, space change and decisive event. Recaps render below the replay without covering the pitch; evidence links play the measured interval and a return control restores the recap. Goal/save evidence opens the cinematic finish. Exports include the recap and supporting facts.
 
 Validation: 68 tests pass, including all six outcomes, citation resolution, no early recaps, delayed terminal receipt, withdrawn outcomes, EN/ES citation consistency and invalid-response rejection. Browser verification confirmed automatic appearance, evidence replay and return navigation. Production build passes with existing Three.js size warning. Foundry remains disconnected; narrative selection is deterministic.
+
+## 24 October 2026 — Live synthetic feed
+
+Added a local SSE sequence stream with a server clock and exactly-once versioned event delivery per connection. Live mode advances the stadium, gates evidence to received events, hides future filmstrip moments and produces the recap after completion. Restart and exit controls, a six-second stall watchdog and stream cleanup handle interrupted sessions. No automatic reconnect or resumable stream is claimed. Added API documentation and Foundry setup guidance; Foundry remains disconnected.
+
+Validation: 70 tests pass, including real streamed HTTP responses for all six scenarios, ordering, receipt boundaries, duplicate prevention, invalid queries/origins and client abort cleanup. Browser verified progressive delivery, notebook updates and automatic goal recap. Production build passes with the existing Three.js chunk size warning.

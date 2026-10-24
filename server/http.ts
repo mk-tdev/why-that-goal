@@ -1,7 +1,9 @@
+import { scenarios } from '../src/core/scenarios';
+import { streamFeed } from './feed';
 import { createServer } from 'node:http';
 import { ContractError } from './contracts';
 import { analyze } from './pipeline';
-export function createApiServer() {
+export function createApiServer(feedOptions: { intervalMs?: number; speed?: number } = {}) {
   return createServer(async (req, res) => {
     const send = (status: number, body: unknown) => {
       res.writeHead(status, {
@@ -13,8 +15,7 @@ export function createApiServer() {
     };
     if (req.method === 'GET' && req.url === '/api/health')
       return send(200, { status: 'ok', foundry: 'disconnected' });
-    if (req.url !== '/api/analyze') return send(404, { error: 'not_found' });
-    if (req.method !== 'POST') return send(405, { error: 'method_not_allowed' });
+
     if (
       req.headers.origin &&
       ![
@@ -27,6 +28,21 @@ export function createApiServer() {
       ].includes(req.headers.origin)
     )
       return send(403, { error: 'browser_origin_not_enabled' });
+    const url = new URL(req.url ?? '/', 'http://localhost');
+    if (url.pathname === '/api/feed') {
+      if (req.method !== 'GET') return send(405, { error: 'method_not_allowed' });
+      const scenario = scenarios.find((s) => s.id === url.searchParams.get('scenarioId'));
+      if (
+        !scenario ||
+        [...url.searchParams.keys()].some((k) => k !== 'scenarioId') ||
+        url.searchParams.getAll('scenarioId').length !== 1
+      )
+        return send(400, { error: 'invalid_feed_request' });
+      streamFeed(scenario, res, feedOptions.intervalMs, feedOptions.speed);
+      return;
+    }
+    if (req.url !== '/api/analyze') return send(404, { error: 'not_found' });
+    if (req.method !== 'POST') return send(405, { error: 'method_not_allowed' });
     if (req.headers['content-type']?.split(';')[0] !== 'application/json')
       return send(415, { error: 'json_required' });
     try {

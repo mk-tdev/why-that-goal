@@ -133,6 +133,52 @@
           }
         }
       }
+    },
+    "/api/feed": {
+      "get": {
+        "operationId": "streamSyntheticSequence",
+        "description": "One seeded sequence per connection, paced at 1x. SSE data frames every approximately 100 ms contain the replay clock and newly received versioned events. Final frame has complete=true; connection closes. Restart begins at zero, with no resume protocol. Foundry disconnected.",
+        "parameters": [
+          {
+            "name": "scenarioId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "quick-break",
+                "switch-play",
+                "no-finish",
+                "cutback-save",
+                "counter-cut-out",
+                "switch-intercepted"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSE data: JSON with scenarioId, time (seconds), events (new MatchEvent records), complete (boolean). Events are released only after both event time and receipt time.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "data: {\"scenarioId\":\"quick-break\",\"time\":0,\"events\":[],\"complete\":false}\n\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown scenario, missing/duplicate scenarioId or unexpected query parameter"
+          },
+          "403": {
+            "description": "Origin outside the local allowlist"
+          },
+          "405": {
+            "description": "Method other than GET"
+          }
+        }
+      }
     }
   },
   "components": {

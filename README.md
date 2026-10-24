@@ -83,3 +83,9 @@ Registration correspondence, account screenshots and private planning notes are 
 Run `npm run dev:api` alongside the frontend to start the loopback-only API on port 8791. It provides validated evidence snapshots and replay moments without model calls. The replay fetches evidence through the Vite `/api` proxy. Start both `npm run dev` and `npm run dev:api`; if the API is unavailable, the notebook shows local fallback and a retry button.
 
 See [backend contract and Foundry handoff](docs/api/intelligence.md) and [OpenAPI specification](docs/api/openapi.json). The server accepts only known scenario IDs and bounded timestamps; a future model adapter can select versioned facts, while trusted code supplies numbers, text and replay coordinates. Foundry setup remains deferred.
+
+## Live synthetic sequence feed
+
+Start both local servers, select a sequence and choose **Start live feed**. The backend streams events at real-time pace; the notebook updates as evidence becomes available. Future filmstrip events stay hidden, replay controls wait for completion, and the recap appears automatically after the final frame. Its evidence links then reopen the relevant play. Restart begins again at zero; Exit to replay returns to manual inspection. An interrupted stream holds its last state and offers restart.
+
+This is a seeded synthetic event stream over SSE, not an external match provider. Tracking routes are preloaded for rendering; event availability is streamed. All six scenarios are supported, including goals, saves and interceptions. Foundry remains disconnected. See [Foundry preparation and integration checklist](docs/foundry-setup.md).
