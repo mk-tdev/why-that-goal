@@ -1,7 +1,9 @@
 import { createRecap } from './recap';
+import { validateNarrative, type Narrative } from './narrative';
 import { scenarios } from '../src/core/scenarios';
 import {
   ContractError,
+  ProviderFailure,
   parseRequest,
   validateSelection,
   type AnalysisResponse,
@@ -9,13 +11,14 @@ import {
 } from './contracts';
 import { createEvidenceTools, type EvidenceTools } from './evidence';
 
-/** Future Foundry adapter boundary. No SDK, credentials or network provider is installed. */
+/** Provider boundary: model prose and evidence selection are validated before rendering. */
 export interface IntelligenceAdapter {
   name: string;
   select(input: {
     evidence: EvidencePacket;
     tools: EvidenceTools;
     signal: AbortSignal;
+    recap?: AnalysisResponse['recap'];
   }): Promise<unknown>;
 }
 export async function analyze(
@@ -29,6 +32,9 @@ export async function analyze(
   if (!scenario) throw new ContractError('Unknown scenario');
   const tools = createEvidenceTools(scenario, request);
   const packet = tools.snapshot();
+  const terminalRecap = createRecap(scenario, packet);
+  let narrative: Narrative | undefined;
+  let telemetry: Partial<AnalysisResponse['trace']> = {};
   let selection = {
     factIds: packet.facts
       .filter((f) => f.kind === 'event')
@@ -37,13 +43,18 @@ export async function analyze(
   };
   let reason: AnalysisResponse['reason'] = 'disconnected';
   let mode: AnalysisResponse['mode'] = 'deterministic';
-  if (adapter) {
+  if (adapter && packet.facts.length) {
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const output = await Promise.race([
         Promise.resolve().then(() =>
-          adapter.select({ evidence: tools.snapshot(), tools, signal: controller.signal }),
+          adapter.select({
+            evidence: tools.snapshot(),
+            tools,
+            signal: controller.signal,
+            recap: terminalRecap,
+          }),
         ),
         new Promise<never>((_, reject) => {
           timer = setTimeout(() => {
@@ -53,15 +64,35 @@ export async function analyze(
         }),
       ]);
       try {
-        selection = validateSelection(output, packet);
+        if (output && typeof output === 'object' && 'story' in output) {
+          const { telemetry: metrics, ...draft } = output as Record<string, unknown>;
+          const validated = validateNarrative(draft, packet, terminalRecap);
+          selection = { factIds: validated.factIds };
+          narrative = validated;
+          if (metrics && typeof metrics === 'object') {
+            const m = metrics as Record<string, unknown>;
+            telemetry = {
+              calls: m.calls === 0 ? 0 : 1,
+              cacheHit: m.cacheHit === true,
+              ...(typeof m.inputTokens === 'number' ? { inputTokens: m.inputTokens } : {}),
+              ...(typeof m.outputTokens === 'number' ? { outputTokens: m.outputTokens } : {}),
+            };
+          }
+        } else selection = validateSelection(output, packet);
         reason = 'validated';
         mode = 'model-selected';
       } catch {
         reason = 'invalid-output';
         mode = 'fallback';
       }
-    } catch {
-      reason = controller.signal.aborted ? 'timeout' : 'provider-error';
+    } catch (error) {
+      if (error instanceof ProviderFailure) telemetry.calls = error.calls;
+      reason =
+        error instanceof ProviderFailure
+          ? error.reason
+          : controller.signal.aborted
+            ? 'timeout'
+            : 'provider-error';
       mode = 'fallback';
     } finally {
       clearTimeout(timer);
@@ -99,8 +130,8 @@ export async function analyze(
         .map((f) => [f.id, f]),
     ).values(),
   ].sort((a, b) => a.at - b.at);
-  return {
-    recap: createRecap(scenario, packet),
+  const result: AnalysisResponse = {
+    recap: terminalRecap,
     buildup: {
       title: failed
         ? en
@@ -149,8 +180,18 @@ export async function analyze(
     }),
     trace: {
       elapsedMs: Math.round(performance.now() - started),
-      calls: adapter ? 1 : 0,
+      calls: adapter && packet.facts.length ? 1 : 0,
       validated: reason === 'validated',
+      ...telemetry,
     },
   };
+  if (narrative) {
+    const limitation = en
+      ? 'Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation.'
+      : 'Interpretación de Foundry · citas y estructura verificadas; puede contener errores. Datos sintéticos, no prueba causal.';
+    result.buildup = { ...narrative.story, factIds: selection.factIds, limitation };
+    if (terminalRecap && narrative.recap)
+      result.recap = { ...terminalRecap, ...narrative.recap, limitation };
+  }
+  return result;
 }

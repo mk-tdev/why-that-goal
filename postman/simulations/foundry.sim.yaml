@@ -1,0 +1,6 @@
+simulation: foundry-integration
+routing: path
+mocks:
+  - name: foundry
+    routeKey: foundry
+    path: postman/mocks/foundry/config.yaml

@@ -1,0 +1,453 @@
+{
+  "recordedAt": "2026-10-25T05:58:31.431Z",
+  "scope": "Live Foundry integration checks on authored regression fixtures; not held-out model-quality or causal validation.",
+  "deployment": "wtg-insights",
+  "results": [
+    {
+      "request": {
+        "scenarioId": "quick-break",
+        "through": 19,
+        "receivedThrough": 19,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 6163,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 2979,
+        "outputTokens": 654
+      },
+      "story": {
+        "title": "A quick break ends in a goal",
+        "summary": "Osei’s recovery started a move that advanced through Silva and Vega before reaching Okafor. Vega’s movement offered a forward option, and the space at his receiving point opened. The move reached Okafor, whose finish was recorded as a goal.",
+        "factIds": [
+          "quick-break-01@1:event",
+          "quick-break-02@1:progress",
+          "quick-break-03@1:run",
+          "quick-break-03@1:space-change",
+          "quick-break-04@1:progress",
+          "quick-break-06@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "goal",
+        "title": "A buildup converted",
+        "summary": "A recorded goal capped a move built through forward passes and receiving runs.",
+        "through": 19,
+        "terminalFactId": "quick-break-06@1:event",
+        "cards": [
+          {
+            "title": "The ball moved on",
+            "text": "Osei’s pass to Silva advanced the attack and changed where the next action could begin.",
+            "factIds": [
+              "quick-break-02@1:progress"
+            ]
+          },
+          {
+            "title": "Vega offered a forward option",
+            "text": "Vega moved before receiving Silva’s pass, offering a new destination ahead.",
+            "factIds": [
+              "quick-break-03@1:run"
+            ]
+          },
+          {
+            "title": "More space at the reception",
+            "text": "The gap at Vega’s receiving point opened as the pass arrived. The tracking does not establish what caused that change.",
+            "factIds": [
+              "quick-break-03@1:space-change"
+            ]
+          },
+          {
+            "title": "Okafor finishes",
+            "text": "The move reached Okafor, and his finish is recorded as a goal.",
+            "factIds": [
+              "quick-break-06@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "switch-play",
+        "through": 21,
+        "receivedThrough": 21,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 6328,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 2705,
+        "outputTokens": 643
+      },
+      "story": {
+        "title": "Forward passes set up the finish",
+        "summary": "Marin’s pass moved the attack forward, with Silva offering a new option before receiving. Silva then found Mendes, who arrived with more space at the receiving point. Mendes connected with Okafor, and the move ended with a recorded goal.",
+        "factIds": [
+          "switch-play-02@1:progress",
+          "switch-play-02@1:run",
+          "switch-play-03@1:progress",
+          "switch-play-03@1:space-change",
+          "switch-play-04@1:progress",
+          "switch-play-06@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "goal",
+        "title": "A buildup converted",
+        "summary": "The passing route carried the ball into a shooting position, and Okafor’s finish was recorded as a goal.",
+        "through": 21,
+        "terminalFactId": "switch-play-06@1:event",
+        "cards": [
+          {
+            "title": "A forward option",
+            "text": "Silva moved before receiving Marin’s pass, offering a new destination ahead of the ball.",
+            "factIds": [
+              "switch-play-02@1:run",
+              "switch-play-02@1:progress"
+            ]
+          },
+          {
+            "title": "Mendes receives with more room",
+            "text": "At Mendes’s receiving point, the nearest opponent was farther away at reception than earlier in the interval.",
+            "factIds": [
+              "switch-play-03@1:space-change"
+            ]
+          },
+          {
+            "title": "The finish",
+            "text": "The move ended with Okafor’s finish recorded as a goal.",
+            "factIds": [
+              "switch-play-06@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "no-finish",
+        "through": 21,
+        "receivedThrough": 21,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 7380,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 2721,
+        "outputTokens": 689
+      },
+      "story": {
+        "title": "A forward move, but no finish",
+        "summary": "Costa’s pass gave Osei a new option, and the ball continued forward through Tan to Okafor. Space at the final receiving point narrowed; Okafor’s shot was saved. The progression created a route to goal, but not a goal.",
+        "factIds": [
+          "no-finish-02@1:progress",
+          "no-finish-02@1:run",
+          "no-finish-03@1:progress",
+          "no-finish-04@1:progress",
+          "no-finish-04@1:space-change",
+          "no-finish-06@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "save",
+        "title": "A chance denied",
+        "summary": "The attack moved forward through completed passes and ended in a shot that the goalkeeper saved.",
+        "through": 21,
+        "terminalFactId": "no-finish-06@1:event",
+        "cards": [
+          {
+            "title": "The move advances",
+            "text": "Costa and Osei began the forward progression, with Osei offering a new passing destination. Osei then found Tan, carrying the move further toward goal.",
+            "factIds": [
+              "no-finish-02@1:progress",
+              "no-finish-02@1:run",
+              "no-finish-03@1:progress"
+            ]
+          },
+          {
+            "title": "Space tightens at the end",
+            "text": "Tan’s pass moved the attack on to Okafor, but the gap at the receiving point narrowed as the ball arrived.",
+            "factIds": [
+              "no-finish-04@1:progress",
+              "no-finish-04@1:space-change"
+            ]
+          },
+          {
+            "title": "The goalkeeper saves",
+            "text": "Okafor’s shot was stopped by the goalkeeper, so the move ended without a goal.",
+            "factIds": [
+              "no-finish-06@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "cutback-save",
+        "through": 21,
+        "receivedThrough": 21,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 6144,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 2742,
+        "outputTokens": 705
+      },
+      "story": {
+        "title": "A forward move ends in a save",
+        "summary": "Marin’s pass gave Silva a new destination ahead. Silva then found Mendes, whose receiving point had more space by the time the pass arrived. Mendes moved the ball closer to goal for Okafor, but the goalkeeper saved the shot.",
+        "factIds": [
+          "cutback-save-02@1:progress",
+          "cutback-save-02@1:run",
+          "cutback-save-03@1:space-change",
+          "cutback-save-04@1:progress",
+          "cutback-save-05@1:event",
+          "cutback-save-06@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "save",
+        "title": "A chance denied",
+        "summary": "The attack progressed through completed passes to a shot, but the goalkeeper saved it.",
+        "through": 21,
+        "terminalFactId": "cutback-save-06@1:event",
+        "cards": [
+          {
+            "title": "Silva offered a forward option",
+            "text": "Silva moved before receiving Marin’s pass, offering a new destination ahead. The ball then moved toward goal.",
+            "factIds": [
+              "cutback-save-02@1:run",
+              "cutback-save-02@1:progress"
+            ]
+          },
+          {
+            "title": "Mendes received with more space",
+            "text": "At Mendes’s receiving point, the nearest opponent was farther away at reception than earlier in the interval. This describes the space change, not what caused it.",
+            "factIds": [
+              "cutback-save-03@1:space-change"
+            ]
+          },
+          {
+            "title": "The move reached a shot",
+            "text": "Mendes’s pass moved the ball closer to goal, and Okafor took a shot.",
+            "factIds": [
+              "cutback-save-04@1:progress",
+              "cutback-save-05@1:event"
+            ]
+          },
+          {
+            "title": "The goalkeeper saved it",
+            "text": "The shot was saved; the attack did not produce a goal.",
+            "factIds": [
+              "cutback-save-06@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "counter-cut-out",
+        "through": 14,
+        "receivedThrough": 14,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 9219,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 2319,
+        "outputTokens": 936
+      },
+      "story": {
+        "title": "Forward progress, then a cut-out",
+        "summary": "Osei and Silva moved the attack forward, with Silva’s pass finding Vega as the next destination. More space was available at Vega’s reception, but the following connection was intercepted and the attack ended before a shot.",
+        "factIds": [
+          "counter-cut-out-02@1:progress",
+          "counter-cut-out-02@1:run",
+          "counter-cut-out-03@1:progress",
+          "counter-cut-out-03@1:space-change",
+          "counter-cut-out-04@1:event",
+          "counter-cut-out-turnover@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "failed-attack",
+        "title": "An attack interrupted",
+        "summary": "The completed passes moved the attack forward, but an intercepted connection ended it before a shot.",
+        "through": 14,
+        "terminalFactId": "counter-cut-out-turnover@1:event",
+        "cards": [
+          {
+            "title": "Progress through the passes",
+            "text": "Osei’s pass moved the ball forward to Silva, who then found Vega further upfield. Each reception gave the next action a more advanced starting point.",
+            "factIds": [
+              "counter-cut-out-02@1:progress",
+              "counter-cut-out-03@1:progress"
+            ]
+          },
+          {
+            "title": "A new destination",
+            "text": "Silva moved before receiving, offering a forward passing option for Osei.",
+            "factIds": [
+              "counter-cut-out-02@1:run"
+            ]
+          },
+          {
+            "title": "More room at reception",
+            "text": "The nearest opponent was farther from Vega’s receiving point when the pass arrived. That describes the space available, but does not show what caused it.",
+            "factIds": [
+              "counter-cut-out-03@1:space-change"
+            ]
+          },
+          {
+            "title": "The attack ends",
+            "text": "The attempted pass was intercepted, and the opponent took possession. The attack ended without a shot.",
+            "factIds": [
+              "counter-cut-out-04@1:event",
+              "counter-cut-out-turnover@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "switch-intercepted",
+        "through": 11,
+        "receivedThrough": 11,
+        "audience": "fan",
+        "language": "en"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 6836,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 1658,
+        "outputTokens": 668
+      },
+      "story": {
+        "title": "Progress, then an interception",
+        "summary": "Marin’s pass found Silva moving ahead and carried the attack toward goal. The receiving gap narrowed, and the next attempted pass was intercepted, ending the attack before a shot.",
+        "factIds": [
+          "switch-intercepted-02@1:progress",
+          "switch-intercepted-02@1:run",
+          "switch-intercepted-02@1:space-change",
+          "switch-intercepted-03@1:event",
+          "switch-intercepted-turnover@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "failed-attack",
+        "title": "An attack interrupted",
+        "summary": "Marin’s pass advanced the attack, but an interception ended it before a shot.",
+        "through": 11,
+        "terminalFactId": "switch-intercepted-turnover@1:event",
+        "cards": [
+          {
+            "title": "The pass moved play forward",
+            "text": "Marin found Silva and moved the ball toward goal, changing where the next action could begin.",
+            "factIds": [
+              "switch-intercepted-02@1:progress"
+            ]
+          },
+          {
+            "title": "Silva offered a destination ahead",
+            "text": "Silva moved before receiving, offering a new passing destination ahead of Marin’s pass.",
+            "factIds": [
+              "switch-intercepted-02@1:run"
+            ]
+          },
+          {
+            "title": "The receiving gap narrowed",
+            "text": "The nearest opponent was closer to the fixed receiving point at reception. The tracking does not establish that Silva’s movement caused the change.",
+            "factIds": [
+              "switch-intercepted-02@1:space-change"
+            ]
+          },
+          {
+            "title": "The attack ended without a shot",
+            "text": "The attempted pass was intercepted, and the opponent took possession. The attack ended before a shot.",
+            "factIds": [
+              "switch-intercepted-03@1:event",
+              "switch-intercepted-turnover@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "quick-break",
+        "through": 8,
+        "receivedThrough": 8,
+        "audience": "analyst",
+        "language": "es"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 6007,
+        "calls": 1,
+        "validated": true,
+        "cacheHit": false,
+        "inputTokens": 1889,
+        "outputTokens": 672
+      },
+      "story": {
+        "title": "Una transición que avanzó con apoyos en movimiento",
+        "summary": "Tras la recuperación de Osei, los pases de Osei y Silva desplazaron el balón hacia la portería y cambiaron el punto de partida de la acción siguiente. Silva y Vega también se movieron antes de recibir, ofreciendo nuevos destinos. La secuencia muestra progresión y movilidad coordinadas, aunque estos datos no prueban que los movimientos causaran los avances.",
+        "factIds": [
+          "quick-break-01@1:event",
+          "quick-break-02@1:progress",
+          "quick-break-02@1:run",
+          "quick-break-03@1:progress",
+          "quick-break-03@1:run"
+        ],
+        "limitation": "Interpretación de Foundry · citas y estructura verificadas; puede contener errores. Datos sintéticos, no prueba causal."
+      },
+      "recap": null
+    }
+  ]
+}

@@ -2,8 +2,16 @@ import { scenarios } from '../src/core/scenarios';
 import { streamFeed } from './feed';
 import { createServer } from 'node:http';
 import { ContractError } from './contracts';
-import { analyze } from './pipeline';
-export function createApiServer(feedOptions: { intervalMs?: number; speed?: number } = {}) {
+import { type IntelligenceAdapter } from './pipeline';
+import { createAnalysisService } from './analysisService';
+export function createApiServer(
+  feedOptions: {
+    intervalMs?: number;
+    speed?: number;
+    adapter?: IntelligenceAdapter;
+  } = {},
+) {
+  const analysis = createAnalysisService(feedOptions.adapter);
   return createServer(async (req, res) => {
     const send = (status: number, body: unknown) => {
       res.writeHead(status, {
@@ -14,7 +22,10 @@ export function createApiServer(feedOptions: { intervalMs?: number; speed?: numb
       res.end(JSON.stringify(body));
     };
     if (req.method === 'GET' && req.url === '/api/health')
-      return send(200, { status: 'ok', foundry: 'disconnected' });
+      return send(200, {
+        status: 'ok',
+        foundry: feedOptions.adapter ? 'configured' : 'disconnected',
+      });
 
     if (
       req.headers.origin &&
@@ -57,7 +68,7 @@ export function createApiServer(feedOptions: { intervalMs?: number; speed?: numb
         chunks.push(Buffer.from(chunk));
       }
       const input: unknown = JSON.parse(Buffer.concat(chunks).toString('utf8'));
-      send(200, await analyze(input));
+      send(200, await analysis(input));
     } catch (error) {
       if (res.headersSent) return;
       send(error instanceof SyntaxError || error instanceof ContractError ? 400 : 500, {

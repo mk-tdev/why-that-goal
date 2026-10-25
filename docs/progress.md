@@ -108,3 +108,11 @@ Validation: 68 tests pass, including all six outcomes, citation resolution, no e
 Added a local SSE sequence stream with a server clock and exactly-once versioned event delivery per connection. Live mode advances the stadium, gates evidence to received events, hides future filmstrip moments and produces the recap after completion. Restart and exit controls, a six-second stall watchdog and stream cleanup handle interrupted sessions. No automatic reconnect or resumable stream is claimed. Added API documentation and Foundry setup guidance; Foundry remains disconnected.
 
 Validation: 70 tests pass, including real streamed HTTP responses for all six scenarios, ordering, receipt boundaries, duplicate prevention, invalid queries/origins and client abort cleanup. Browser verified progressive delivery, notebook updates and automatic goal recap. Production build passes with the existing Three.js chunk size warning.
+
+## 25 October 2026 — Live Foundry explanations and recaps
+
+Verified `wtg-insights` (`gpt-6-luna`, Global Standard) and connected the resource Responses endpoint with server-side Entra authentication. Foundry now writes the main buildup story and cited recap cards in the selected language/audience. Number-free model prose is separated from trusted measured facts; invalid references, premature recaps, malformed outputs and timeouts fall back. Citation checks do not prove semantic accuracy.
+
+The API serves measured evidence immediately and polls bounded asynchronous generation, preserving snapshot isolation. Added cached results, concurrency and request budgets, timeout/cooldown behavior and server-only environment configuration. The ignored local environment is enabled; public example defaults to disabled. No Azure roles/resources were changed.
+
+Validation: 73 tests pass. Real HTTP transport and Postman simulation verify success, 429, service errors, invalid citations and timeouts. Seven live calls cover six terminal outcomes and an early Spanish analyst snapshot; all returned validated model narratives. These are authored regression fixtures, not held-out AI evaluation. Production build passes with the existing Three.js warning; dependency audit reports zero vulnerabilities with the pinned Azure identity/UUID dependency combination.

@@ -3,7 +3,7 @@
   "info": {
     "title": "Why That Goal local evidence API",
     "version": "1.0.0",
-    "description": "Loopback-only developer API. Foundry disconnected. Local Vite development and preview origins allowed; cross-origin CORS access disabled."
+    "description": "Loopback-only evidence API with optional server-side Microsoft Foundry generation. Measured evidence is immediate; poll identical POST while trace.pending=true for the cited AI story. CORS disabled."
   },
   "servers": [
     {
@@ -30,7 +30,7 @@
                     },
                     "foundry": {
                       "type": "string",
-                      "enum": ["disconnected"]
+                      "enum": ["configured", "disconnected"]
                     }
                   }
                 }
@@ -62,7 +62,7 @@
         },
         "responses": {
           "200": {
-            "description": "Offline evidence analysis",
+            "description": "Time-bounded evidence with deterministic, model-generated or fallback narrative. While generation is pending, repeat the identical request after approximately 1.5 seconds. Pending responses include a deterministic recap only after the terminal event is available.",
             "content": {
               "application/json": {
                 "schema": {
@@ -449,7 +449,14 @@
           },
           "reason": {
             "type": "string",
-            "enum": ["disconnected", "validated", "invalid-output", "provider-error", "timeout"]
+            "enum": [
+              "disconnected",
+              "validated",
+              "invalid-output",
+              "provider-error",
+              "timeout",
+              "generating"
+            ]
           },
           "evidence": {
             "$ref": "#/components/schemas/EvidencePacket"
@@ -476,6 +483,20 @@
               },
               "validated": {
                 "type": "boolean"
+              },
+              "pending": {
+                "type": "boolean"
+              },
+              "cacheHit": {
+                "type": "boolean"
+              },
+              "inputTokens": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "outputTokens": {
+                "type": "integer",
+                "minimum": 0
               }
             }
           },

@@ -11,10 +11,12 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --import tsx --test src/core/*.test.ts server/*.test.ts",
-    "dev:api": "node --import tsx server/index.ts",
-    "evaluate:scenarios": "node --import tsx scripts/evaluate-scenarios.ts"
+    "dev:api": "node --env-file-if-exists=.env --import tsx server/index.ts",
+    "evaluate:scenarios": "node --import tsx scripts/evaluate-scenarios.ts",
+    "check:foundry": "node --env-file-if-exists=.env --import tsx scripts/check-foundry.ts"
   },
   "dependencies": {
+    "@azure/identity": "4.13.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "three": "^0.186.1"
@@ -29,5 +31,8 @@
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
     "vite": "8.3.4"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }

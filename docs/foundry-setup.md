@@ -1,6 +1,20 @@
 # Foundry setup for Why That Goal
 
-The app currently runs entirely locally: synthetic SSE events, geometric evidence, deterministic explanations and recaps. Creating Azure resources does **not** connect this app. No Foundry SDK, model deployment or credentials are enabled by this change.
+The app now supports server-side Foundry generation through the resource Responses API. The verified deployment is `wtg-insights`, model `gpt-6-luna` (version `2026-09-22`), Global Standard in Southeast Asia. Verification date: 25 October 2026. No API keys are needed for local development.
+
+## Connect this checkout
+
+1. Sign in with `az login` using the Azure account with access to the resource. Azure CLI is already installed on the development machine.
+2. Copy `.env.example` to `.env`; set `FOUNDRY_ENABLED=true`, your full resource Responses endpoint, and `FOUNDRY_DEPLOYMENT=wtg-insights`. The local ignored `.env` has already been configured for this checkout. Never put credentials in frontend variables.
+3. Run `npm run dev:api` and `npm run dev`. The API reports Foundry configured. Use `npm run check:foundry` to verify an actual generation; health alone does not establish connectivity.
+4. Open the notebook. Measured evidence appears immediately; the app polls while Foundry writes. The AI story and recap replace the baseline once the same snapshot is ready. Both link to trusted replay evidence.
+5. Set `FOUNDRY_ENABLED=false` and restart the API to return to deterministic mode.
+
+The adapter uses `@azure/identity` and the documented Responses REST API with Entra bearer authentication. On Azure hosting, use a managed identity with the appropriate inference role. No roles were changed during this integration.
+
+See [intelligence contract](api/intelligence.md) for the validation boundaries, local call budgets, timeouts, caching and production limitations.
+
+The following resource-creation notes are retained for setting up another environment.
 
 ## Prepare the resources when ready
 
@@ -10,14 +24,11 @@ The app currently runs entirely locally: synthetic SSE events, geometric evidenc
 4. Copy the project endpoint from the project overview. It has the form `https://<resource>.services.ai.azure.com/api/projects/<project>`. Keep the endpoint, deployment name, region and subscription/resource names for integration. Never paste API keys into chat or commit them.
 5. For local development, use Microsoft Entra authentication (`az login`) and an appropriately scoped project role. Microsoft's [TypeScript quickstart](https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code) uses `@azure/ai-projects` and `@azure/identity`. We will add these on the server during integration, not in the browser. For hosting, use a managed identity with the required project permissions.
 
-These are preparation steps, not commands to run against this repo yet. Any future environment variable names will be defined with the actual adapter; the app does not currently read Foundry settings.
+For this repository, use the environment variables listed above; they are read by the API process only.
 
-## What we still implement before enabling it
+## Remaining work
 
-- Implement the existing server `IntelligenceAdapter` against the deployed model. Supply only the time-bounded evidence snapshot, audience and language; require selection of valid fact IDs.
-- Preserve trusted geometry, versioned citations, replay coordinates and deterministic fallback. The model must not invent distances, event IDs, outcomes or causal certainty.
-- Add server-only configuration and explicit opt-in. Keep `/api/health` honest about enabled status. Set request timeout, output limits and bounded retries; reuse results for unchanged evidence. Never call the model on each 100 ms feed tick.
-- Test malformed output, unsupported citations, timeout/rate limits, all six goal/save/interception sequences, and no future-event leakage. Run an independent evaluation set before making quality claims.
-- Record token usage and latency, then estimate cost from measured requests and the chosen deployment's current rates. Provisioning a project alone is not an application integration test.
-
-No agent service, vector database, search index or video processing is needed for the first adapter: our backend already supplies structured evidence. Add services only when a measured product need warrants them.
+- Independently evaluate model usefulness, language fidelity, outcome accuracy and unsupported interpretations on held-out synthetic attacks. Citation membership is not semantic validation.
+- Add hosted identity, access controls, distributed rate limits, operational tracing and Azure deployment infrastructure.
+- Measure end-to-end live-feed behavior under concurrent users and failures, then price measured token usage at the deployment's current rates.
+- Implement and evaluate purposeful runtime agent collaboration separately; this connection is one model call, not a multi-agent system.

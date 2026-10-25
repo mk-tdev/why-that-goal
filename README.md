@@ -43,7 +43,7 @@ The explanations describe what the available evidence shows. A run or a gap can 
 
 The replay, live synthetic feed, clickable explanations and automatic sequence recaps work locally today.
 
-**Microsoft Foundry is not connected yet.** Current explanations use measured match information and predefined wording. The next step is to connect Foundry so it can help select the most useful observations, while keeping every claim tied to the match evidence. Azure hosting, AI evaluation and the final demo video are also still to complete.
+**Microsoft Foundry now powers the buildup explanations and sequence recaps when enabled on the server.** It writes audience- and language-specific narratives with versioned evidence citations. Measured geometry and replay targets remain code-derived. The replay shows measured evidence immediately while a story is being generated, and clearly identifies deterministic fallback. Azure hosting, independent AI quality evaluation and the final demo video are still to complete.
 
 All teams, players and match data are fictional and created for this project. This is a hackathon prototype, not a live Premier League data service.
 
@@ -67,7 +67,7 @@ Start the app in a second terminal:
 npm run dev
 ```
 
-Open the local address printed in that terminal. No Azure credentials or paid football data subscription are needed for the current demo.
+Open the local address printed in that terminal. The default setup runs without Azure credentials. To enable Foundry, copy `.env.example` to `.env`, set the Responses endpoint and deployment name, set `FOUNDRY_ENABLED=true`, and run `az login` before starting the API. Never use `VITE_` variables for credentials. See the Foundry setup guide below.
 
 ## Further details
 
@@ -77,3 +77,7 @@ Open the local address printed in that terminal. No Azure credentials or paid fo
 - [Development progress](docs/progress.md)
 
 For development checks, run `npm test` and `npm run build`.
+
+## Check Foundry
+
+`npm run check:foundry` makes one real model call and fails if the app falls back. `node --env-file=.env --import tsx scripts/evaluate-foundry.ts` checks six authored outcomes plus an early Spanish analyst snapshot; it uses paid inference and records latency, token usage and cited narratives in `docs/evaluations/foundry.json`. These are integration checks, not a held-out quality benchmark.

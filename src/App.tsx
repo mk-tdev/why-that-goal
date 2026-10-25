@@ -623,7 +623,7 @@ export default function App() {
                 <span role="status">
                   {live.enabled
                     ? `${live.ids.length} / ${scene.events.length} events received · ${live.time.toFixed(1)}s`
-                    : 'Server-delivered events · real-time pacing · Foundry disconnected'}
+                    : 'Server-delivered events · real-time pacing · evidence-linked stories'}
                 </span>
               </div>
               <button
@@ -1052,7 +1052,8 @@ export default function App() {
                                 {language === 'en' ? 'Replay evidence' : 'Ver evidencia'} ·{' '}
                                 {clock(scene.baseClock, fact.at)} ↗
                                 <small>
-                                  {fact.eventId} · v{fact.version}
+                                  {fact.kind.replaceAll('-', ' ')} · {fact.eventId} · v
+                                  {fact.version}
                                 </small>
                               </button>
                             );
@@ -1169,9 +1170,11 @@ export default function App() {
                           <small>
                             {fact.kind === 'off-ball-run'
                               ? 'RUN'
-                              : fact.kind === 'space-change'
+                              : fact.kind === 'space-change' || fact.kind === 'receiver-space'
                                 ? 'SPACE'
-                                : 'PASS'}{' '}
+                                : fact.kind === 'event'
+                                  ? 'MOMENT'
+                                  : 'PASS'}{' '}
                             · {clock(scene.baseClock, fact.at)}
                           </small>
                           <span>{fact.text}</span>
@@ -1194,9 +1197,19 @@ export default function App() {
                       ? 'Loading replay evidence…'
                       : analysis.status === 'offline'
                         ? 'Local fallback · evidence API unavailable'
-                        : 'Backend evidence · deterministic'}
+                        : analysis.data?.mode === 'model-selected'
+                          ? 'Microsoft Foundry · AI story'
+                          : analysis.data?.trace.pending
+                            ? 'Foundry is writing · live evidence ready'
+                            : analysis.data?.mode === 'fallback'
+                              ? 'Foundry unavailable · rule-based fallback'
+                              : 'Backend evidence · deterministic'}
                   </div>
-                  <small>Foundry disconnected · synthetic match data</small>
+                  <small>
+                    {analysis.data?.mode === 'model-selected'
+                      ? `Citations checked · ${analysis.data.trace.cacheHit ? 'cached story' : 'live model response'} · synthetic data`
+                      : 'Synthetic match data · measured evidence'}
+                  </small>
                   {analysis.status === 'offline' && (
                     <button className="evidence-retry" onClick={analysis.retry}>
                       Retry connection ↗
@@ -1372,7 +1385,12 @@ export default function App() {
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
             </span>
             <span>
-              Foundry integration pending <b>·</b> v0.5
+              {analysis.data?.mode === 'model-selected'
+                ? 'Microsoft Foundry connected'
+                : analysis.data?.mode === 'fallback'
+                  ? 'Foundry fallback active'
+                  : 'Evidence engine'}{' '}
+              <b>·</b> v0.6
             </span>
           </footer>
         </main>

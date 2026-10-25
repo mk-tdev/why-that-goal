@@ -54,13 +54,35 @@ export type AnalysisResponse = {
   schemaVersion: '1.0';
   mode: 'deterministic' | 'model-selected' | 'fallback';
   provider: string;
-  reason: 'disconnected' | 'validated' | 'invalid-output' | 'provider-error' | 'timeout';
+  reason:
+    | 'generating'
+    | 'disconnected'
+    | 'validated'
+    | 'invalid-output'
+    | 'provider-error'
+    | 'timeout';
   evidence: EvidencePacket;
   buildup: { title: string; summary: string; limitation: string; factIds: string[] };
   moments: (Fact & { replayAt: number })[];
-  trace: { elapsedMs: number; calls: number; validated: boolean };
+  trace: {
+    elapsedMs: number;
+    calls: number;
+    validated: boolean;
+    cacheHit?: boolean;
+    pending?: boolean;
+    inputTokens?: number;
+    outputTokens?: number;
+  };
 };
 export class ContractError extends Error {}
+export class ProviderFailure extends Error {
+  constructor(
+    public reason: 'provider-error' | 'timeout' | 'invalid-output',
+    public calls: number,
+  ) {
+    super(reason);
+  }
+}
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value))
     throw new ContractError('Expected object');

@@ -12,19 +12,26 @@ export function useAnalysis(request: AnalysisRequest) {
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
-    const timeout = setTimeout(() => controller.abort(), 6000);
+    let poll: ReturnType<typeof setTimeout> | undefined;
     setState({ key, status: 'loading' });
-    fetchAnalysis(JSON.parse(key), controller.signal)
-      .then((data) => {
-        if (active) setState({ key, status: 'ready', data });
-      })
-      .catch(() => {
+    const load = async () => {
+      const timeout = setTimeout(() => controller.abort(), 6000);
+      try {
+        const data = await fetchAnalysis(JSON.parse(key), controller.signal);
+        if (active) {
+          setState({ key, status: 'ready', data });
+          if (data.trace.pending) poll = setTimeout(load, 1500);
+        }
+      } catch {
         if (active) setState({ key, status: 'offline' });
-      })
-      .finally(() => clearTimeout(timeout));
+      } finally {
+        clearTimeout(timeout);
+      }
+    };
+    void load();
     return () => {
       active = false;
-      clearTimeout(timeout);
+      clearTimeout(poll);
       controller.abort();
     };
   }, [key, attempt]);
