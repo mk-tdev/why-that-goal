@@ -1,9 +1,13 @@
+import type { WorkflowTrace } from './agentContracts';
 import { analyze, type IntelligenceAdapter } from './pipeline';
 import { parseRequest, type AnalysisResponse } from './contracts';
 
 /** Serve measured evidence immediately; poll for the same snapshot's AI story. Never block live play on inference. */
 export function createAnalysisService(adapter?: IntelligenceAdapter) {
-  const jobs = new Map<string, { result?: AnalysisResponse; expires: number }>();
+  const jobs = new Map<
+    string,
+    { result?: AnalysisResponse; expires: number; workflow?: WorkflowTrace }
+  >();
   let active = 0;
   return async (input: unknown) => {
     const request = parseRequest(input);
@@ -21,10 +25,14 @@ export function createAnalysisService(adapter?: IntelligenceAdapter) {
       if (oldest) jobs.delete(oldest[0]);
     }
     if (!existing && active < 2 && jobs.size < 128) {
-      const entry: { result?: AnalysisResponse; expires: number } = { expires: now + 600000 };
+      const entry: { result?: AnalysisResponse; expires: number; workflow?: WorkflowTrace } = {
+        expires: now + 600000,
+      };
       jobs.set(key, entry);
       active++;
-      void analyze(request, adapter, 20000)
+      void analyze(request, adapter, adapter.timeoutMs ?? 20000, (workflow) => {
+        entry.workflow = workflow;
+      })
         .then((result) => {
           entry.result = result;
           entry.expires = Date.now() + (result.mode === 'fallback' ? 20000 : 600000);
@@ -40,7 +48,7 @@ export function createAnalysisService(adapter?: IntelligenceAdapter) {
       ...baseline,
       provider: adapter.name,
       reason: 'generating' as const,
-      trace: { ...baseline.trace, pending: true },
+      trace: { ...baseline.trace, pending: true, workflow: jobs.get(key)?.workflow },
       recap: baseline.recap
         ? {
             ...baseline.recap,

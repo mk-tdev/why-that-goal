@@ -13,7 +13,8 @@
     "test": "node --import tsx --test src/core/*.test.ts server/*.test.ts",
     "dev:api": "node --env-file-if-exists=.env --import tsx server/index.ts",
     "evaluate:scenarios": "node --import tsx scripts/evaluate-scenarios.ts",
-    "check:foundry": "node --env-file-if-exists=.env --import tsx scripts/check-foundry.ts"
+    "check:foundry": "node --env-file-if-exists=.env --import tsx scripts/check-foundry.ts",
+    "evaluate:agents": "node --env-file-if-exists=.env --import tsx scripts/evaluate-multi-agent.ts"
   },
   "dependencies": {
     "@azure/identity": "4.13.0",

@@ -81,3 +81,9 @@ For development checks, run `npm test` and `npm run build`.
 ## Check Foundry
 
 `npm run check:foundry` makes one real model call and fails if the app falls back. `node --env-file=.env --import tsx scripts/evaluate-foundry.ts` checks six authored outcomes plus an early Spanish analyst snapshot; it uses paid inference and records latency, token usage and cited narratives in `docs/evaluations/foundry.json`. These are integration checks, not a held-out quality benchmark.
+
+## Agent collaboration
+
+Foundry now runs a match analyst, storyteller and evidence reviewer with typed shared state and explicit handoffs. The reviewer can return a draft for one correction or block publication; unapproved prose falls back to measured explanations. Expand **Agent collaboration** in the notebook for the actual role trace and review issues. All three roles currently use the same deployment through custom TypeScript orchestration.
+
+See [workflow, recovery limits and comparison](docs/multi-agent.md). `npm run evaluate:agents` makes bounded paid model calls and records the authored single-versus-multi comparison plus a controlled semantic fault. Set `FOUNDRY_ORCHESTRATION=single-agent` to restore the baseline. This feature does not establish enterprise readiness or guarantee an award.

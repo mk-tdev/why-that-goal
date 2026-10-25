@@ -131,7 +131,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Measured evidence immediately; poll while trace.pending. Optional Foundry orchestration exposes trace.workflow with distinct analyst, storyteller and reviewer steps, concrete handoffs and a single writer revision. AI publication requires host checks and reviewer approval; otherwise deterministic fallback."
       }
     },
     "/api/feed": {
@@ -497,6 +498,9 @@
               "outputTokens": {
                 "type": "integer",
                 "minimum": 0
+              },
+              "workflow": {
+                "$ref": "#/components/schemas/WorkflowTrace"
               }
             }
           },
@@ -616,6 +620,183 @@
             }
           }
         }
+      },
+      "AgentStep": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "agent": {
+            "type": "string",
+            "enum": ["analysis", "storytelling", "evidence-check"]
+          },
+          "attempt": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2
+          },
+          "status": {
+            "type": "string",
+            "enum": ["running", "completed", "revision-requested", "rejected", "failed"]
+          },
+          "elapsedMs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "factIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "summary": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": ["getFact"]
+                },
+                "factId": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "factId"]
+            }
+          },
+          "inputTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "outputTokens": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "agent",
+          "attempt",
+          "status",
+          "elapsedMs",
+          "factIds",
+          "summary",
+          "toolCalls",
+          "inputTokens",
+          "outputTokens"
+        ]
+      },
+      "AgentIssue": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "target": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "unsupported-claim",
+              "wrong-outcome",
+              "wrong-actor",
+              "missing-evidence",
+              "causal-overclaim",
+              "language",
+              "format"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "factIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["target", "reason", "detail", "factIds"]
+      },
+      "WorkflowTrace": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshotId": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{16}$"
+          },
+          "version": {
+            "type": "string",
+            "enum": ["1.0"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["running", "approved", "fallback"]
+          },
+          "steps": {
+            "type": "array",
+            "maxItems": 6,
+            "items": {
+              "$ref": "#/components/schemas/AgentStep"
+            }
+          },
+          "handoffs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "enum": ["analysis", "storytelling", "evidence-check"]
+                },
+                "to": {
+                  "type": "string",
+                  "enum": ["analysis", "storytelling", "evidence-check"]
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "factIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["from", "to", "reason", "factIds"]
+            }
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentIssue"
+            }
+          },
+          "revisions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "modelCalls": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          }
+        },
+        "required": [
+          "snapshotId",
+          "version",
+          "status",
+          "steps",
+          "handoffs",
+          "issues",
+          "revisions",
+          "modelCalls"
+        ]
       }
     }
   }

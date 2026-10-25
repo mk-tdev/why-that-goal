@@ -1,3 +1,4 @@
+import type { WorkflowTrace } from './agentContracts';
 import { createRecap } from './recap';
 import { validateNarrative, type Narrative } from './narrative';
 import { scenarios } from '../src/core/scenarios';
@@ -14,17 +15,20 @@ import { createEvidenceTools, type EvidenceTools } from './evidence';
 /** Provider boundary: model prose and evidence selection are validated before rendering. */
 export interface IntelligenceAdapter {
   name: string;
+  timeoutMs?: number;
   select(input: {
     evidence: EvidencePacket;
     tools: EvidenceTools;
     signal: AbortSignal;
     recap?: AnalysisResponse['recap'];
+    onProgress?: (trace: WorkflowTrace) => void;
   }): Promise<unknown>;
 }
 export async function analyze(
   input: unknown,
   adapter?: IntelligenceAdapter,
-  timeoutMs = 5000,
+  timeoutMs = adapter?.timeoutMs ?? 5000,
+  onProgress?: (trace: WorkflowTrace) => void,
 ): Promise<AnalysisResponse> {
   const started = performance.now();
   const request = parseRequest(input);
@@ -34,6 +38,7 @@ export async function analyze(
   const packet = tools.snapshot();
   const terminalRecap = createRecap(scenario, packet);
   let narrative: Narrative | undefined;
+  let latestWorkflow: WorkflowTrace | undefined;
   let telemetry: Partial<AnalysisResponse['trace']> = {};
   let selection = {
     factIds: packet.facts
@@ -54,6 +59,10 @@ export async function analyze(
             tools,
             signal: controller.signal,
             recap: terminalRecap,
+            onProgress: (trace) => {
+              latestWorkflow = trace;
+              onProgress?.(trace);
+            },
           }),
         ),
         new Promise<never>((_, reject) => {
@@ -72,7 +81,14 @@ export async function analyze(
           if (metrics && typeof metrics === 'object') {
             const m = metrics as Record<string, unknown>;
             telemetry = {
-              calls: m.calls === 0 ? 0 : 1,
+              calls:
+                typeof m.calls === 'number' &&
+                Number.isInteger(m.calls) &&
+                m.calls >= 0 &&
+                m.calls <= 6
+                  ? m.calls
+                  : 1,
+              ...(m.workflow ? { workflow: m.workflow as WorkflowTrace } : {}),
               cacheHit: m.cacheHit === true,
               ...(typeof m.inputTokens === 'number' ? { inputTokens: m.inputTokens } : {}),
               ...(typeof m.outputTokens === 'number' ? { outputTokens: m.outputTokens } : {}),
@@ -86,7 +102,28 @@ export async function analyze(
         mode = 'fallback';
       }
     } catch (error) {
-      if (error instanceof ProviderFailure) telemetry.calls = error.calls;
+      if (error instanceof ProviderFailure) {
+        telemetry = {
+          calls: error.calls,
+          workflow: error.workflow,
+          inputTokens: error.inputTokens,
+          outputTokens: error.outputTokens,
+        };
+      }
+      if (!telemetry.workflow && latestWorkflow)
+        telemetry.workflow = {
+          ...latestWorkflow,
+          status: 'fallback',
+          steps: latestWorkflow.steps.map((step) =>
+            step.status === 'running'
+              ? {
+                  ...step,
+                  status: 'failed',
+                  summary: 'Workflow deadline reached; unreviewed output withheld.',
+                }
+              : step,
+          ),
+        };
       reason =
         error instanceof ProviderFailure
           ? error.reason

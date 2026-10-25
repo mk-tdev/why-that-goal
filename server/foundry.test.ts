@@ -48,6 +48,9 @@ test('narrative provenance gates reject future recaps, invented numbers, HTML an
       receivedThrough: scenario.duration,
     });
     assert.ok(validateNarrative(draft(base), base.evidence, base.recap).recap);
+    const qualified = draft(base);
+    qualified.story.summary = 'These observations do not prove causation.';
+    assert.ok(validateNarrative(qualified, base.evidence, base.recap));
     const bad = draft(base);
     bad.recap!.cards[0].factIds = ['invented'];
     assert.throws(() => validateNarrative(bad, base.evidence, base.recap));

@@ -27,7 +27,12 @@ export function validateNarrative(
       !value.trim() ||
       value.length > max ||
       /[<>\d]/u.test(value) ||
-      /\b(guarantee[sd]?|proved?|certainly caused|xg)\b/i.test(value)
+      /\b(guarantee[sd]?|proved?|certainly caused|xg)\b/i.test(
+        value.replace(
+          /\b(?:(?:does|do|did|can|could)\s+not|cannot|can't|doesn't|don't|didn't|not)\s+(?:prove|guarantee)\b|\bno guarantee\b/gi,
+          '',
+        ),
+      )
     )
       throw new ContractError('Unsafe or unsupported narrative text');
     return value.trim();

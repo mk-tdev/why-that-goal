@@ -90,6 +90,63 @@ export function readAnalysis(value: unknown, request: AnalysisRequest): Analysis
     )
       throw new Error('Invalid recap evidence');
   }
+  if (!data.trace || !Number.isFinite(data.trace.calls) || data.trace.calls < 0)
+    throw new Error('Invalid analysis trace');
+  const workflow = data.trace.workflow;
+  if (workflow) {
+    const validRefs = (ids: unknown) =>
+      Array.isArray(ids) &&
+      ids.every((id) => typeof id === 'string' && data.evidence.facts.some((f) => f.id === id));
+    const validAgent = (name: unknown) =>
+      ['analysis', 'storytelling', 'evidence-check'].includes(name as string);
+    if (
+      workflow.version !== '1.0' ||
+      typeof workflow.snapshotId !== 'string' ||
+      !/^[a-f0-9]{16}$/.test(workflow.snapshotId) ||
+      !['running', 'approved', 'fallback'].includes(workflow.status) ||
+      !Number.isInteger(workflow.modelCalls) ||
+      workflow.modelCalls < 0 ||
+      workflow.modelCalls > 6 ||
+      !Number.isInteger(workflow.revisions) ||
+      workflow.revisions < 0 ||
+      workflow.revisions > 1 ||
+      !Array.isArray(workflow.steps) ||
+      workflow.steps.length > 6 ||
+      workflow.steps.some(
+        (step) =>
+          !step ||
+          !validAgent(step.agent) ||
+          ![1, 2].includes(step.attempt) ||
+          !['running', 'completed', 'revision-requested', 'rejected', 'failed'].includes(
+            step.status,
+          ) ||
+          typeof step.summary !== 'string' ||
+          !Number.isFinite(step.elapsedMs) ||
+          !validRefs(step.factIds) ||
+          !Array.isArray(step.toolCalls) ||
+          step.toolCalls.some((t) => !t || t.name !== 'getFact' || !validRefs([t.factId])),
+      ) ||
+      !Array.isArray(workflow.handoffs) ||
+      workflow.handoffs.some(
+        (h) =>
+          !h ||
+          !validAgent(h.from) ||
+          !validAgent(h.to) ||
+          typeof h.reason !== 'string' ||
+          !validRefs(h.factIds),
+      ) ||
+      !Array.isArray(workflow.issues) ||
+      workflow.issues.some(
+        (issue) =>
+          !issue ||
+          typeof issue.target !== 'string' ||
+          typeof issue.reason !== 'string' ||
+          typeof issue.detail !== 'string' ||
+          !validRefs(issue.factIds),
+      )
+    )
+      throw new Error('Invalid collaboration trace');
+  }
   return data;
 }
 export async function fetchAnalysis(request: AnalysisRequest, signal: AbortSignal, base = '') {

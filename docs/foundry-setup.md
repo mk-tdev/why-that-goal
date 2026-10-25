@@ -31,4 +31,8 @@ For this repository, use the environment variables listed above; they are read b
 - Independently evaluate model usefulness, language fidelity, outcome accuracy and unsupported interpretations on held-out synthetic attacks. Citation membership is not semantic validation.
 - Add hosted identity, access controls, distributed rate limits, operational tracing and Azure deployment infrastructure.
 - Measure end-to-end live-feed behavior under concurrent users and failures, then price measured token usage at the deployment's current rates.
-- Implement and evaluate purposeful runtime agent collaboration separately; this connection is one model call, not a multi-agent system.
+- Independently evaluate the new analyst/storyteller/reviewer workflow on held-out attacks; see [agent orchestration](multi-agent.md). All roles currently use one deployment through separate model invocations.
+
+## Orchestration mode
+
+When enabled, Foundry defaults to the three-agent workflow. Set `FOUNDRY_ORCHESTRATION=single-agent` for the original baseline and restart the API. Each reviewed story normally uses three requests, with a maximum of six including bounded contract correction and one writer revision. Measured evidence continues immediately while agents work.

@@ -4623,3 +4623,46 @@ button.op-row:hover:not(:disabled) {
     transition: none !important;
   }
 }
+
+/* Operator evidence: agent handoffs stay in the notebook, off the pitch. */
+.agent-workflow {
+  display: grid;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 12px;
+}
+.agent-workflow article {
+  border: 1px solid #79d7c433;
+  border-left: 3px solid #79d7c4;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0e1923;
+}
+.agent-workflow article[data-status='running'] {
+  border-left-color: #efbd7c;
+}
+.agent-workflow article[data-status='failed'],
+.agent-workflow article[data-status='rejected'] {
+  border-left-color: #fb9e87;
+}
+.agent-workflow b,
+.agent-workflow span {
+  display: block;
+  margin-bottom: 6px;
+}
+.agent-workflow span,
+.agent-workflow small {
+  color: #99b6bf;
+}
+.agent-workflow p {
+  margin: 4px 0;
+  line-height: 1.6;
+}
+.agent-workflow .agent-handoff {
+  font-size: 11px;
+  color: #79d7c4;
+}
+.agent-workflow .agent-issue {
+  font-size: 11px;
+  color: #efbd7c;
+}

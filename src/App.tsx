@@ -1198,7 +1198,9 @@ export default function App() {
                       : analysis.status === 'offline'
                         ? 'Local fallback · evidence API unavailable'
                         : analysis.data?.mode === 'model-selected'
-                          ? 'Microsoft Foundry · AI story'
+                          ? analysis.data.trace.workflow
+                            ? 'Foundry · reviewed agent story'
+                            : 'Microsoft Foundry · AI story'
                           : analysis.data?.trace.pending
                             ? 'Foundry is writing · live evidence ready'
                             : analysis.data?.mode === 'fallback'
@@ -1210,6 +1212,56 @@ export default function App() {
                       ? `Citations checked · ${analysis.data.trace.cacheHit ? 'cached story' : 'live model response'} · synthetic data`
                       : 'Synthetic match data · measured evidence'}
                   </small>
+                  {analysis.data?.trace.workflow && (
+                    <Disclosure
+                      open={false}
+                      title={`Agent collaboration · ${analysis.data.trace.workflow.status}`}
+                    >
+                      <div className="agent-workflow" aria-label="Agent collaboration trace">
+                        <p>Analysis → storytelling → evidence check</p>
+                        <small>
+                          Snapshot {analysis.data.trace.workflow.snapshotId} ·{' '}
+                          {analysis.data.trace.workflow.modelCalls} model calls ·{' '}
+                          {analysis.data.trace.workflow.revisions} revisions
+                        </small>
+                        {analysis.data.trace.workflow.steps.map((step, index) => (
+                          <article key={`${step.agent}-${step.attempt}`} data-status={step.status}>
+                            <b>
+                              {index + 1}.{' '}
+                              {step.agent === 'analysis'
+                                ? 'Match analyst'
+                                : step.agent === 'storytelling'
+                                  ? 'Storyteller'
+                                  : 'Evidence reviewer'}
+                            </b>
+                            <span>
+                              {step.status.replaceAll('-', ' ')} · attempt {step.attempt}
+                            </span>
+                            <p>{step.summary}</p>
+                            <small>
+                              {(step.elapsedMs / 1000).toFixed(1)}s · {step.factIds.length} facts ·{' '}
+                              {step.toolCalls.length} evidence lookups
+                            </small>
+                          </article>
+                        ))}
+                        {analysis.data.trace.workflow.handoffs.map((handoff, i) => (
+                          <p className="agent-handoff" key={i}>
+                            {handoff.from} → {handoff.to}: {handoff.reason}
+                          </p>
+                        ))}
+                        {analysis.data.trace.workflow.issues.map((issue, i) => (
+                          <p className="agent-issue" key={i}>
+                            Review: {issue.target} · {issue.reason.replaceAll('-', ' ')} —{' '}
+                            {issue.detail}
+                          </p>
+                        ))}
+                        <small>
+                          Model review can miss errors. Publication requires contract checks and
+                          reviewer approval.
+                        </small>
+                      </div>
+                    </Disclosure>
+                  )}
                   {analysis.status === 'offline' && (
                     <button className="evidence-retry" onClick={analysis.retry}>
                       Retry connection ↗

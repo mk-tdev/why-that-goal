@@ -1,3 +1,4 @@
+import type { WorkflowTrace } from './agentContracts';
 import type { Audience, Language, Point } from '../src/core/model';
 
 export type AnalysisRequest = {
@@ -70,12 +71,16 @@ export type AnalysisResponse = {
     validated: boolean;
     cacheHit?: boolean;
     pending?: boolean;
+    workflow?: WorkflowTrace;
     inputTokens?: number;
     outputTokens?: number;
   };
 };
 export class ContractError extends Error {}
 export class ProviderFailure extends Error {
+  workflow?: WorkflowTrace;
+  inputTokens?: number;
+  outputTokens?: number;
   constructor(
     public reason: 'provider-error' | 'timeout' | 'invalid-output',
     public calls: number,

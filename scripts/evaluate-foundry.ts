@@ -24,7 +24,7 @@ const results = [];
 for (let i = 0; i < cases.length; i += 2) {
   const batch = await Promise.all(
     cases.slice(i, i + 2).map(async (request) => {
-      const r = await analyze(request, adapter, 20000);
+      const r = await analyze(request, adapter, adapter.timeoutMs ?? 20000);
       const row = {
         request,
         mode: r.mode,

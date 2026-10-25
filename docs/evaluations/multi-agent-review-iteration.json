@@ -1,0 +1,2237 @@
+{
+  "recordedAt": "2026-10-25T06:16:12.677Z",
+  "scope": "Small authored regression comparison plus one controlled semantic fault; not a held-out quality benchmark or proof of general superiority. Same deployed model in all roles; extra review incurs additional tokens and latency.",
+  "deployment": "wtg-insights",
+  "results": [
+    {
+      "request": {
+        "scenarioId": "quick-break",
+        "through": 19,
+        "receivedThrough": 19,
+        "audience": "fan",
+        "language": "en"
+      },
+      "single": {
+        "mode": "model-selected",
+        "trace": {
+          "elapsedMs": 3896,
+          "calls": 1,
+          "validated": true,
+          "cacheHit": false,
+          "inputTokens": 2979,
+          "outputTokens": 360
+        },
+        "story": {
+          "title": "A quick break finds its finish",
+          "summary": "Osei\u2019s forward pass moved the ball into a new area, and Silva then found Vega after Vega\u2019s run offered another destination ahead. More space was available at Vega\u2019s reception, before Vega moved the ball on to Okafor. Okafor\u2019s finish was recorded as a goal; the sequence shows how the attack reached the shooting position, not proof of what caused the goal.",
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-04@1:progress",
+            "quick-break-04@1:run",
+            "quick-break-06@1:event"
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        },
+        "recap": {
+          "outcome": "goal",
+          "title": "A buildup converted",
+          "summary": "Three completed passes. One shot, one goal.",
+          "through": 19,
+          "terminalFactId": "quick-break-06@1:event",
+          "cards": [
+            {
+              "title": "The connection that advanced the attack",
+              "text": "Vega\u2019s pass moved the ball toward goal, changing where the next action could begin.",
+              "factIds": [
+                "quick-break-04@1:progress"
+              ]
+            },
+            {
+              "title": "The receiving movement",
+              "text": "Vega moved before receiving, offering a new passing destination ahead of Silva\u2019s pass.",
+              "factIds": [
+                "quick-break-03@1:run"
+              ]
+            },
+            {
+              "title": "Space at the reception",
+              "text": "More separation from the nearest opponent was recorded at Vega\u2019s receiving point by the time the pass arrived.",
+              "factIds": [
+                "quick-break-03@1:space-change"
+              ]
+            },
+            {
+              "title": "The recorded outcome",
+              "text": "The sequence ended with Okafor\u2019s finish recorded as a goal. The passing route brought the ball to the shooter; the evidence does not prove what caused the finish.",
+              "factIds": [
+                "quick-break-06@1:event"
+              ]
+            }
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        }
+      },
+      "multi": {
+        "mode": "fallback",
+        "reason": "invalid-output",
+        "trace": {
+          "elapsedMs": 23801,
+          "calls": 5,
+          "validated": false,
+          "workflow": {
+            "snapshotId": "34a33a9bcdb4fe7a",
+            "version": "1.0",
+            "status": "fallback",
+            "steps": [
+              {
+                "agent": "analysis",
+                "attempt": 1,
+                "status": "completed",
+                "elapsedMs": 3527,
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ],
+                "summary": "Selected findings checked against measured facts.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-06@1:event"
+                  }
+                ],
+                "inputTokens": 2595,
+                "outputTokens": 278
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 1,
+                "status": "completed",
+                "elapsedMs": 4561,
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-06@1:event"
+                  }
+                ],
+                "inputTokens": 1638,
+                "outputTokens": 555
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 1,
+                "status": "revision-requested",
+                "elapsedMs": 5415,
+                "factIds": [
+                  "quick-break-01@1:event",
+                  "quick-break-02@1:event",
+                  "quick-break-02@1:distance",
+                  "quick-break-02@1:space",
+                  "quick-break-03@1:event",
+                  "quick-break-03@1:distance",
+                  "quick-break-03@1:space",
+                  "quick-break-04@1:event",
+                  "quick-break-04@1:distance",
+                  "quick-break-04@1:space",
+                  "quick-break-05@1:event",
+                  "quick-break-06@1:event",
+                  "quick-break-02@1:progress",
+                  "quick-break-02@1:run",
+                  "quick-break-02@1:space-change",
+                  "quick-break-03@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-04@1:progress",
+                  "quick-break-04@1:run",
+                  "quick-break-04@1:space-change"
+                ],
+                "summary": "Review completed against the full evidence snapshot.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-05@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-06@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:space-change"
+                  }
+                ],
+                "inputTokens": 3507,
+                "outputTokens": 528
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 3291,
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-06@1:event"
+                  }
+                ],
+                "inputTokens": 1805,
+                "outputTokens": 379
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 2,
+                "status": "revision-requested",
+                "elapsedMs": 7001,
+                "factIds": [
+                  "quick-break-01@1:event",
+                  "quick-break-02@1:event",
+                  "quick-break-02@1:distance",
+                  "quick-break-02@1:space",
+                  "quick-break-03@1:event",
+                  "quick-break-03@1:distance",
+                  "quick-break-03@1:space",
+                  "quick-break-04@1:event",
+                  "quick-break-04@1:distance",
+                  "quick-break-04@1:space",
+                  "quick-break-05@1:event",
+                  "quick-break-06@1:event",
+                  "quick-break-02@1:progress",
+                  "quick-break-02@1:run",
+                  "quick-break-02@1:space-change",
+                  "quick-break-03@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-04@1:progress",
+                  "quick-break-04@1:run",
+                  "quick-break-04@1:space-change"
+                ],
+                "summary": "Review completed against the full evidence snapshot.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-05@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-06@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "quick-break-04@1:space-change"
+                  }
+                ],
+                "inputTokens": 3500,
+                "outputTokens": 619
+              }
+            ],
+            "handoffs": [
+              {
+                "from": "analysis",
+                "to": "storytelling",
+                "reason": "Ranked measured findings and hydrated evidence.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ]
+              },
+              {
+                "from": "evidence-check",
+                "to": "storytelling",
+                "reason": "Reviewer requested a bounded correction with supporting evidence.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ]
+              }
+            ],
+            "issues": [
+              {
+                "target": "story",
+                "reason": "causal-overclaim",
+                "detail": "The title says quick passing \u201copens the route to goal,\u201d which can imply the passing caused or created the route to goal. The cited facts support forward progression and a recorded goal, but not that causal link.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-06@1:event"
+                ]
+              },
+              {
+                "target": "recap-card-3",
+                "reason": "missing-evidence",
+                "detail": "The text says the buildup shows how the ball reached Okafor, but its only citation records the finish as a goal and does not document the preceding passes or route. Cite evidence for the buildup claim or remove it.",
+                "factIds": [
+                  "quick-break-06@1:event"
+                ]
+              },
+              {
+                "target": "recap-summary",
+                "reason": "missing-evidence",
+                "detail": "The cited card facts support the three-pass buildup and recorded goal, but none supports the claim that there was one shot. The evidence includes a shot event, but it is not among the recap cards' citations.",
+                "factIds": [
+                  "quick-break-02@1:progress",
+                  "quick-break-03@1:progress",
+                  "quick-break-04@1:progress",
+                  "quick-break-03@1:run",
+                  "quick-break-03@1:space-change",
+                  "quick-break-06@1:event"
+                ]
+              }
+            ],
+            "revisions": 1,
+            "modelCalls": 5
+          },
+          "inputTokens": 13045,
+          "outputTokens": 2359
+        },
+        "story": {
+          "title": "How the goal was built",
+          "summary": "The completed passes moved the attack into a shooting position. Receiver movement and the changing gaps below show how the ball reached the finish; the goal is the recorded outcome.",
+          "limitation": "Rule-based explanation of synthetic tracking. These observations support a buildup interpretation, not proof that a run or gap caused the outcome.",
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-04@1:progress"
+          ]
+        },
+        "recap": {
+          "outcome": "goal",
+          "title": "A buildup converted",
+          "summary": "3 completed passes. One shot, one goal.",
+          "through": 19,
+          "terminalFactId": "quick-break-06@1:event",
+          "cards": [
+            {
+              "title": "The connection that advanced the attack",
+              "text": "Vega found Okafor, moving the ball 3.8 m toward goal. This changed where the next action could begin.",
+              "factIds": [
+                "quick-break-04@1:progress"
+              ]
+            },
+            {
+              "title": "The receiving movement",
+              "text": "Vega moved 5.4 m before receiving, offering a new passing destination ahead of the pass from Silva.",
+              "factIds": [
+                "quick-break-03@1:run"
+              ]
+            },
+            {
+              "title": "What happened to the space",
+              "text": "Space at the receiving point opened: the nearest opponent was 6.5 m away, then 7.4 m at reception. The pass arrived with more separation from the nearest defender.",
+              "factIds": [
+                "quick-break-03@1:space-change"
+              ]
+            },
+            {
+              "title": "Why this outcome",
+              "text": "The move ends in a recorded goal. The passing route delivered the ball to the shooter; the finish converted that opportunity.",
+              "factIds": [
+                "quick-break-06@1:event"
+              ]
+            }
+          ],
+          "limitation": "Automatic rule-based recap \u00b7 synthetic data \u00b7 observed buildup, not proof of tactical causation. Foundry disconnected."
+        }
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "cutback-save",
+        "through": 21,
+        "receivedThrough": 21,
+        "audience": "fan",
+        "language": "en"
+      },
+      "single": {
+        "mode": "model-selected",
+        "trace": {
+          "elapsedMs": 4358,
+          "calls": 1,
+          "validated": true,
+          "cacheHit": false,
+          "inputTokens": 2742,
+          "outputTokens": 339
+        },
+        "story": {
+          "title": "A quick route forward, but no goal",
+          "summary": "Marin\u2019s pass gave Silva a new option ahead, and Silva then moved the ball on toward Mendes with more space at the receiving point. The final pass reached Okafor, whose shot was saved. The buildup advanced the attack, but the sequence ended without a goal.",
+          "factIds": [
+            "cutback-save-02@1:progress",
+            "cutback-save-02@1:run",
+            "cutback-save-03@1:progress",
+            "cutback-save-03@1:space-change",
+            "cutback-save-04@1:event",
+            "cutback-save-06@1:event"
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        },
+        "recap": {
+          "outcome": "save",
+          "title": "A chance denied",
+          "summary": "Three completed passes led to a shot, but the goalkeeper saved it.",
+          "through": 21,
+          "terminalFactId": "cutback-save-06@1:event",
+          "cards": [
+            {
+              "title": "The attack moved forward",
+              "text": "Marin found Silva with a pass that advanced the ball and offered a new destination ahead. Silva then found Mendes, with more separation from the nearest opponent at reception.",
+              "factIds": [
+                "cutback-save-02@1:progress",
+                "cutback-save-02@1:run",
+                "cutback-save-03@1:progress",
+                "cutback-save-03@1:space-change"
+              ]
+            },
+            {
+              "title": "The final connection",
+              "text": "Mendes found Okafor, moving the ball toward goal and setting up the shot.",
+              "factIds": [
+                "cutback-save-04@1:event"
+              ]
+            },
+            {
+              "title": "The goalkeeper saves",
+              "text": "The move reached a shot, but the goalkeeper stopped it. The buildup did not produce a goal.",
+              "factIds": [
+                "cutback-save-06@1:event"
+              ]
+            }
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        }
+      },
+      "multi": {
+        "mode": "model-selected",
+        "reason": "validated",
+        "trace": {
+          "elapsedMs": 27705,
+          "calls": 6,
+          "validated": true,
+          "workflow": {
+            "snapshotId": "fd0dac71daf1808b",
+            "version": "1.0",
+            "status": "approved",
+            "steps": [
+              {
+                "agent": "analysis",
+                "attempt": 1,
+                "status": "failed",
+                "elapsedMs": 4171,
+                "factIds": [],
+                "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
+                "toolCalls": [],
+                "inputTokens": 2355,
+                "outputTokens": 354
+              },
+              {
+                "agent": "analysis",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 3683,
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ],
+                "summary": "Selected findings checked against measured facts.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-06@1:event"
+                  }
+                ],
+                "inputTokens": 2358,
+                "outputTokens": 299
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 1,
+                "status": "completed",
+                "elapsedMs": 2839,
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-06@1:event"
+                  }
+                ],
+                "inputTokens": 1657,
+                "outputTokens": 332
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 1,
+                "status": "revision-requested",
+                "elapsedMs": 7482,
+                "factIds": [
+                  "cutback-save-01@1:event",
+                  "cutback-save-02@1:event",
+                  "cutback-save-02@1:distance",
+                  "cutback-save-02@1:space",
+                  "cutback-save-03@1:event",
+                  "cutback-save-03@1:distance",
+                  "cutback-save-03@1:space",
+                  "cutback-save-04@1:event",
+                  "cutback-save-04@1:distance",
+                  "cutback-save-04@1:space",
+                  "cutback-save-05@1:event",
+                  "cutback-save-06@1:event",
+                  "cutback-save-02@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-02@1:space-change",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-04@1:space-change"
+                ],
+                "summary": "Review completed against the full evidence snapshot.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-05@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-06@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:space-change"
+                  }
+                ],
+                "inputTokens": 3222,
+                "outputTokens": 772
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 5269,
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-06@1:event"
+                  }
+                ],
+                "inputTokens": 1748,
+                "outputTokens": 576
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 4254,
+                "factIds": [
+                  "cutback-save-01@1:event",
+                  "cutback-save-02@1:event",
+                  "cutback-save-02@1:distance",
+                  "cutback-save-02@1:space",
+                  "cutback-save-03@1:event",
+                  "cutback-save-03@1:distance",
+                  "cutback-save-03@1:space",
+                  "cutback-save-04@1:event",
+                  "cutback-save-04@1:distance",
+                  "cutback-save-04@1:space",
+                  "cutback-save-05@1:event",
+                  "cutback-save-06@1:event",
+                  "cutback-save-02@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-02@1:space-change",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-04@1:space-change"
+                ],
+                "summary": "All narrative targets reviewed; publication approved.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-05@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-06@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "cutback-save-04@1:space-change"
+                  }
+                ],
+                "inputTokens": 3259,
+                "outputTokens": 383
+              }
+            ],
+            "handoffs": [
+              {
+                "from": "analysis",
+                "to": "analysis",
+                "reason": "Host contract gate requested one corrected analysis plan.",
+                "factIds": []
+              },
+              {
+                "from": "analysis",
+                "to": "storytelling",
+                "reason": "Ranked measured findings and hydrated evidence.",
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ]
+              },
+              {
+                "from": "evidence-check",
+                "to": "storytelling",
+                "reason": "Reviewer requested a bounded correction with supporting evidence.",
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-04@1:progress",
+                  "cutback-save-02@1:run",
+                  "cutback-save-03@1:space-change",
+                  "cutback-save-06@1:event"
+                ]
+              }
+            ],
+            "issues": [
+              {
+                "target": "recap-summary",
+                "reason": "missing-evidence",
+                "detail": "The summary claims three completed passes, but its available card citations support only the Marin\u2013Silva and Silva\u2013Mendes passes. The cited save event confirms a shot was saved, not the number of completed passes.",
+                "factIds": [
+                  "cutback-save-02@1:progress",
+                  "cutback-save-03@1:progress",
+                  "cutback-save-06@1:event"
+                ]
+              }
+            ],
+            "revisions": 1,
+            "modelCalls": 6
+          },
+          "cacheHit": false,
+          "inputTokens": 14599,
+          "outputTokens": 2716
+        },
+        "story": {
+          "title": "Forward passes, then a save",
+          "summary": "Marin found Silva, and Silva found Mendes, carrying the attack forward. Silva\u2019s movement offered a new destination before receiving, while the space at Mendes\u2019s receiving point opened. The move ended with a shot that the goalkeeper saved.",
+          "factIds": [
+            "cutback-save-02@1:progress",
+            "cutback-save-03@1:progress",
+            "cutback-save-04@1:progress",
+            "cutback-save-02@1:run",
+            "cutback-save-03@1:space-change",
+            "cutback-save-06@1:event"
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        },
+        "recap": {
+          "outcome": "save",
+          "title": "A chance denied",
+          "summary": "The attack progressed through connected passes and ended with a shot saved by the goalkeeper.",
+          "through": 21,
+          "terminalFactId": "cutback-save-06@1:event",
+          "cards": [
+            {
+              "title": "Passes moved the attack forward",
+              "text": "Marin found Silva, then Silva found Mendes. Both passes advanced the ball toward goal, changing where the next action could begin.",
+              "factIds": [
+                "cutback-save-02@1:progress",
+                "cutback-save-03@1:progress"
+              ]
+            },
+            {
+              "title": "Silva offered a passing destination",
+              "text": "Silva moved before receiving Marin\u2019s pass, offering a new destination ahead of the ball.",
+              "factIds": [
+                "cutback-save-02@1:run"
+              ]
+            },
+            {
+              "title": "More space at the receiving point",
+              "text": "The nearest opponent was farther from Mendes\u2019s receiving point when the pass arrived. The tracking shows the gap changed, but not why.",
+              "factIds": [
+                "cutback-save-03@1:space-change"
+              ]
+            },
+            {
+              "title": "The goalkeeper stopped the shot",
+              "text": "The sequence produced a shot, but the goalkeeper saved it; the attack did not produce a goal.",
+              "factIds": [
+                "cutback-save-06@1:event"
+              ]
+            }
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        }
+      }
+    },
+    {
+      "request": {
+        "scenarioId": "counter-cut-out",
+        "through": 14,
+        "receivedThrough": 14,
+        "audience": "fan",
+        "language": "en"
+      },
+      "single": {
+        "mode": "model-selected",
+        "trace": {
+          "elapsedMs": 3643,
+          "calls": 1,
+          "validated": true,
+          "cacheHit": false,
+          "inputTokens": 2319,
+          "outputTokens": 315
+        },
+        "story": {
+          "title": "A quick advance, then an interception",
+          "summary": "Osei\u2019s pass moved play forward as Silva ran into a new passing option. Silva then found Vega, whose movement offered another destination ahead. But the next attempted pass was intercepted, and the attack ended without a shot.",
+          "factIds": [
+            "counter-cut-out-02@1:progress",
+            "counter-cut-out-02@1:run",
+            "counter-cut-out-03@1:progress",
+            "counter-cut-out-03@1:run",
+            "counter-cut-out-04@1:event",
+            "counter-cut-out-turnover@1:event"
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        },
+        "recap": {
+          "outcome": "failed-attack",
+          "title": "An attack interrupted",
+          "summary": "Two completed passes advanced the attack, but an interception ended it before a shot.",
+          "through": 14,
+          "terminalFactId": "counter-cut-out-turnover@1:event",
+          "cards": [
+            {
+              "title": "Forward progress",
+              "text": "Osei\u2019s pass moved the ball toward goal and found Silva, who had moved into a new passing option.",
+              "factIds": [
+                "counter-cut-out-02@1:progress",
+                "counter-cut-out-02@1:run"
+              ]
+            },
+            {
+              "title": "Another option ahead",
+              "text": "Silva\u2019s pass to Vega advanced play again, with Vega moving into a new destination before receiving.",
+              "factIds": [
+                "counter-cut-out-03@1:progress",
+                "counter-cut-out-03@1:run"
+              ]
+            },
+            {
+              "title": "The attack ends",
+              "text": "The attempted connection was intercepted. The opponent took possession, and the attack ended without a shot.",
+              "factIds": [
+                "counter-cut-out-04@1:event",
+                "counter-cut-out-turnover@1:event"
+              ]
+            }
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        }
+      },
+      "multi": {
+        "mode": "model-selected",
+        "reason": "validated",
+        "trace": {
+          "elapsedMs": 23868,
+          "calls": 5,
+          "validated": true,
+          "workflow": {
+            "snapshotId": "a214188c1dc7eb96",
+            "version": "1.0",
+            "status": "approved",
+            "steps": [
+              {
+                "agent": "analysis",
+                "attempt": 1,
+                "status": "completed",
+                "elapsedMs": 4843,
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event"
+                ],
+                "summary": "Selected findings checked against measured facts.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-turnover@1:event"
+                  }
+                ],
+                "inputTokens": 1919,
+                "outputTokens": 312
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 1,
+                "status": "completed",
+                "elapsedMs": 4519,
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-turnover@1:event"
+                  }
+                ],
+                "inputTokens": 1688,
+                "outputTokens": 330
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 1,
+                "status": "revision-requested",
+                "elapsedMs": 7632,
+                "factIds": [
+                  "counter-cut-out-01@1:event",
+                  "counter-cut-out-02@1:event",
+                  "counter-cut-out-02@1:distance",
+                  "counter-cut-out-02@1:space",
+                  "counter-cut-out-03@1:event",
+                  "counter-cut-out-03@1:distance",
+                  "counter-cut-out-03@1:space",
+                  "counter-cut-out-04@1:event",
+                  "counter-cut-out-turnover@1:event",
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-02@1:space-change",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change"
+                ],
+                "summary": "Review completed against the full evidence snapshot.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-turnover@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space-change"
+                  }
+                ],
+                "inputTokens": 2797,
+                "outputTokens": 695
+              },
+              {
+                "agent": "storytelling",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 3381,
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event",
+                  "counter-cut-out-04@1:event"
+                ],
+                "summary": "Cited draft handed to independent evidence review.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-turnover@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-04@1:event"
+                  }
+                ],
+                "inputTokens": 1896,
+                "outputTokens": 369
+              },
+              {
+                "agent": "evidence-check",
+                "attempt": 2,
+                "status": "completed",
+                "elapsedMs": 3488,
+                "factIds": [
+                  "counter-cut-out-01@1:event",
+                  "counter-cut-out-02@1:event",
+                  "counter-cut-out-02@1:distance",
+                  "counter-cut-out-02@1:space",
+                  "counter-cut-out-03@1:event",
+                  "counter-cut-out-03@1:distance",
+                  "counter-cut-out-03@1:space",
+                  "counter-cut-out-04@1:event",
+                  "counter-cut-out-turnover@1:event",
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-02@1:space-change",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change"
+                ],
+                "summary": "All narrative targets reviewed; publication approved.",
+                "toolCalls": [
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-01@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:distance"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-04@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-turnover@1:event"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-02@1:space-change"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:progress"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:run"
+                  },
+                  {
+                    "name": "getFact",
+                    "factId": "counter-cut-out-03@1:space-change"
+                  }
+                ],
+                "inputTokens": 2842,
+                "outputTokens": 295
+              }
+            ],
+            "handoffs": [
+              {
+                "from": "analysis",
+                "to": "storytelling",
+                "reason": "Ranked measured findings and hydrated evidence.",
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event"
+                ]
+              },
+              {
+                "from": "evidence-check",
+                "to": "storytelling",
+                "reason": "Reviewer requested a bounded correction with supporting evidence.",
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-turnover@1:event",
+                  "counter-cut-out-04@1:event"
+                ]
+              },
+              {
+                "from": "storytelling",
+                "to": "evidence-check",
+                "reason": "Draft and exact citations; reviewer can inspect all facts.",
+                "factIds": [
+                  "counter-cut-out-02@1:progress",
+                  "counter-cut-out-02@1:run",
+                  "counter-cut-out-03@1:progress",
+                  "counter-cut-out-03@1:run",
+                  "counter-cut-out-03@1:space-change",
+                  "counter-cut-out-04@1:event",
+                  "counter-cut-out-turnover@1:event"
+                ]
+              }
+            ],
+            "issues": [
+              {
+                "target": "story",
+                "reason": "unsupported-claim",
+                "detail": "\u201cMore space around him\u201d overstates the cited measurement: the evidence concerns opponent distance from the receiving point, not space around Vega generally.",
+                "factIds": [
+                  "counter-cut-out-03@1:space-change"
+                ]
+              },
+              {
+                "target": "recap-card-2",
+                "reason": "missing-evidence",
+                "detail": "The cited turnover fact says the opponent took possession after an interception; it does not itself identify the opponent as the interceptor. Cite the recorded interception event to support \u201cAn opponent intercepted.\u201d",
+                "factIds": [
+                  "counter-cut-out-04@1:event",
+                  "counter-cut-out-turnover@1:event"
+                ]
+              }
+            ],
+            "revisions": 1,
+            "modelCalls": 5
+          },
+          "cacheHit": false,
+          "inputTokens": 11142,
+          "outputTokens": 2001
+        },
+        "story": {
+          "title": "Promising progress, then an interception",
+          "summary": "Osei found Silva moving forward, and Silva then found Vega, who had run ahead to offer a new option. At Vega\u2019s receiving point, the nearest opponent was farther away at reception than before the pass. But the next attempted connection was intercepted, ending the attack before a shot.",
+          "factIds": [
+            "counter-cut-out-02@1:progress",
+            "counter-cut-out-02@1:run",
+            "counter-cut-out-03@1:progress",
+            "counter-cut-out-03@1:run",
+            "counter-cut-out-03@1:space-change",
+            "counter-cut-out-04@1:event"
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        },
+        "recap": {
+          "outcome": "failed-attack",
+          "title": "An attack interrupted",
+          "summary": "Two completed passes. No shot: an interception ended the attack.",
+          "through": 14,
+          "terminalFactId": "counter-cut-out-turnover@1:event",
+          "cards": [
+            {
+              "title": "Progress through Silva",
+              "text": "Osei found Silva moving the ball toward goal, then Silva found Vega. Both passes advanced where the next action could begin.",
+              "factIds": [
+                "counter-cut-out-02@1:progress",
+                "counter-cut-out-03@1:progress"
+              ]
+            },
+            {
+              "title": "Vega offered a forward option",
+              "text": "Vega moved before receiving, offering a new destination ahead of Silva\u2019s pass.",
+              "factIds": [
+                "counter-cut-out-03@1:run"
+              ]
+            },
+            {
+              "title": "More separation at the receiving point",
+              "text": "The nearest opponent was farther from Vega\u2019s receiving point at reception than before the pass. This describes the point, not space around Vega generally.",
+              "factIds": [
+                "counter-cut-out-03@1:space-change"
+              ]
+            },
+            {
+              "title": "The attack ends",
+              "text": "An opponent intercepted the attempted pass, ending the attack before a shot.",
+              "factIds": [
+                "counter-cut-out-04@1:event",
+                "counter-cut-out-turnover@1:event"
+              ]
+            }
+          ],
+          "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+        }
+      }
+    }
+  ],
+  "fault": {
+    "injection": "A false save in the goal story; citation structure remains valid.",
+    "singleAgentContractWouldAccept": true,
+    "mode": "fallback",
+    "reason": "invalid-output",
+    "trace": {
+      "elapsedMs": 27730,
+      "calls": 6,
+      "validated": false,
+      "workflow": {
+        "snapshotId": "34a33a9bcdb4fe7a",
+        "version": "1.0",
+        "status": "fallback",
+        "steps": [
+          {
+            "agent": "analysis",
+            "attempt": 1,
+            "status": "failed",
+            "elapsedMs": 3316,
+            "factIds": [],
+            "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
+            "toolCalls": [],
+            "inputTokens": 2595,
+            "outputTokens": 352
+          },
+          {
+            "agent": "analysis",
+            "attempt": 2,
+            "status": "completed",
+            "elapsedMs": 4066,
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ],
+            "summary": "Selected findings checked against measured facts.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              }
+            ],
+            "inputTokens": 2598,
+            "outputTokens": 372
+          },
+          {
+            "agent": "storytelling",
+            "attempt": 1,
+            "status": "completed",
+            "elapsedMs": 4327,
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ],
+            "summary": "Cited draft handed to independent evidence review.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              }
+            ],
+            "inputTokens": 1638,
+            "outputTokens": 442
+          },
+          {
+            "agent": "evidence-check",
+            "attempt": 1,
+            "status": "revision-requested",
+            "elapsedMs": 5270,
+            "factIds": [
+              "quick-break-01@1:event",
+              "quick-break-02@1:event",
+              "quick-break-02@1:distance",
+              "quick-break-02@1:space",
+              "quick-break-03@1:event",
+              "quick-break-03@1:distance",
+              "quick-break-03@1:space",
+              "quick-break-04@1:event",
+              "quick-break-04@1:distance",
+              "quick-break-04@1:space",
+              "quick-break-05@1:event",
+              "quick-break-06@1:event",
+              "quick-break-02@1:progress",
+              "quick-break-02@1:run",
+              "quick-break-02@1:space-change",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-04@1:progress",
+              "quick-break-04@1:run",
+              "quick-break-04@1:space-change"
+            ],
+            "summary": "Review completed against the full evidence snapshot.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-01@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-05@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space-change"
+              }
+            ],
+            "inputTokens": 3394,
+            "outputTokens": 551
+          },
+          {
+            "agent": "storytelling",
+            "attempt": 2,
+            "status": "completed",
+            "elapsedMs": 4595,
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ],
+            "summary": "Cited draft handed to independent evidence review.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              }
+            ],
+            "inputTokens": 1789,
+            "outputTokens": 353
+          },
+          {
+            "agent": "evidence-check",
+            "attempt": 2,
+            "status": "revision-requested",
+            "elapsedMs": 6146,
+            "factIds": [
+              "quick-break-01@1:event",
+              "quick-break-02@1:event",
+              "quick-break-02@1:distance",
+              "quick-break-02@1:space",
+              "quick-break-03@1:event",
+              "quick-break-03@1:distance",
+              "quick-break-03@1:space",
+              "quick-break-04@1:event",
+              "quick-break-04@1:distance",
+              "quick-break-04@1:space",
+              "quick-break-05@1:event",
+              "quick-break-06@1:event",
+              "quick-break-02@1:progress",
+              "quick-break-02@1:run",
+              "quick-break-02@1:space-change",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-04@1:progress",
+              "quick-break-04@1:run",
+              "quick-break-04@1:space-change"
+            ],
+            "summary": "Review completed against the full evidence snapshot.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-01@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-05@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space-change"
+              }
+            ],
+            "inputTokens": 3468,
+            "outputTokens": 497
+          }
+        ],
+        "handoffs": [
+          {
+            "from": "analysis",
+            "to": "analysis",
+            "reason": "Host contract gate requested one corrected analysis plan.",
+            "factIds": []
+          },
+          {
+            "from": "analysis",
+            "to": "storytelling",
+            "reason": "Ranked measured findings and hydrated evidence.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "from": "storytelling",
+            "to": "evidence-check",
+            "reason": "Draft and exact citations; reviewer can inspect all facts.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "from": "evidence-check",
+            "to": "storytelling",
+            "reason": "Reviewer requested a bounded correction with supporting evidence.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "from": "storytelling",
+            "to": "evidence-check",
+            "reason": "Draft and exact citations; reviewer can inspect all facts.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "target": "story",
+            "reason": "wrong-outcome",
+            "detail": "The summary says the goalkeeper saved the shot and the attack ended without a goal. The cited evidence records Okafor's finish as a goal.",
+            "factIds": [
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "target": "recap-summary",
+            "reason": "causal-overclaim",
+            "detail": "\u201cThe completed passing sequence led to\u201d a goal implies the sequence caused the outcome. The evidence records the passes and goal, but does not establish why the goal happened; the stated limitations explicitly caution against that inference.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "target": "story",
+            "reason": "unsupported-claim",
+            "detail": "\u201cOsei\u2019s pass found Silva moving forward\u201d implies Silva was moving forward. The cited progress fact supports the ball moving toward goal, but does not establish Silva\u2019s movement before receiving. The cited run fact concerns Vega, not Silva.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:run"
+            ]
+          },
+          {
+            "target": "story",
+            "reason": "missing-evidence",
+            "detail": "\u201cThe buildup continued to Okafor\u201d asserts a connection to Okafor, but the story\u2019s citations do not include evidence for Vega\u2019s pass to Okafor. Add the relevant pass fact or remove the claim.",
+            "factIds": [
+              "quick-break-04@1:event"
+            ]
+          }
+        ],
+        "revisions": 1,
+        "modelCalls": 6
+      },
+      "inputTokens": 15482,
+      "outputTokens": 2567
+    },
+    "story": {
+      "title": "How the goal was built",
+      "summary": "The completed passes moved the attack into a shooting position. Receiver movement and the changing gaps below show how the ball reached the finish; the goal is the recorded outcome.",
+      "limitation": "Rule-based explanation of synthetic tracking. These observations support a buildup interpretation, not proof that a run or gap caused the outcome.",
+      "factIds": [
+        "quick-break-02@1:progress",
+        "quick-break-03@1:run",
+        "quick-break-03@1:space-change",
+        "quick-break-04@1:progress"
+      ]
+    },
+    "recap": {
+      "outcome": "goal",
+      "title": "A buildup converted",
+      "summary": "3 completed passes. One shot, one goal.",
+      "through": 19,
+      "terminalFactId": "quick-break-06@1:event",
+      "cards": [
+        {
+          "title": "The connection that advanced the attack",
+          "text": "Vega found Okafor, moving the ball 3.8 m toward goal. This changed where the next action could begin.",
+          "factIds": [
+            "quick-break-04@1:progress"
+          ]
+        },
+        {
+          "title": "The receiving movement",
+          "text": "Vega moved 5.4 m before receiving, offering a new passing destination ahead of the pass from Silva.",
+          "factIds": [
+            "quick-break-03@1:run"
+          ]
+        },
+        {
+          "title": "What happened to the space",
+          "text": "Space at the receiving point opened: the nearest opponent was 6.5 m away, then 7.4 m at reception. The pass arrived with more separation from the nearest defender.",
+          "factIds": [
+            "quick-break-03@1:space-change"
+          ]
+        },
+        {
+          "title": "Why this outcome",
+          "text": "The move ends in a recorded goal. The passing route delivered the ball to the shooter; the finish converted that opportunity.",
+          "factIds": [
+            "quick-break-06@1:event"
+          ]
+        }
+      ],
+      "limitation": "Automatic rule-based recap \u00b7 synthetic data \u00b7 observed buildup, not proof of tactical causation. Foundry disconnected."
+    }
+  },
+  "developmentIteration": "Low-effort iteration. Strict review caught missing support and semantic errors, but the writer introduced new unsupported counts while repairing. This led to target-scoped revision merging and tighter writer citation instructions."
+}

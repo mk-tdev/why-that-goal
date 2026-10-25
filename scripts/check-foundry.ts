@@ -5,7 +5,7 @@ if (!adapter) throw new Error('Foundry not configured');
 const result = await analyze(
   { scenarioId: 'quick-break', through: 19, receivedThrough: 19, audience: 'fan', language: 'en' },
   adapter,
-  20000,
+  adapter.timeoutMs ?? 20000,
 );
 console.log(
   JSON.stringify(
