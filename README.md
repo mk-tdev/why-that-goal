@@ -39,14 +39,17 @@ Choose one of six sequences: two goals, two saves and two attacks stopped by int
 2. Follow the explanations in the notebook beside the 3D pitch.
 3. When the sequence ends, read the automatic recap and click **Replay evidence** to revisit a key moment.
 4. Explore further with guided replay, slow motion, player focus and the broadcast, overhead or follow-play cameras.
+5. Choose **Open workspace → Enter Workspace**, then switch to **Operator** for the broadcast console: a signal chain from feed to Foundry, a timestamped event log, a queue of measured evidence you can cue onto the pitch, and **Take graphic to air** for an on-air lower third.
 
 The explanations describe what the available evidence shows. A run or a gap can help explain the buildup, but it does not prove that the same action would always produce a goal.
 
 ## Where the project stands
 
-The replay, live synthetic feed, clickable explanations and automatic sequence recaps work locally today.
+The replay, live synthetic feed, clickable explanations, automatic sequence recaps and Operator console are deployed publicly on Azure Container Apps, which reaches Foundry through a managed identity with no API keys.
 
-**Microsoft Foundry now powers the buildup explanations and sequence recaps when enabled on the server.** It writes audience- and language-specific narratives with versioned evidence citations. Measured geometry and replay targets remain code-derived. The replay shows measured evidence immediately while a story is being generated, and clearly identifies deterministic fallback. Azure hosting, independent AI quality evaluation and the final demo video are still to complete.
+**Microsoft Foundry powers the buildup explanations and sequence recaps.** It writes audience- and language-specific narratives with versioned evidence citations. Measured geometry and replay targets remain code-derived. The replay shows measured evidence immediately while a story is being generated, and clearly identifies deterministic fallback. Generated stories are cached in memory, so the first run of a sequence can take longer than a repeat.
+
+Recorded checks are published in [`public/verification.json`](public/verification.json) and shown in **Inside the intelligence**. They cover 40/40 controlled checks, 4/4 approved live Foundry cases and a reviewer-corrected false-save fault. These are integration evidence, not an independent AI quality benchmark. The public demo video is still to be recorded.
 
 All teams, players and match data are fictional and created for this project. This is a hackathon prototype, not a live Premier League data service.
 
