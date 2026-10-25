@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deploy an already pushed image. Reads only the operator hash from ignored .env.
+"""Deploy an already pushed public-demo image. No visitor password or local .env required.
 Prerequisites and initial scoped identity grants are documented in docs/deployment.md.
 No resource deletion, registry credential or Foundry API key is used.
 """
@@ -17,10 +17,6 @@ args = parser.parse_args()
 cfg = json.loads((root / 'deploy/azure.json').read_text())
 if not args.image.startswith(cfg['registry'] + '/why-that-goal:') and not args.image.startswith(cfg['registry'] + '/why-that-goal@sha256:'):
     raise SystemExit('Image must be in the configured why-that-goal repository')
-env = dict(line.split('=', 1) for line in (root / '.env').read_text().splitlines() if '=' in line and not line.startswith('#'))
-operator_hash = env.get('AUTH_OPERATOR_PASSWORD_HASH', '')
-if not operator_hash.startswith('scrypt$'):
-    raise SystemExit('Run npm run setup:auth first; an operator password hash is required')
 base = f"/subscriptions/{cfg['subscription']}/resourceGroups/{cfg['resourceGroup']}/providers"
 identity = base + '/Microsoft.ManagedIdentity/userAssignedIdentities/' + cfg['identityName']
 settings = {
@@ -40,7 +36,7 @@ app = {
         'workloadProfileName': 'Consumption',
         'configuration': {
             'activeRevisionsMode': 'Single',
-            'secrets': [{'name': 'operator-password-hash', 'value': operator_hash}],
+            'secrets': [],
             'registries': [{'server': cfg['registry'], 'identity': identity}],
             'ingress': {'external': True, 'targetPort': 8080, 'transport': 'auto', 'allowInsecure': False,
                         'traffic': [{'latestRevision': True, 'weight': 100}]},
@@ -48,14 +44,14 @@ app = {
         'template': {
             'containers': [{'name': 'web', 'image': args.image,
                             'resources': {'cpu': 0.25, 'memory': '0.5Gi'},
-                            'env': [{'name': k, 'value': v} for k, v in settings.items()] + [{'name': 'AUTH_OPERATOR_PASSWORD_HASH', 'secretRef': 'operator-password-hash'}],
+                            'env': [{'name': k, 'value': v} for k, v in settings.items()],
                             'probes': [probe(k) for k in ['Startup', 'Readiness', 'Liveness']]}],
             'scale': {'minReplicas': 0, 'maxReplicas': 1,
                       'rules': [{'name': 'http', 'http': {'metadata': {'concurrentRequests': '20'}}}]},
         },
     },
 }
-# Azure CLI reads JSON as YAML. The temporary manifest contains the hash, never publish it.
+# Azure CLI reads JSON as YAML. The temporary manifest contains configuration, never model API keys.
 with tempfile.NamedTemporaryFile(mode='w', suffix='.json', prefix='wtg-deploy-', delete=False) as file:
     os.chmod(file.name, 0o600)
     json.dump(app, file)

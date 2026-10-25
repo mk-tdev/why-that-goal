@@ -1,6 +1,13 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { Modal } from './Modal';
 import { securedFetch, setSessionCsrf, ApiError } from '../core/session';
-type Session = { role: 'viewer' | 'operator'; csrf?: string; guest?: boolean; expiresAt: number };
+type Session = {
+  role: 'viewer' | 'operator';
+  csrf?: string;
+  guest?: boolean;
+  demo?: boolean;
+  expiresAt: number;
+};
 type Config = {
   mode: 'local' | 'entra' | 'disabled';
   publicDemo?: boolean;
@@ -22,6 +29,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<Config>(),
     [session, setSession] = useState<Session>(),
     [password, setPassword] = useState(''),
+    [demoOpen, setDemoOpen] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [attempt, setAttempt] = useState(0);
@@ -79,7 +87,11 @@ export function AccessGate({ children }: { children: ReactNode }) {
     setBusy(true);
     setError('');
     try {
-      if (config?.mode === 'local') {
+      if (config?.publicDemo) {
+        const r = await securedFetch('/api/auth/demo', { method: 'POST' });
+        accept(await r.json());
+        setDemoOpen(false);
+      } else if (config?.mode === 'local') {
         const r = await securedFetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -128,12 +140,52 @@ export function AccessGate({ children }: { children: ReactNode }) {
     setSessionCsrf();
     if (config?.publicDemo) setAttempt((n) => n + 1);
   }
+  const demoDialog =
+    demoOpen && config?.publicDemo ? (
+      <Modal
+        titleId="demo-workspace-title"
+        onClose={() => setDemoOpen(false)}
+        className="access-card"
+      >
+        <span className="access-brand">OPEN STUDIO / HACKATHON DEMO</span>
+        <h1 id="demo-workspace-title">
+          Step inside
+          <br />
+          <em>the workspace.</em>
+        </h1>
+        <p>
+          Explore the broadcast console, agent handoffs and service monitoring. No account or
+          password required.
+        </p>
+        <p>
+          All teams, players and match events are fictional. Microsoft Foundry generates
+          interpretations from measured evidence; rejected stories fall back safely. This demo gives
+          you inspection tools, not access to Azure administration.
+        </p>
+        <button autoFocus className="access-submit" disabled={busy} onClick={() => void signIn()}>
+          {busy ? 'Opening workspace…' : 'Enter Workspace ↗'}
+        </button>
+        {error && (
+          <p role="alert" className="access-error">
+            {error}
+          </p>
+        )}
+        <button className="access-retry" onClick={() => setDemoOpen(false)}>
+          Back to replay
+        </button>
+      </Modal>
+    ) : null;
   if (session)
     return (
       <AccessContext.Provider
-        value={{ session, signOut, openOperator: () => setSession(undefined) }}
+        value={{
+          session,
+          signOut,
+          openOperator: () => (config?.publicDemo ? setDemoOpen(true) : setSession(undefined)),
+        }}
       >
         {children}
+        {demoDialog}
       </AccessContext.Provider>
     );
   return (
@@ -146,7 +198,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
           <em>Behind the finish.</em>
         </h1>
         <p>Sign in to the replay workspace.</p>
-        {config?.mode === 'local' && (
+        {config?.mode === 'local' && !config.publicDemo && (
           <label className="access-label">
             Workspace password
             <input
@@ -163,7 +215,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
         )}
         <button
           className="access-submit"
-          disabled={busy || !config || (config.mode === 'local' && !password)}
+          disabled={busy || !config || (!config.publicDemo && config.mode === 'local' && !password)}
           onClick={() => void signIn()}
         >
           {busy
@@ -199,14 +251,16 @@ export function AccessControls() {
       <span>
         {session.guest
           ? 'Public demo'
-          : session.role === 'operator'
-            ? 'Operator access'
-            : 'Viewer access'}
+          : session.demo
+            ? 'Demo workspace'
+            : session.role === 'operator'
+              ? 'Operator access'
+              : 'Viewer access'}
       </span>
       {session.guest ? (
-        <button onClick={openOperator}>Operator sign-in</button>
+        <button onClick={openOperator}>Open workspace</button>
       ) : (
-        <button onClick={signOut}>Sign out</button>
+        <button onClick={signOut}>{session.demo ? 'Leave workspace' : 'Sign out'}</button>
       )}
     </div>
   );

@@ -1,0 +1,88 @@
+{
+  "recordedAt": "2026-10-25T07:02:04.983Z",
+  "deterministic": {
+    "checks": 40,
+    "passed": 40
+  },
+  "live": {
+    "cases": 4,
+    "approved": 4,
+    "fallback": 0,
+    "p95Ms": 21048,
+    "knownInputTokens": 27689,
+    "knownOutputTokens": 4541
+  },
+  "load": {
+    "requests": 50,
+    "p95Ms": 27,
+    "burstLimited": 10,
+    "unauthorizedDenied": 10,
+    "providerInvocations": 1
+  },
+  "fault": {
+    "injection": "A false save in the goal story; citation structure remains valid.",
+    "structuralChecksAccepted": true,
+    "finalMode": "model-selected",
+    "finalStatus": "approved",
+    "calls": 5,
+    "elapsedMs": 23641,
+    "steps": [
+      {
+        "agent": "analysis",
+        "status": "completed",
+        "attempt": 1
+      },
+      {
+        "agent": "storytelling",
+        "status": "completed",
+        "attempt": 1
+      },
+      {
+        "agent": "evidence-check",
+        "status": "revision-requested",
+        "attempt": 1
+      },
+      {
+        "agent": "storytelling",
+        "status": "completed",
+        "attempt": 2
+      },
+      {
+        "agent": "evidence-check",
+        "status": "completed",
+        "attempt": 2
+      }
+    ],
+    "issues": [
+      {
+        "target": "story",
+        "reason": "wrong-outcome",
+        "detail": "The summary says the goalkeeper saved the shot and the attack ended without a goal. The cited terminal event records Okafor’s finish as a goal; the supplied score is also 1–0.",
+        "factIds": [
+          "quick-break-06@1:event"
+        ]
+      },
+      {
+        "target": "recap-summary",
+        "reason": "missing-evidence",
+        "detail": "The summary attributes the pass to Vega to Silva. The cards’ cited facts support Vega’s movement before receiving and the other cited passes, but do not establish who passed to Vega. The event fact establishes Silva as the passer, but is not among the card citations available to the summary.",
+        "factIds": [
+          "quick-break-03@1:event"
+        ]
+      },
+      {
+        "target": "recap-card-1",
+        "reason": "missing-evidence",
+        "detail": "The card says Vega received Silva’s pass, but its cited run and space-change facts do not identify the passer. The event fact does, but is not cited on this card.",
+        "factIds": [
+          "quick-break-03@1:event"
+        ]
+      }
+    ]
+  },
+  "limits": [
+    "Four authored reserved cases; not a blinded or independent benchmark.",
+    "Human semantic review is pending; model review is not proof of correctness.",
+    "The load test uses a controlled provider, not live Foundry scale testing."
+  ]
+}

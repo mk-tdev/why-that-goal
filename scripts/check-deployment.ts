@@ -29,6 +29,33 @@ const hostile = await fetch(base + '/api/auth/me', {
   headers: { Origin: 'https://untrusted.example' },
 });
 checks.originRestriction = hostile.status === 403;
+const verification = await (await get('/verification.json')).json();
+checks.recordedEvaluationEvidence =
+  verification.live.cases === 4 &&
+  verification.deterministic.checks === 40 &&
+  verification.fault.steps.some((s: { status: string }) => s.status === 'revision-requested');
+const workspaceResponse = await fetch(base + '/api/auth/demo', {
+  method: 'POST',
+  headers: { Origin: base },
+});
+const workspace = await workspaceResponse.json();
+const cookie = workspaceResponse.headers.get('set-cookie')?.split(';')[0] ?? '';
+checks.passwordlessWorkspace =
+  workspaceResponse.ok && workspace.demo === true && workspace.role === 'operator' && !!cookie;
+checks.workspaceMonitoring = (
+  await fetch(base + '/api/ops/metrics', { headers: { Cookie: cookie } })
+).ok;
+checks.workspaceCsrf =
+  (await fetch(base + '/api/auth/logout', { method: 'POST', headers: { Cookie: cookie } }))
+    .status === 403;
+checks.workspaceLogout = (
+  await fetch(base + '/api/auth/logout', {
+    method: 'POST',
+    headers: { Cookie: cookie, 'X-CSRF-Token': workspace.csrf },
+  })
+).ok;
+checks.workspaceRevoked =
+  (await fetch(base + '/api/ops/metrics', { headers: { Cookie: cookie } })).status === 403;
 const input: AnalysisRequest = {
   scenarioId: 'quick-break',
   through: 19,

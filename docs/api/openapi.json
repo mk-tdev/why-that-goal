@@ -3,7 +3,7 @@
   "info": {
     "title": "Why That Goal local evidence API",
     "version": "1.0.0",
-    "description": "Authenticated evidence API with local-development sessions or Entra delegated bearer tokens. Rate limits, CSRF, operator-only monitoring and optional Foundry multi-agent narrative generation. Factory-without-auth mode is loopback-test-only; application startup requires authentication. Public demo mode allows anonymous viewer requests to analysis, feed, readiness and auth/me; operator metrics still require authentication. Anonymous quotas use the socket peer IP."
+    "description": "Authenticated evidence API with local-development sessions or Entra delegated bearer tokens. Rate limits, CSRF, operator-only monitoring and optional Foundry multi-agent narrative generation. Factory-without-auth mode is loopback-test-only; application startup requires authentication. Public demo mode allows anonymous viewer requests to analysis, feed, readiness and auth/me; operator metrics still require authentication. Anonymous quotas use the socket peer IP. Public workspace entry uses POST /api/auth/demo without a password; its expiring demo inspection session can read aggregate operator metrics and does not grant Azure administration."
   },
   "servers": [
     {
@@ -446,6 +446,9 @@
                     },
                     "scope": {
                       "type": "string"
+                    },
+                    "publicDemo": {
+                      "type": "boolean"
                     }
                   }
                 }
@@ -1113,6 +1116,32 @@
             }
           }
         }
+      }
+    },
+    "/api/auth/demo": {
+      "post": {
+        "summary": "Enter the open demo workspace without credentials",
+        "description": "Enabled only when PUBLIC_DEMO=true. Ten attempts/minute per caller IP. Returns an expiring HttpOnly demo inspection session, role=operator and a CSRF token. Retains the same caller quota identity. Not enterprise authentication.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Demo session with role, demo=true, CSRF token and expiry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public demo disabled"
+          },
+          "429": {
+            "description": "Entry quota exceeded"
+          }
+        },
+        "operationId": "enterDemoWorkspace"
       }
     }
   },
@@ -1862,6 +1891,14 @@
           "expiresAt": {
             "type": "number",
             "description": "Unix epoch milliseconds; absolute session expiry."
+          },
+          "guest": {
+            "type": "boolean",
+            "description": "Anonymous public viewer, with no session cookie."
+          },
+          "demo": {
+            "type": "boolean",
+            "description": "Passwordless public inspection session; not enterprise identity proof."
           }
         }
       }

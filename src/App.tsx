@@ -1,4 +1,5 @@
 import { AccessControls, useAccess } from './ui/Access';
+import { IntelligenceReview } from './ui/Intelligence';
 import { OperationsPanel } from './ui/Operations';
 import { useLiveFeed } from './hooks/useLiveFeed';
 import type { Fact } from '../server/contracts';
@@ -251,6 +252,7 @@ export default function App() {
   });
   const operator = accessSession.role === 'operator' && operatorPreference;
   const [onAir, setOnAir] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   useEffect(() => {
     try {
       localStorage.setItem('wtg-operator', operator ? '1' : '0');
@@ -534,6 +536,9 @@ export default function App() {
           Spatial replay <span>/</span> Northstar vs Atlas
         </span>
         <div className="header-actions">
+          <button className="intelligence-trigger" onClick={() => setReviewOpen(true)}>
+            Inside the intelligence ↗
+          </button>
           <AccessControls />
           <div className="mode-switch" role="group" aria-label="Display mode">
             <button aria-pressed={!operator} onClick={() => setOperator(false)}>
@@ -555,6 +560,16 @@ export default function App() {
           </button>
         </div>
       </header>
+      {reviewOpen && (
+        <IntelligenceReview
+          analysis={analysis.data}
+          onClose={() => setReviewOpen(false)}
+          onStart={() => {
+            setReviewOpen(false);
+            live.start();
+          }}
+        />
+      )}
       <div className="desk-body">
         <nav className="tool-rail" aria-label="Analysis tools">
           <button

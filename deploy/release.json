@@ -1,10 +1,11 @@
 {
   "deployedAt": "2026-10-25",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
-  "revision": "why-that-goal--lwrrufl",
-  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:ffb08ff998516c7562dbf7678b08df85330a6c0ec329c7b7b058f91e7a5b5396",
+  "revision": "why-that-goal--0000001",
+  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:49079d0a90fe60a30c6a88929f191c17067a407e87084be9eda9f7a25612dbdf",
   "publicDemo": true,
   "foundryOrchestration": "multi-agent",
-  "testsPassed": 95,
-  "publicVerification": "docs/evaluations/deployment.json"
+  "testsPassed": 97,
+  "publicVerification": "docs/evaluations/deployment.json",
+  "passwordlessWorkspace": true
 }

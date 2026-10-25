@@ -15,4 +15,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - run: npm run publish:verification
+      - run: git diff --exit-code -- public/verification.json
       - run: npm run build

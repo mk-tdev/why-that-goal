@@ -31,7 +31,7 @@ Nonsecret resource settings are in [`deploy/azure.json`](../deploy/azure.json):
 
 The user explicitly approved two persistent identity grants: `AcrPull` on the existing registry (role ID `7f951dda-4ed3-4680-a7ca-43fe172d538d`) and `Cognitive Services OpenAI User` on the specific Foundry account (role ID `5e0bd9bd-7b93-4f28-af87-19fc36ad61bd`). No Owner, subscription-wide model permission or API key is needed by the app. The registry pull role can read images throughout that registry; it cannot push them.
 
-The operator password hash is an Azure Container Apps secret. Its private password remains in ignored `research/local-access.txt`; neither it nor `.env` is committed or copied into the image. Viewer sessions are unnecessary for judges. Operator login retains HTTPS-only HttpOnly cookies, CSRF and role checks.
+The public deployment stores no operator password. Anyone can choose **Open workspace → Enter Workspace** after reading a demo note. This creates an expiring inspection session with HTTPS-only HttpOnly cookies and CSRF protection; it enables the demo console and aggregate metrics, not Azure administration. Caller quotas retain the same IP identity before and after entry. The public workspace is deliberately not an enterprise authorization boundary. Private access remains opt-in through `PUBLIC_DEMO=false`.
 
 The built frontend is served by the production Node process with content types, cache rules, CSP and source/secret-file isolation. `HOST=0.0.0.0`, `PORT=8080` and `STATIC_DIRECTORY=/app/dist` are image defaults. Startup/readiness/liveness probes call `/api/health` without running inference.
 
@@ -45,8 +45,6 @@ Prerequisites: Azure CLI logged into the configured subscription, Docker, Node 2
 npm ci
 npm test
 npm run build
-# Generates/preserves the private local operator credential if missing.
-npm run setup:auth
 az acr login -n acrvillageshadows23894
 # Use a fresh tag for each build, then deploy its immutable digest.
 docker build --platform linux/amd64 -t acrvillageshadows23894.azurecr.io/why-that-goal:YOUR_TAG .
@@ -55,7 +53,7 @@ python3 scripts/deploy-azure.py --image acrvillageshadows23894.azurecr.io/why-th
 node --import tsx scripts/check-deployment.ts https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io
 ```
 
-The deploy script reads only the operator hash from ignored `.env`, creates a permission-restricted temporary manifest, deletes it after the CLI completes, and prints only the app hostname/state/revision. Foundry settings come from the nonsecret deployment configuration. `.dockerignore` excludes local credentials, private research, Git history and artifacts. The runtime container is unprivileged and contains production dependencies.
+The deploy script needs no local `.env` or visitor password. It creates a temporary configuration manifest, deletes it after the CLI completes, and prints only the app hostname/state/revision. Foundry settings come from the nonsecret deployment configuration. `.dockerignore` excludes local credentials, private research, Git history and artifacts. The runtime container is unprivileged and contains production dependencies.
 
 If recreating the environment, use `az containerapp env create -g rg-why-that-goal -n cae-why-that-goal -l southeastasia --logs-destination none --enable-workload-profiles true`. A newly created environment may have a different domain; update `publicOrigin` before deploying. Do not recreate resources casually during judging.
 
@@ -66,3 +64,5 @@ The public check runs real HTTPS requests for anonymous entry, protected metrics
 Operator sign-in → Operator → Operations pulse shows process-local requests, denials, throttles, AI calls, latency and fallbacks. `/api/ops/metrics` and `/api/ops/prometheus` remain protected. Azure live console logs are available through `az containerapp logs show -g rg-why-that-goal -n why-that-goal --follow`; permanent export, external uptime monitoring and a pager are not configured.
 
 To pause public hosting, open the Container App in the Azure portal and choose **Stop**; choose **Start** to resume. The installed CLI does not expose app stop/start commands; the documented [Stop REST operation](https://learn.microsoft.com/en-us/rest/api/resource-manager/containerapps/container-apps/stop?view=rest-resource-manager-containerapps-2025-07-01) is available for scripting. This does not stop charges for other existing services. To retire the hackathon app, delete only the named Container App and its unused environment/identity after review; **do not delete the resource group**, which contains Foundry. The shared registry serves another project and must be retained.
+
+Current review release: 97 tests pass. The fresh public HTTPS verification passed all 18 checks, including passwordless workspace entry/monitoring, CSRF, logout/revocation, report delivery, a new approved three-agent goal story in 10.9 seconds and the paced SSE feed. Screenshots in docs/screenshots show the actual entry popup and intelligence overview. The earlier 12.6-second result above belongs to the previous release.

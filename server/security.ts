@@ -3,7 +3,12 @@ import { promisify } from 'node:util';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createRemoteJWKSet, jwtVerify, type JWTVerifyGetKey } from 'jose';
 const scrypt = promisify(scryptCallback);
-export type Principal = { id: string; role: 'viewer' | 'operator'; expiresAt: number };
+export type Principal = {
+  id: string;
+  role: 'viewer' | 'operator';
+  expiresAt: number;
+  demo?: boolean;
+};
 export type AuthConfig = {
   mode: 'local' | 'entra';
   secureCookies: boolean;
@@ -34,6 +39,7 @@ export function createSecurity(config: AuthConfig) {
   const now = config.now ?? Date.now;
   if (
     config.mode === 'local' &&
+    !config.publicDemo &&
     !/^scrypt\$[a-f0-9]{32}\$[a-f0-9]{64}$/.test(config.operatorHash ?? '')
   )
     throw new Error('Local authentication requires a password hash');
@@ -162,7 +168,7 @@ export function createSecurity(config: AuthConfig) {
         'Set-Cookie',
         `${cookieName}=${token}; Path=${cookiePath}; HttpOnly; SameSite=Strict; Max-Age=${Math.max(0, Math.floor((expiresAt - now()) / 1000))}${config.secureCookies ? '; Secure' : ''}`,
       );
-      return { role: principal.role, csrf, expiresAt };
+      return { role: principal.role, csrf, expiresAt, ...(principal.demo ? { demo: true } : {}) };
     },
     close(req: IncomingMessage, res: ServerResponse) {
       revoke(req);
@@ -173,7 +179,14 @@ export function createSecurity(config: AuthConfig) {
     },
     info(req: IncomingMessage) {
       const s = session(req);
-      return s ? { role: s.principal.role, csrf: s.csrf, expiresAt: s.expiresAt } : undefined;
+      return s
+        ? {
+            role: s.principal.role,
+            csrf: s.csrf,
+            expiresAt: s.expiresAt,
+            ...(s.principal.demo ? { demo: true } : {}),
+          }
+        : undefined;
     },
   };
 }

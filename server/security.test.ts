@@ -450,3 +450,78 @@ test('public demo admits judges without credentials, retains quotas and protects
     await app.close();
   }
 });
+
+test('open demo workspace requires no password, preserves caller quota and revokes its inspection session', async () => {
+  const app = await listen(
+    { mode: 'local', publicDemo: true, secureCookies: false },
+    { requestLimit: 4 },
+  );
+  try {
+    assert.equal((await fetch(`${app.base}/api/auth/me`)).status, 200);
+    const entry = await fetch(`${app.base}/api/auth/demo`, { method: 'POST' });
+    assert.equal(entry.status, 200);
+    const cookie = entry.headers.get('set-cookie')!.split(';')[0];
+    const session = await entry.json();
+    assert.equal(session.role, 'operator');
+    assert.equal(session.demo, true);
+    assert.ok(session.csrf);
+    const me = await (
+      await fetch(`${app.base}/api/auth/me`, { headers: { Cookie: cookie } })
+    ).json();
+    assert.equal(me.demo, true);
+    assert.equal(
+      (await fetch(`${app.base}/api/ops/metrics`, { headers: { Cookie: cookie } })).status,
+      200,
+    );
+    const second = await fetch(`${app.base}/api/auth/demo`, {
+      method: 'POST',
+      headers: { Cookie: cookie },
+    });
+    assert.equal(second.status, 200);
+    const secondCookie = second.headers.get('set-cookie')!.split(';')[0];
+    const secondSession = await second.json();
+    // Re-entering does not create a fresh caller quota identity.
+    assert.equal(
+      (await fetch(`${app.base}/api/auth/me`, { headers: { Cookie: secondCookie } })).status,
+      200,
+    );
+    assert.equal(
+      (await fetch(`${app.base}/api/auth/me`, { headers: { Cookie: secondCookie } })).status,
+      429,
+    );
+    assert.equal(
+      (
+        await fetch(`${app.base}/api/auth/logout`, {
+          method: 'POST',
+          headers: { Cookie: secondCookie },
+        })
+      ).status,
+      403,
+    );
+    assert.equal(
+      (
+        await fetch(`${app.base}/api/auth/logout`, {
+          method: 'POST',
+          headers: { Cookie: secondCookie, 'X-CSRF-Token': secondSession.csrf },
+        })
+      ).status,
+      200,
+    );
+    assert.equal(
+      (await fetch(`${app.base}/api/ops/metrics`, { headers: { Cookie: cookie } })).status,
+      429,
+    );
+  } finally {
+    await app.close();
+  }
+});
+
+test('private mode never exposes the passwordless demo entry endpoint', async () => {
+  const app = await listen(await local());
+  try {
+    assert.equal((await fetch(`${app.base}/api/auth/demo`, { method: 'POST' })).status, 404);
+    assert.equal((await fetch(`${app.base}/api/ops/metrics`)).status, 401);
+  } finally {
+    await app.close();
+  }
+});

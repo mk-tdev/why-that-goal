@@ -87,6 +87,7 @@ export function createApiServer(
       '/api/auth/config',
       '/api/auth/me',
       '/api/auth/login',
+      '/api/auth/demo',
       '/api/auth/session',
       '/api/auth/logout',
       '/api/analyze',
@@ -133,6 +134,21 @@ export function createApiServer(
         throw new HttpError(403, 'browser_origin_not_enabled');
       if (url.pathname === '/api/auth/config' && req.method === 'GET')
         return send(200, auth?.publicConfig() ?? { mode: 'disabled' });
+      if (url.pathname === '/api/auth/demo') {
+        if (req.method !== 'POST') throw new HttpError(405, 'method_not_allowed');
+        if (!auth || !options.auth?.publicDemo) throw new HttpError(404, 'demo_not_enabled');
+        limit(`demo-entry:${ip}`, 10);
+        ops.audit({ event: 'demo_workspace_entered', requestId, role: 'operator' });
+        return send(
+          200,
+          auth.open(req, res, {
+            id: `guest:${ip}`,
+            role: 'operator',
+            expiresAt: Date.now() + 900000,
+            demo: true,
+          }),
+        );
+      }
       if (url.pathname === '/api/auth/login') {
         if (req.method !== 'POST') throw new HttpError(405, 'method_not_allowed');
         limit(`login:${ip}`, options.loginLimit ?? 5);
