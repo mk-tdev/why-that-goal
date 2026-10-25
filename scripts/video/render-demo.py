@@ -72,36 +72,38 @@ def card(closing=False):
 
 card(False).save(BASE/'why-that-goal-thumbnail.jpg',quality=96)
 
-# Match caption groups to each locally synthesized narration chapter.
+# Silent, caption-free export is the default; narration is an explicit optional variant.
+clean='--narrated' not in sys.argv
 subs=[]; audio=[]
-for i,c in enumerate(chapters):
- path=BASE/f'audio/{i:02}.aiff'; duration=float(probe(path)['duration'])
- allowed=c['end']-c['start']-.6
- speed=max(1,duration/allowed)
- out=BASE/f'audio/{i:02}.wav'
- subprocess.run(['ffmpeg','-v','error','-y','-i',str(path),'-af',f'atempo={speed:.6f},adelay=300|300,loudnorm=I=-16:TP=-1.5:LRA=7,asetpts=N/SR/TB,apad,atrim=duration={c["end"]-c["start"]}', '-ar','48000','-ac','2',str(out)],check=True)
- audio.append(out)
- # Natural clause groups, with words-per-group timing approximating the generated speech.
- parts=re.split(r'(?<=[.!?])\s+',c['speech'])
- groups=[]
- for part in parts:
-  words=part.split()
-  while len(words)>15:
-   split=next((j+1 for j in range(8,min(15,len(words))) if words[j].endswith((',',':',';'))),12)
-   groups.append(' '.join(words[:split]));words=words[split:]
-  if words:groups.append(' '.join(words))
- total=sum(len(g.split()) for g in groups); t=c['start']+.3
- spoken=duration/speed
- for g in groups:
-  end=t+spoken*len(g.split())/total
-  subs.append((t,end,g));t=end
+if not clean:
+ for i,c in enumerate(chapters):
+  path=BASE/f'audio/{i:02}.aiff'; duration=float(probe(path)['duration'])
+  allowed=c['end']-c['start']-.6
+  speed=max(1,duration/allowed)
+  out=BASE/f'audio/{i:02}.wav'
+  subprocess.run(['ffmpeg','-v','error','-y','-i',str(path),'-af',f'atempo={speed:.6f},adelay=300|300,loudnorm=I=-16:TP=-1.5:LRA=7,asetpts=N/SR/TB,apad,atrim=duration={c["end"]-c["start"]}', '-ar','48000','-ac','2',str(out)],check=True)
+  audio.append(out)
+  # Natural clause groups, with words-per-group timing approximating the generated speech.
+  parts=re.split(r'(?<=[.!?])\s+',c['speech'])
+  groups=[]
+  for part in parts:
+   words=part.split()
+   while len(words)>15:
+    split=next((j+1 for j in range(8,min(15,len(words))) if words[j].endswith((',',':',';'))),12)
+    groups.append(' '.join(words[:split]));words=words[split:]
+   if words:groups.append(' '.join(words))
+  total=sum(len(g.split()) for g in groups); t=c['start']+.3
+  spoken=duration/speed
+  for g in groups:
+   end=t+spoken*len(g.split())/total
+   subs.append((t,end,g));t=end
 
-concat=BASE/'audio/concat.txt';concat.write_text(''.join(f"file '{p.as_posix()}'\n" for p in audio))
-subprocess.run(['ffmpeg','-v','error','-y','-f','concat','-safe','0','-i',str(concat),'-c','pcm_s16le',str(BASE/'narration.wav')],check=True)
+ concat=BASE/'audio/concat.txt';concat.write_text(''.join(f"file '{p.as_posix()}'\n" for p in audio))
+ subprocess.run(['ffmpeg','-v','error','-y','-f','concat','-safe','0','-i',str(concat),'-c','pcm_s16le',str(BASE/'narration.wav')],check=True)
 
-def srt_time(t):
- ms=round(t*1000);return f'{ms//3600000:02}:{ms//60000%60:02}:{ms//1000%60:02},{ms%1000:03}'
-(BASE/'why-that-goal-demo.srt').write_text('\n\n'.join(f'{i+1}\n{srt_time(a)} --> {srt_time(b)}\n{text}' for i,(a,b,text) in enumerate(subs))+'\n')
+ def srt_time(t):
+  ms=round(t*1000);return f'{ms//3600000:02}:{ms//60000%60:02}:{ms//1000%60:02},{ms%1000:03}'
+ (BASE/'why-that-goal-demo.srt').write_text('\n\n'.join(f'{i+1}\n{srt_time(a)} --> {srt_time(b)}\n{text}' for i,(a,b,text) in enumerate(subs))+'\n')
 
 # Prepare recordings with their genuine timestamp spacing. Do not invent intermediate states.
 records={}
@@ -118,7 +120,7 @@ for _,_,text in subs:
  for line in lines: center(d,line,y,font(32 if len(lines)<=2 else 29));y+=43
  caption_cache[text]=overlay
 
-silent=BASE/'picture-only.mp4'
+silent=BASE/('why-that-goal-demo-clean.mp4' if clean else 'picture-only.mp4')
 command=['ffmpeg','-hide_banner','-loglevel','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-','-an','-c:v','libx264','-preset','fast','-crf','19','-pix_fmt','yuv420p','-movflags','+faststart',str(silent)]
 preview='--preview' in sys.argv
 process=None if preview else subprocess.Popen(command,stdin=subprocess.PIPE)
@@ -161,7 +163,10 @@ for duration,name,offset,crop in shots:
  print(json.dumps({'shot':name,'timelineEnd':elapsed,'preview':preview}),flush=True)
 if not preview:
  process.stdin.close();assert process.wait()==0
- final=BASE/'why-that-goal-hackathon-demo.mp4'
- subprocess.run(['ffmpeg','-v','error','-y','-i',str(silent),'-i',str(BASE/'narration.wav'),'-i',str(BASE/'why-that-goal-demo.srt'),'-map','0:v:0','-map','1:a:0','-map','2:s:0','-c:v','copy','-c:a','aac','-b:a','192k','-c:s','mov_text','-metadata:s:s:0','language=eng','-metadata','title=Why That Goal? — See the Play Behind the Finish','-metadata','comment=Edited screen recording of the real public app in Chrome. Original synthetic match data. Recorded evaluation panels retain their limitations. Locally synthesized English narration.','-t','110','-movflags','+faststart',str(final)],check=True)
- print(json.dumps({'output':str(final),'duration':probe(final)['duration']}),flush=True)
+ if clean:
+  print(json.dumps({'output':str(silent),'duration':probe(silent)['duration'],'audio':False,'subtitles':False}),flush=True)
+ else:
+  final=BASE/'why-that-goal-hackathon-demo.mp4'
+  subprocess.run(['ffmpeg','-v','error','-y','-i',str(silent),'-i',str(BASE/'narration.wav'),'-map','0:v:0','-map','1:a:0','-c:v','copy','-c:a','aac','-b:a','192k','-metadata','title=Why That Goal? — See the Play Behind the Finish','-metadata','comment=Edited screen recording of the real public app in Chrome. Original synthetic match data. Recorded evaluation panels retain their limitations. Locally synthesized English narration.','-t','110','-movflags','+faststart',str(final)],check=True)
+  print(json.dumps({'output':str(final),'duration':probe(final)['duration']}),flush=True)
 (BASE/'edit-decision-list.json').write_text(json.dumps(story,indent=2)+'\n')

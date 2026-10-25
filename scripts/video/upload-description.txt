@@ -20,4 +20,4 @@ Microsoft Foundry powers three specialized roles: match analysis, storytelling a
 
 Disclosure: all football teams, players, events and tracking are fictional. Footage is edited from actual Chrome recordings of the public deployment, with static-panel holds and crops for readability. Cached model results remain labeled. The reviewer fault case is a separately recorded evaluation, not the current live match. Four authored cases and 40 deterministic checks are not independent model-accuracy or availability certification. Enterprise controls are prototype foundations, with production limitations documented in the app and repository.
 
-English narration uses an installed stock macOS voice. No cloned voice, third-party football footage or copyrighted music is used. Captions are included in the picture; an English subtitle track is also available.
+This export is silent and has no subtitles. A separate timed narration script is provided for recording a voiceover. No third-party football footage or music is included.
