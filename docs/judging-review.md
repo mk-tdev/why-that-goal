@@ -32,9 +32,9 @@ The five scored dimensions are equally weighted. This is our evidence review, no
 
 ## Before submission
 
-1. Record and upload the functioning demo video, under two minutes, on an allowed public video host. Verify signed-out playback. Use the script in submission.md; a script is not a completed video.
+1. Upload the completed 110-second Chrome-recorded master to an allowed public video host. Verify signed-out playback. Use the script in submission.md; a script is not a completed video.
 2. Update existing Innovation Studio project **126704**, not a duplicate, with the public repository, demo URL, final pitch and video URL. Verify saved values. Final submission is not performed or asserted by this review.
 3. Entrant confirms personal/team eligibility, ownership/rights and required declarations. No personal attestations are made here.
 4. Submit before **28 October 2026, 2:59 PM Singapore**; keep free judge access available through **11 November 2026, 3:59 PM Singapore**. These are the official Pacific deadlines converted to Singapore time, with a recommended earlier upload buffer.
 
-No record-and-upload capability was established in this session, and no existing public demo-video URL was verified. This is the remaining submission-critical artifact, not a backend implementation gap.
+The completed 110-second master is documented in demo-video.md. Public video hosting and portal submission remain pending; do not treat a local video file as the required public host URL.

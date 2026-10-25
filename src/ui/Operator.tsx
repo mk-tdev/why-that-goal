@@ -98,7 +98,11 @@ export function OperatorConsole({
       state: data ? (data.mode === 'model-selected' ? 'on' : 'idle') : 'idle',
       value: data ? modeLabel[data.mode] : '—',
       detail: data
-        ? `${data.trace.calls ? `${data.trace.calls} model calls · ${data.trace.validated ? 'validated' : 'rejected'}` : 'Rule-based · no model output'}`
+        ? data.mode === 'model-selected' && data.trace.cacheHit
+          ? 'Reviewed model output · cache hit · no new calls'
+          : data.trace.calls
+            ? `${data.trace.calls} model calls · ${data.trace.validated ? 'validated' : 'rejected'}`
+            : 'Measured evidence · no model prose'
         : 'Waiting for evidence',
     },
     {

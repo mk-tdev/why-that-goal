@@ -5,7 +5,7 @@
 - Demo: https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io
 - Source: https://github.com/mk-tdev/why-that-goal
 - Existing Innovation Studio project: https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704
-- Public video: **pending — record/upload and verify before final entry**.
+- Public video: **finished local 110-second master; public-host upload URL still pending**. See [video package](demo-video.md).
 
 No account or password is needed. Choose Open workspace → read the note → Enter Workspace to inspect the studio console and aggregate monitoring. Inside the intelligence exposes the pipeline, current agents and recorded evaluations. If the service has scaled to zero, allow the first request to wake it.
 

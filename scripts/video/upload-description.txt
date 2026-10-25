@@ -1,0 +1,23 @@
+Why That Goal? — See the Play Behind the Finish
+
+Watch the real public application transform original synthetic football events into an evidence-linked replay and a reviewed studio story.
+
+Try the demo — no password required:
+https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io
+
+Public source and evaluation reports:
+https://github.com/mk-tdev/why-that-goal
+
+Microsoft Foundry powers three specialized roles: match analysis, storytelling and evidence review. A typed TypeScript coordinator records shared snapshots, fact lookups, handoffs and bounded corrections. Azure Container Apps hosts the app with managed-identity inference. This is custom orchestration, not Microsoft Agent Framework.
+
+00:00 Public app and original synthetic data
+00:10 Real-time synthetic feed and Foundry status
+00:32 Goal recap and cited off-ball replay
+00:50 Five-stage pipeline and actual agent handoffs
+01:08 Recorded false-save correction and evaluation limits
+01:22 Open workspace, monitoring and Take Graphic to Air
+01:40 Public demo and source
+
+Disclosure: all football teams, players, events and tracking are fictional. Footage is edited from actual Chrome recordings of the public deployment, with static-panel holds and crops for readability. Cached model results remain labeled. The reviewer fault case is a separately recorded evaluation, not the current live match. Four authored cases and 40 deterministic checks are not independent model-accuracy or availability certification. Enterprise controls are prototype foundations, with production limitations documented in the app and repository.
+
+English narration uses an installed stock macOS voice. No cloned voice, third-party football footage or copyrighted music is used. Captions are included in the picture; an English subtitle track is also available.

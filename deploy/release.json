@@ -1,8 +1,8 @@
 {
   "deployedAt": "2026-10-25",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
-  "revision": "why-that-goal--0000001",
-  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:49079d0a90fe60a30c6a88929f191c17067a407e87084be9eda9f7a25612dbdf",
+  "revision": "why-that-goal--0000002",
+  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:b246e4344d1320ff05ded0ba665bbe0f4ed3d56bbd6823a9640356914d621267",
   "publicDemo": true,
   "foundryOrchestration": "multi-agent",
   "testsPassed": 97,

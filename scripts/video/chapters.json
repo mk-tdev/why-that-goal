@@ -1,0 +1,44 @@
+[
+  {
+    "start": 0,
+    "end": 10,
+    "title": "THE PLAY BEHIND THE FINISH",
+    "speech": "A goal tells you what happened. Why That Goal lets you rewind the buildup and inspect what mattered. A real public demo, using fictional match data."
+  },
+  {
+    "start": 10,
+    "end": 32,
+    "title": "01 / LIVE SYNTHETIC MATCH INTELLIGENCE",
+    "speech": "Events arrive one by one, while the match keeps moving. The server derives pass progress, receiving runs and space changes from the available evidence. At useful checkpoints, Microsoft Foundry writes and reviews a grounded story. The screen distinguishes measured evidence, model output and cached results."
+  },
+  {
+    "start": 32,
+    "end": 50,
+    "title": "02 / REWIND THE EVIDENCE",
+    "speech": "The goal produces an automatic recap. Select the receiving run, and the pitch returns to its exact interval. The camera follows the player, while the trace and space measurement show the supporting evidence. This is an observed buildup, not proof of tactical causation."
+  },
+  {
+    "start": 50,
+    "end": 68,
+    "title": "03 / PURPOSEFUL AGENT COLLABORATION",
+    "speech": "Five stages connect incoming events to personalized presentation. The analyst selects facts. The storyteller drafts. The reviewer checks the full snapshot. Here, missing evidence triggered a targeted correction, then another review."
+  },
+  {
+    "start": 68,
+    "end": 82,
+    "title": "04 / RECORDED REVIEWER EVALUATION",
+    "speech": "This recorded test inserted a false save into a goal story. The reviewer demanded a correction. Forty checks and four authored cases show measured progress, not independent accuracy scores."
+  },
+  {
+    "start": 82,
+    "end": 100,
+    "title": "05 / THE PRODUCER WORKSPACE",
+    "speech": "Enter without a password. Inspect the signal chain, event log and service monitoring. Managed identity keeps model credentials server-side. Take the reviewed graphic to air: the program tally turns red, and the story appears alongside the replay."
+  },
+  {
+    "start": 100,
+    "end": 110,
+    "title": "WHY THAT GOAL?",
+    "speech": "One pipeline, from incoming events to personalized insight. Explore the demo and source. See the play behind the finish."
+  }
+]
