@@ -18,7 +18,8 @@
     "setup:auth": "node --import tsx scripts/setup-local-auth.ts",
     "evaluate:enterprise": "node --env-file-if-exists=.env --import tsx scripts/evaluate-enterprise.ts",
     "check:load": "node --import tsx scripts/check-enterprise-load.ts",
-    "publish:verification": "node --import tsx scripts/publish-verification.ts"
+    "publish:verification": "node --import tsx scripts/publish-verification.ts",
+    "audit:licenses": "node scripts/audit-licenses.mjs"
   },
   "dependencies": {
     "@azure/identity": "4.13.0",
