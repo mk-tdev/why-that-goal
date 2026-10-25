@@ -51,6 +51,12 @@ http
           { kind: terminalId ? 'outcome' : 'context', factIds: [terminalId ?? factIds[0]] },
         ],
       };
+      if (req.url.includes('contract-repair') && !payload.previousPlan) {
+        value = {
+          factIds: [evidence.facts[0].id],
+          findings: [{ kind: 'context', factIds: [evidence.facts[0].id] }],
+        };
+      }
     } else if (role === 'evidence_check') {
       const decision = req.url.includes('reject')
         ? 'reject'
@@ -96,6 +102,18 @@ http
             }
           : null,
       };
+      if (req.url.includes('contract-repair') && !payload.rejectedDraft) {
+        value.story.summary = 'An invented 999 metre pass.';
+      }
+      if (
+        req.url.includes('contract-repair') &&
+        payload.rejectedDraft &&
+        !payload.feedback.some((f) =>
+          f.detail.includes('Host contract: Unsafe or unsupported narrative text'),
+        )
+      ) {
+        value.story.summary = 'An invented 999 metre pass.';
+      }
     }
     if (req.url.includes('invalid')) value.factIds = ['fabricated-evidence'];
     res.setHeader('Content-Type', 'application/json');

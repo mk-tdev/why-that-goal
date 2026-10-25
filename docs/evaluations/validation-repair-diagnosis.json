@@ -1,0 +1,275 @@
+{
+  "scope": "Monitor summaries retained no raw drafts, so their two five-call fallbacks are not attributed to one proven cause. Fresh pre-change diagnosis reproduced a missing terminal citation that the existing repair gate corrected. This is failure-mode investigation, not a controlled before/after accuracy comparison.",
+  "monitor": {
+    "observedAt": "2026-10-25T10:55:35.412Z",
+    "checks": {
+      "frontend": true,
+      "foundryConfigured": true,
+      "publicDemo": true,
+      "anonymousViewer": true,
+      "reviewedAI": false,
+      "threeRoles": true,
+      "goalEvidence": true
+    },
+    "result": {
+      "mode": "fallback",
+      "reason": "invalid-output",
+      "workflowStatus": "fallback",
+      "observedGeneration": true,
+      "cacheRead": true,
+      "modelCalls": 5
+    },
+    "confirmationAttempts": 2
+  },
+  "preChangeDiagnosis": {
+    "mode": "model-selected",
+    "reason": "validated",
+    "workflow": {
+      "snapshotId": "34a33a9bcdb4fe7a",
+      "version": "1.0",
+      "status": "approved",
+      "steps": [
+        {
+          "agent": "analysis",
+          "attempt": 1,
+          "status": "failed",
+          "elapsedMs": 4887,
+          "factIds": [],
+          "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
+          "toolCalls": [],
+          "inputTokens": 2595,
+          "outputTokens": 306
+        },
+        {
+          "agent": "analysis",
+          "attempt": 2,
+          "status": "completed",
+          "elapsedMs": 3369,
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-06@1:event"
+          ],
+          "summary": "Selected findings checked against measured facts.",
+          "toolCalls": [
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:run"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:space-change"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-06@1:event"
+            }
+          ],
+          "inputTokens": 2598,
+          "outputTokens": 279
+        },
+        {
+          "agent": "storytelling",
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3908,
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-06@1:event"
+          ],
+          "summary": "Cited draft handed to independent evidence review.",
+          "toolCalls": [
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:run"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:space-change"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-06@1:event"
+            }
+          ],
+          "inputTokens": 1356,
+          "outputTokens": 364
+        },
+        {
+          "agent": "evidence-check",
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 4886,
+          "factIds": [
+            "quick-break-01@1:event",
+            "quick-break-02@1:event",
+            "quick-break-02@1:distance",
+            "quick-break-02@1:space",
+            "quick-break-03@1:event",
+            "quick-break-03@1:distance",
+            "quick-break-03@1:space",
+            "quick-break-04@1:event",
+            "quick-break-04@1:distance",
+            "quick-break-04@1:space",
+            "quick-break-05@1:event",
+            "quick-break-06@1:event",
+            "quick-break-02@1:progress",
+            "quick-break-02@1:run",
+            "quick-break-02@1:space-change",
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-04@1:progress",
+            "quick-break-04@1:run",
+            "quick-break-04@1:space-change"
+          ],
+          "summary": "All narrative targets reviewed; publication approved.",
+          "toolCalls": [
+            {
+              "name": "getFact",
+              "factId": "quick-break-01@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:distance"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:space"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:distance"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:space"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:distance"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:space"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-05@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-06@1:event"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:run"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-02@1:space-change"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:run"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-03@1:space-change"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:progress"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:run"
+            },
+            {
+              "name": "getFact",
+              "factId": "quick-break-04@1:space-change"
+            }
+          ],
+          "inputTokens": 3209,
+          "outputTokens": 465
+        }
+      ],
+      "handoffs": [
+        {
+          "from": "analysis",
+          "to": "analysis",
+          "reason": "Host contract gate requested one corrected analysis plan.",
+          "factIds": []
+        },
+        {
+          "from": "analysis",
+          "to": "storytelling",
+          "reason": "Ranked measured findings and hydrated evidence.",
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-06@1:event"
+          ]
+        },
+        {
+          "from": "storytelling",
+          "to": "evidence-check",
+          "reason": "Draft and exact citations; reviewer can inspect all facts.",
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change",
+            "quick-break-06@1:event"
+          ]
+        }
+      ],
+      "issues": [],
+      "revisions": 0,
+      "modelCalls": 4
+    }
+  }
+}

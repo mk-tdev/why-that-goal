@@ -43,6 +43,7 @@ for (const [scenarioId, through, outcome] of [
   };
   const at = Date.now();
   let result;
+  let generationObserved = false;
   do {
     const response = await request('/api/analyze', {
       method: 'POST',
@@ -52,6 +53,7 @@ for (const [scenarioId, through, outcome] of [
     assert.equal(response.status, 200);
     result = readAnalysis(await response.json(), input);
     if (!result.trace.pending) break;
+    generationObserved = true;
     await new Promise((r) => setTimeout(r, 2000));
   } while (Date.now() - at < 110000);
   const row = {
@@ -61,6 +63,7 @@ for (const [scenarioId, through, outcome] of [
     mode: result?.mode,
     reason: result?.reason,
     cacheHit: result?.trace.cacheHit ?? false,
+    generationObserved,
     workflowStatus: result?.trace.workflow?.status,
     roles: [...new Set(result?.trace.workflow?.steps.map((s) => s.agent))],
     modelCalls: result?.trace.workflow?.modelCalls,

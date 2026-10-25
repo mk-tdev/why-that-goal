@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-25T10:21:59.937643+00:00",
+  "recordedAt": "2026-10-25T11:23:23.611679+00:00",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
   "subscriptionState": "Enabled",
   "deployment": {
@@ -43,7 +43,7 @@
   },
   "app": {
     "state": "Succeeded",
-    "readyRevision": "why-that-goal--0000003",
+    "readyRevision": "why-that-goal--0000004",
     "scale": {
       "cooldownPeriod": 300,
       "maxReplicas": 1,

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-25T10:18:29.430Z",
+  "recordedAt": "2026-10-25T11:21:38.627Z",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
   "checks": {
     "frontend": true,
@@ -22,41 +22,36 @@
     "liveFeed": true
   },
   "passed": true,
-  "generationModelCalls": 4,
+  "generationModelCalls": 3,
   "verificationCacheHit": true,
   "analysis": {
     "recap": {
       "outcome": "goal",
-      "title": "Okafor’s finish is recorded as a goal",
-      "summary": "Osei’s pass progressed the move to Silva, who found Vega after Vega moved ahead. More separation from the nearest opponent was recorded at Vega’s receiving point by reception. Okafor’s finish was recorded as a goal.",
+      "title": "The buildup and finish",
+      "summary": "The passing sequence progressed toward goal, and Okafor’s finish was recorded as a goal.",
       "through": 19,
       "terminalFactId": "quick-break-06@1:event",
       "cards": [
         {
-          "title": "Osei finds Silva further toward goal",
-          "text": "Osei’s pass moved the ball toward goal and changed where the next action could begin.",
+          "title": "Progress through the passes",
+          "text": "Osei found Silva and Silva found Vega, with both passes moving the ball toward goal. Vega then found Okafor with further progress toward goal.",
           "factIds": [
-            "quick-break-02@1:progress"
-          ]
-        },
-        {
-          "title": "Silva finds Vega after his forward run",
-          "text": "Vega moved ahead before receiving Silva’s pass, which also progressed the ball toward goal.",
-          "factIds": [
+            "quick-break-02@1:progress",
             "quick-break-03@1:progress",
-            "quick-break-03@1:run"
+            "quick-break-04@1:progress"
           ]
         },
         {
-          "title": "More separation at Vega’s receiving point",
-          "text": "The nearest opponent was farther from the fixed receiving point when the pass arrived than earlier; the evidence does not show that Vega’s run caused this change.",
+          "title": "Vega’s movement and the receiving point",
+          "text": "Vega moved before receiving. At the fixed receiving point, the nearest opponent was farther away at reception than earlier.",
           "factIds": [
+            "quick-break-03@1:run",
             "quick-break-03@1:space-change"
           ]
         },
         {
-          "title": "Okafor’s finish is a goal",
-          "text": "The finish is recorded as a goal.",
+          "title": "Okafor’s finish",
+          "text": "Okafor’s finish was recorded as a goal.",
           "factIds": [
             "quick-break-06@1:event"
           ]
@@ -65,14 +60,15 @@
       "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
     },
     "buildup": {
-      "title": "Osei and Silva progress the break to Vega",
-      "summary": "Osei’s pass found Silva further toward goal, and Silva then found Vega, who moved ahead before receiving. At Vega’s fixed receiving point, the nearest opponent was farther away at reception than earlier. The sequence ended with Okafor’s finish recorded as a goal; these details describe the move, not what caused the goal.",
+      "title": "A progressive passing sequence ends with Okafor’s goal",
+      "summary": "Osei found Silva, then Silva found Vega, with both passes moving the ball toward goal. Vega moved before receiving, and the nearest opponent was farther from the fixed receiving point at reception. Vega then found Okafor, whose finish was recorded as a goal.",
       "factIds": [
+        "quick-break-06@1:event",
         "quick-break-02@1:progress",
         "quick-break-03@1:progress",
+        "quick-break-04@1:progress",
         "quick-break-03@1:run",
-        "quick-break-03@1:space-change",
-        "quick-break-06@1:event"
+        "quick-break-03@1:space-change"
       ],
       "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
     },
@@ -452,6 +448,21 @@
     },
     "moments": [
       {
+        "eventId": "quick-break-06",
+        "version": 1,
+        "at": 16,
+        "playerId": "N-9",
+        "target": {
+          "x": 105,
+          "y": 31.8
+        },
+        "id": "quick-break-06@1:event",
+        "kind": "event",
+        "text": "Okafor's finish is recorded as a goal. Rewind the preceding passes to inspect how the ball reached this position.",
+        "method": "Recorded synthetic event; not causal evidence.",
+        "replayAt": 16
+      },
+      {
         "eventId": "quick-break-02",
         "version": 1,
         "at": 4,
@@ -488,6 +499,25 @@
         "text": "Silva found Vega, moving the ball 13.8 m toward goal. This changed where the next action could begin.",
         "method": "Signed endpoint progress along the team attacking axis; not a line-break classification.",
         "replayAt": 8
+      },
+      {
+        "eventId": "quick-break-04",
+        "version": 1,
+        "at": 12,
+        "playerId": "N-7",
+        "target": {
+          "x": 94,
+          "y": 34
+        },
+        "fromTime": 10,
+        "toTime": 12,
+        "id": "quick-break-04@1:progress",
+        "kind": "pass-progress",
+        "value": 3.8,
+        "unit": "m",
+        "text": "Vega found Okafor, moving the ball 3.8 m toward goal. This changed where the next action could begin.",
+        "method": "Signed endpoint progress along the team attacking axis; not a line-break classification.",
+        "replayAt": 12
       },
       {
         "eventId": "quick-break-03",
@@ -528,25 +558,10 @@
         "text": "Space at the receiving point opened: the nearest opponent was 6.5 m away, then 7.4 m at reception. The pass arrived with more separation from the nearest defender.",
         "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap.",
         "replayAt": 8
-      },
-      {
-        "eventId": "quick-break-06",
-        "version": 1,
-        "at": 16,
-        "playerId": "N-9",
-        "target": {
-          "x": 105,
-          "y": 31.8
-        },
-        "id": "quick-break-06@1:event",
-        "kind": "event",
-        "text": "Okafor's finish is recorded as a goal. Rewind the preceding passes to inspect how the ball reached this position.",
-        "method": "Recorded synthetic event; not causal evidence.",
-        "replayAt": 16
       }
     ],
     "trace": {
-      "elapsedMs": 15416,
+      "elapsedMs": 11054,
       "calls": 0,
       "validated": true,
       "workflow": {
@@ -557,30 +572,24 @@
           {
             "agent": "analysis",
             "attempt": 1,
-            "status": "failed",
-            "elapsedMs": 6454,
-            "factIds": [],
-            "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
-            "toolCalls": [],
-            "inputTokens": 2595,
-            "outputTokens": 321
-          },
-          {
-            "agent": "analysis",
-            "attempt": 2,
             "status": "completed",
-            "elapsedMs": 3229,
+            "elapsedMs": 6336,
             "factIds": [
+              "quick-break-06@1:event",
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
               "quick-break-03@1:run",
-              "quick-break-03@1:space-change",
-              "quick-break-06@1:event"
+              "quick-break-03@1:space-change"
             ],
             "summary": "Selected findings checked against measured facts.",
             "toolCalls": [
               {
                 "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              },
+              {
+                "name": "getFact",
                 "factId": "quick-break-02@1:progress"
               },
               {
@@ -589,34 +598,39 @@
               },
               {
                 "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
                 "factId": "quick-break-03@1:run"
               },
               {
                 "name": "getFact",
                 "factId": "quick-break-03@1:space-change"
-              },
-              {
-                "name": "getFact",
-                "factId": "quick-break-06@1:event"
               }
             ],
-            "inputTokens": 2598,
-            "outputTokens": 269
+            "inputTokens": 3803,
+            "outputTokens": 282
           },
           {
             "agent": "storytelling",
             "attempt": 1,
             "status": "completed",
-            "elapsedMs": 3520,
+            "elapsedMs": 2515,
             "factIds": [
+              "quick-break-06@1:event",
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
               "quick-break-03@1:run",
-              "quick-break-03@1:space-change",
-              "quick-break-06@1:event"
+              "quick-break-03@1:space-change"
             ],
             "summary": "Cited draft handed to independent evidence review.",
             "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              },
               {
                 "name": "getFact",
                 "factId": "quick-break-02@1:progress"
@@ -627,25 +641,25 @@
               },
               {
                 "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
                 "factId": "quick-break-03@1:run"
               },
               {
                 "name": "getFact",
                 "factId": "quick-break-03@1:space-change"
-              },
-              {
-                "name": "getFact",
-                "factId": "quick-break-06@1:event"
               }
             ],
-            "inputTokens": 1356,
-            "outputTokens": 393
+            "inputTokens": 1996,
+            "outputTokens": 336
           },
           {
             "agent": "evidence-check",
             "attempt": 1,
             "status": "completed",
-            "elapsedMs": 2202,
+            "elapsedMs": 2173,
             "factIds": [
               "quick-break-01@1:event",
               "quick-break-02@1:event",
@@ -756,27 +770,22 @@
                 "factId": "quick-break-04@1:space-change"
               }
             ],
-            "inputTokens": 3244,
-            "outputTokens": 212
+            "inputTokens": 3503,
+            "outputTokens": 173
           }
         ],
         "handoffs": [
           {
             "from": "analysis",
-            "to": "analysis",
-            "reason": "Host contract gate requested one corrected analysis plan.",
-            "factIds": []
-          },
-          {
-            "from": "analysis",
             "to": "storytelling",
             "reason": "Ranked measured findings and hydrated evidence.",
             "factIds": [
+              "quick-break-06@1:event",
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
               "quick-break-03@1:run",
-              "quick-break-03@1:space-change",
-              "quick-break-06@1:event"
+              "quick-break-03@1:space-change"
             ]
           },
           {
@@ -784,21 +793,22 @@
             "to": "evidence-check",
             "reason": "Draft and exact citations; reviewer can inspect all facts.",
             "factIds": [
+              "quick-break-06@1:event",
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
+              "quick-break-04@1:progress",
               "quick-break-03@1:run",
-              "quick-break-03@1:space-change",
-              "quick-break-06@1:event"
+              "quick-break-03@1:space-change"
             ]
           }
         ],
         "issues": [],
         "revisions": 0,
-        "modelCalls": 4
+        "modelCalls": 3
       },
       "cacheHit": true,
-      "inputTokens": 9793,
-      "outputTokens": 1195
+      "inputTokens": 9302,
+      "outputTokens": 791
     }
   },
   "streamFrames": 191,

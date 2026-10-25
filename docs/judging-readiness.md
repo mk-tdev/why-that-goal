@@ -10,7 +10,7 @@ Public video: https://www.youtube.com/watch?v=qVZuNPllBsk (YouTube displayed 1:5
 - Foundry account: Succeeded; `wtg-insights` deployment Running/Succeeded.
 - Model: `gpt-6-luna`, version `2026-09-22`, GlobalStandard, capacity 100.
 - Deployment-reported limit: **100 requests / 60 seconds; 100,000 tokens / 60 seconds**. These are configured limits, not a report of remaining tokens or guaranteed throughput. Other consumers can share quota.
-- Container App: ready revision `why-that-goal--0000003`, all ingress traffic to the latest revision, public HTTPS, managed identity, multi-agent inference enabled.
+- Container App: ready revision `why-that-goal--0000004`, all ingress traffic to the latest revision, public HTTPS, managed identity, multi-agent inference enabled.
 - Scale: 0–1 replicas, 0.25 vCPU / 0.5 GiB. Kept the existing low-cost configuration. A cold start is possible; no always-on replica or paid monitoring service was added.
 
 ## Fixed: permanent app-budget exhaustion
@@ -26,7 +26,7 @@ Azure's reported RPM exceeds the app's limit, so no deployment-capacity increase
 ## Reproducible evidence
 
 - `npm run audit:licenses`: all 133 locked entries, zero unresolved; notices are included in the public app and runtime container.
-- `npm test`: 101 passing checks, including access, CSRF, revocation, static notice serving and recovering transport limits.
+- `npm test`: 104 passing checks, including access, CSRF, revocation, static notice serving and recovering transport limits.
 - Production frontend build and Linux/amd64 container build pass; the container build verifies license notices before pruning development packages.
 - [Deployment report](evaluations/deployment.json): anonymous replay, no session cookie/sign-in requirement, passwordless inspection workspace, security boundaries, paced event stream and managed-identity three-role goal recap.
 - [Judge walkthrough report](evaluations/judging-access.json): goal/save/failed attack outcomes, cited replay evidence, review status and local remaining capacity. Cache use and failures are recorded explicitly. The report's `passed` value is authoritative; this document does not substitute for it.
@@ -49,3 +49,7 @@ Keep Azure resources, the model deployment, managed-identity grants and billing 
 There is no external uptime alert or unattended monitor configured. This review and its reports are point-in-time evidence. If the app cannot obtain approved output, inspect the reported reason, Azure deployment health/quota and identity permissions before claiming Foundry availability. Avoid blanket public load testing or unbounded retries that consume the judging budget.
 
 Portal updates and personal eligibility/rights declarations remain separate from these technical checks. Use [the field guide](submission.md) and the now-linked public video to complete the existing project entry.
+
+## Explanation validation repair
+
+The later hourly baseline observed two quick-break AI validation fallbacks with working judge access. The generation schemas and repair handoffs were corrected without relaxing citation, temporal or semantic review checks. Seven predeclared fresh real-model cases passed after the changes, including repeated goals, saved/intercepted attacks, Spanish analyst and an early snapshot (23 calls total; one semantic revision). See [the full repair report](validation-repair.md) and the refreshed deployed reports for current results. The earlier three-case cache result above belongs to the previous quota-audit run; it is not proof of fresh inference for this release.

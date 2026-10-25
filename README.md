@@ -93,7 +93,7 @@ For development checks, run `npm test` and `npm run build`.
 
 Foundry now runs a match analyst, storyteller and evidence reviewer with typed shared state and explicit handoffs. The reviewer can return a draft for one correction or block publication; unapproved prose falls back to measured explanations. Expand **Agent collaboration** in the notebook for the actual role trace and review issues. All three roles currently use the same deployment through custom TypeScript orchestration.
 
-See [workflow, recovery limits and comparison](docs/multi-agent.md). `npm run evaluate:agents` makes bounded paid model calls and records the authored single-versus-multi comparison plus a controlled semantic fault. Set `FOUNDRY_ORCHESTRATION=single-agent` to restore the baseline. This feature does not establish enterprise readiness or guarantee an award.
+See [workflow, recovery limits and comparison](docs/multi-agent.md) and [evidence-preserving validation repair](docs/validation-repair.md). `npm run evaluate:agents` makes bounded paid model calls and records the authored single-versus-multi comparison plus a controlled semantic fault. Set `FOUNDRY_ORCHESTRATION=single-agent` to restore the baseline. This feature does not establish enterprise readiness or guarantee an award.
 
 ## Enterprise access and operations
 

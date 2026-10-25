@@ -12,6 +12,7 @@ const request = {
 for (const path of [
   '',
   'semantic-fault/',
+  'contract-repair/',
   'reject/',
   'rate-limit/',
   'unavailable/',
@@ -28,12 +29,21 @@ for (const path of [
     }),
   );
   const r = await analyze(request, adapter);
-  assert.equal(r.mode, !path || path === 'semantic-fault/' ? 'model-selected' : 'fallback');
+  assert.equal(
+    r.mode,
+    !path || ['semantic-fault/', 'contract-repair/'].includes(path) ? 'model-selected' : 'fallback',
+  );
   assert.equal(r.recap?.outcome, 'goal');
   if (path === 'semantic-fault/') {
     assert.equal(r.trace.workflow?.revisions, 1);
     assert.equal(r.trace.calls, 5);
     assert.ok(!r.buildup.summary.includes('goalkeeper saved'));
+  }
+  if (path === 'contract-repair/') {
+    assert.equal(r.trace.calls, 5);
+    assert.equal(r.trace.workflow?.steps.filter((s) => s.status === 'failed').length, 2);
+    assert.equal(r.trace.workflow?.steps.at(-1)?.agent, 'evidence-check');
+    assert.equal(r.trace.workflow?.status, 'approved');
   }
   console.log(
     JSON.stringify({

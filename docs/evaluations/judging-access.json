@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-25T10:22:00.374Z",
+  "recordedAt": "2026-10-25T11:21:38.725Z",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
   "anonymousReplay": true,
   "passwordlessWorkspace": true,
@@ -9,8 +9,8 @@
     "callsPerMinute": 12,
     "callsPerWindow": 200,
     "windowSeconds": 3600,
-    "remainingMinute": 12,
-    "remainingWindow": 180,
+    "remainingMinute": 9,
+    "remainingWindow": 197,
     "activeRequests": 0,
     "retryAfterSeconds": 0
   },
@@ -19,8 +19,8 @@
     "callsPerMinute": 12,
     "callsPerWindow": 200,
     "windowSeconds": 3600,
-    "remainingMinute": 12,
-    "remainingWindow": 180,
+    "remainingMinute": 3,
+    "remainingWindow": 191,
     "activeRequests": 0,
     "retryAfterSeconds": 0
   },
@@ -32,50 +32,7 @@
       "mode": "model-selected",
       "reason": "validated",
       "cacheHit": true,
-      "workflowStatus": "approved",
-      "roles": [
-        "analysis",
-        "storytelling",
-        "evidence-check"
-      ],
-      "modelCalls": 4,
-      "steps": [
-        {
-          "agent": "analysis",
-          "attempt": 1,
-          "status": "failed",
-          "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld."
-        },
-        {
-          "agent": "analysis",
-          "attempt": 2,
-          "status": "completed",
-          "summary": "Selected findings checked against measured facts."
-        },
-        {
-          "agent": "storytelling",
-          "attempt": 1,
-          "status": "completed",
-          "summary": "Cited draft handed to independent evidence review."
-        },
-        {
-          "agent": "evidence-check",
-          "attempt": 1,
-          "status": "completed",
-          "summary": "All narrative targets reviewed; publication approved."
-        }
-      ],
-      "issues": [],
-      "elapsedMs": 12,
-      "clickableEvidence": true
-    },
-    {
-      "scenarioId": "cutback-save",
-      "expectedOutcome": "save",
-      "actualOutcome": "save",
-      "mode": "model-selected",
-      "reason": "validated",
-      "cacheHit": true,
+      "generationObserved": false,
       "workflowStatus": "approved",
       "roles": [
         "analysis",
@@ -104,23 +61,24 @@
         }
       ],
       "issues": [],
-      "elapsedMs": 10,
+      "elapsedMs": 14,
       "clickableEvidence": true
     },
     {
-      "scenarioId": "counter-cut-out",
-      "expectedOutcome": "failed-attack",
-      "actualOutcome": "failed-attack",
+      "scenarioId": "cutback-save",
+      "expectedOutcome": "save",
+      "actualOutcome": "save",
       "mode": "model-selected",
       "reason": "validated",
       "cacheHit": true,
+      "generationObserved": true,
       "workflowStatus": "approved",
       "roles": [
         "analysis",
         "storytelling",
         "evidence-check"
       ],
-      "modelCalls": 5,
+      "modelCalls": 3,
       "steps": [
         {
           "agent": "analysis",
@@ -137,33 +95,51 @@
         {
           "agent": "evidence-check",
           "attempt": 1,
-          "status": "revision-requested",
-          "summary": "Review completed against the full evidence snapshot."
+          "status": "completed",
+          "summary": "All narrative targets reviewed; publication approved."
+        }
+      ],
+      "issues": [],
+      "elapsedMs": 10459,
+      "clickableEvidence": true
+    },
+    {
+      "scenarioId": "counter-cut-out",
+      "expectedOutcome": "failed-attack",
+      "actualOutcome": "failed-attack",
+      "mode": "model-selected",
+      "reason": "validated",
+      "cacheHit": true,
+      "generationObserved": true,
+      "workflowStatus": "approved",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 3,
+      "steps": [
+        {
+          "agent": "analysis",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Selected findings checked against measured facts."
         },
         {
           "agent": "storytelling",
-          "attempt": 2,
+          "attempt": 1,
           "status": "completed",
           "summary": "Cited draft handed to independent evidence review."
         },
         {
           "agent": "evidence-check",
-          "attempt": 2,
+          "attempt": 1,
           "status": "completed",
           "summary": "All narrative targets reviewed; publication approved."
         }
       ],
-      "issues": [
-        {
-          "target": "story",
-          "reason": "causal-overclaim",
-          "detail": "“His movement created a new destination” overstates the run evidence, which says Silva’s movement offered a new passing destination ahead; it does not establish that the movement created it.",
-          "factIds": [
-            "counter-cut-out-02@1:run"
-          ]
-        }
-      ],
-      "elapsedMs": 12,
+      "issues": [],
+      "elapsedMs": 10449,
       "clickableEvidence": true
     }
   ],

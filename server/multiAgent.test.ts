@@ -276,3 +276,75 @@ test('review corrections cannot regress accepted cards or change card structure'
   revised.recap!.cards.push(structuredClone(revised.recap!.cards[0]));
   assert.throws(() => mergeRevision(original, revised, issues));
 });
+
+test('analyst repair receives the exact rejected plan and terminal omission, without host-added facts', async () => {
+  let attempts = 0;
+  const { client } = model((call) => {
+    if (call.agent !== 'analysis') return;
+    const p = call.input as { previousPlan: unknown; correction: string; terminalFactId: string };
+    if (++attempts === 1) {
+      const value = plan(call);
+      value.factIds = value.factIds.filter((id) => id !== p.terminalFactId);
+      return value;
+    }
+    assert.equal(p.correction, 'Analysis omitted terminal evidence');
+    assert.ok(p.previousPlan);
+    assert.ok(!(p.previousPlan as { factIds: string[] }).factIds.includes(p.terminalFactId));
+    return plan(call);
+  });
+  const result = await analyze(request, createMultiAgentAdapter(client));
+  assert.equal(result.mode, 'model-selected');
+  assert.equal(result.trace.calls, 4);
+  assert.equal(result.trace.workflow?.steps[0].status, 'failed');
+  assert.equal(result.trace.workflow?.steps.at(-1)?.agent, 'evidence-check');
+});
+
+test('writer repair receives its rejected recap and specific contract error before full re-review', async () => {
+  let writes = 0;
+  const { client, calls } = model((call) => {
+    if (call.agent !== 'storytelling') return;
+    if (++writes === 1) {
+      const value = story(call);
+      value.recap!.cards[0].factIds = ['fabricated'];
+      return value;
+    }
+    const p = call.input as {
+      rejectedDraft: ReturnType<typeof story>;
+      feedback: { detail: string }[];
+    };
+    assert.deepEqual(p.rejectedDraft.recap!.cards[0].factIds, ['fabricated']);
+    assert.match(p.feedback[0].detail, /Host contract:.*(evidence|fact|citation)/i);
+    return story(call);
+  });
+  const result = await analyze(request, createMultiAgentAdapter(client));
+  assert.equal(result.mode, 'model-selected');
+  assert.equal(result.trace.calls, 4);
+  assert.equal(calls.at(-1)?.agent, 'evidence_check');
+  assert.ok(result.recap?.cards.every((c) => !c.factIds.includes('fabricated')));
+});
+
+test('generation schemas restrict citations and exact review targets to the current snapshot', async () => {
+  const { analysisSchemaFor, reviewSchemaFor } = await import('./multiAgent');
+  const { narrativeSchemaFor } = await import('./foundry');
+  const early = await analyze({ ...request, through: 4, receivedThrough: 4 });
+  const final = await analyze(request);
+  const ids = early.evidence.facts.map((f) => f.id);
+  const analystSchema = analysisSchemaFor(early.evidence);
+  assert.deepEqual(analystSchema.properties.factIds.items.enum, ids);
+  assert.ok(!JSON.stringify(analystSchema).includes(final.recap!.terminalFactId));
+  const writerSchema = narrativeSchemaFor(ids, false);
+  assert.deepEqual(writerSchema.properties.recap, { type: 'null' });
+  const revisionSchema = narrativeSchemaFor(
+    final.evidence.facts.map((f) => f.id),
+    true,
+    2,
+  );
+  assert.ok('properties' in revisionSchema.properties.recap);
+  assert.equal(revisionSchema.properties.recap.properties.cards.minItems, 2);
+  assert.equal(revisionSchema.properties.recap.properties.cards.maxItems, 2);
+  const targets = ['story', 'recap-summary', 'recap-card-0'];
+  const reviewerSchema = reviewSchemaFor(final.evidence, targets);
+  assert.deepEqual(reviewerSchema.properties.coveredTargets.items.enum, targets);
+  assert.equal(reviewerSchema.properties.coveredTargets.minItems, 3);
+  assert.equal(reviewerSchema.properties.coveredTargets.maxItems, 3);
+});

@@ -1,11 +1,11 @@
 {
   "deployedAt": "2026-10-25",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
-  "revision": "why-that-goal--0000003",
-  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:3a8d9d93d4a2a41207c400d5ef551cd67d9ef278d476e2efeecf16cb674e49d1",
+  "revision": "why-that-goal--0000004",
+  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:5439c202573ec16b48469eafcd475d8dc36d9740cf631ed151e7524676be2ed7",
   "publicDemo": true,
   "foundryOrchestration": "multi-agent",
-  "testsPassed": 101,
+  "testsPassed": 104,
   "publicVerification": "docs/evaluations/deployment.json",
   "passwordlessWorkspace": true,
   "licenseAudit": "docs/evaluations/dependency-licenses.json",
@@ -13,5 +13,6 @@
     "scope": "process-local",
     "requestsPerMinute": 12,
     "callsPerRollingHour": 200
-  }
+  },
+  "validationRepair": "docs/validation-repair.md"
 }

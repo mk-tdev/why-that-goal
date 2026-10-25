@@ -45,3 +45,9 @@ The controlled false-save story passed the baseline's structural/provenance gate
 ## Enterprise scheduling
 
 The authenticated API now runs one useful nonterminal checkpoint per scenario/audience/language cache window (after two completed passes) and the terminal outcome, while intermediate moments use current measured explanations. This prevents per-event inference from consuming the model budget before the recap. Direct evaluation calls still run a complete workflow for the supplied snapshot. Access, per-caller limits and monitoring are documented in [enterprise controls](enterprise-readiness.md).
+
+## Snapshot-constrained generation and actionable repair
+
+Generation schemas now enumerate only the current snapshot's valid citation IDs, enforce terminal/nonterminal recap shape and card bounds, retain the existing card count during revision, and enumerate the exact review targets. Runtime validation is still mandatory even if a provider ignores the schema. A per-fact support guide helps agents distinguish ball progression, receiver movement and fixed-point separation without inventing causal relationships.
+
+The analyst receives its rejected plan and exact terminal/citation contract error on its sole correction. A writer host-format repair receives the rejected draft and specific failure rather than a generic instruction. Reviewer revisions still merge only flagged targets and recheck the entire draft against the full evidence snapshot. The reviewer is asked to report all target issues in one complete pass; it is never told to approve a previously accepted target automatically. Call ceilings and all evidence/review gates remain unchanged. See [validation repair and real-model results](validation-repair.md).
