@@ -3,6 +3,7 @@ import type { Fact } from '../server/contracts';
 import { useAnalysis } from './hooks/useAnalysis';
 import { buildGuide, type GuideStep } from './core/guide';
 import { Select, Slider, Disclosure } from './ui/Controls';
+import { OperatorConsole } from './ui/Operator';
 import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from 'react';
 const Stadium = lazy(() => import('./scene/Stadium'));
 import { scenarios } from './core/scenarios';
@@ -238,6 +239,19 @@ export default function App() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [threeD, setThreeD] = useState(true);
   const [immersive, setImmersive] = useState(true);
+  const [operator, setOperator] = useState(() => {
+    try {
+      return localStorage.getItem('wtg-operator') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const [onAir, setOnAir] = useState(false);
+  useEffect(() => {
+    try {
+      localStorage.setItem('wtg-operator', operator ? '1' : '0');
+    } catch {}
+  }, [operator]);
   const [sceneId, setSceneId] = useState(scenarios[0].id),
     [time, setTime] = useState(8),
     [selected, setSelected] = useState(2),
@@ -480,8 +494,28 @@ export default function App() {
     language === 'en'
       ? `${player.name} moves the ball ${spatial.progress.toFixed(1)} m forward and ${sideways.toFixed(1)} m across the pitch. At ${clock(scene.baseClock, displayTime)}, the receiving point is ${spatial.receiver.receiverDistance.toFixed(1)} m from the nearest defender. ${analyst ? `The nearest opponent to the pass segment is ${spatial.lane.player.name}, ${spatial.lane.laneDistance.toFixed(1)} m away. These are frame measurements, not interception probabilities.` : 'The shaded circle shows that space; the pink marker identifies the defender closest to the passing lane.'}`
       : `${player.name} avanza el balón ${spatial.progress.toFixed(1)} m y lo desplaza ${sideways.toFixed(1)} m lateralmente. A las ${clock(scene.baseClock, displayTime)}, el punto de recepción está a ${spatial.receiver.receiverDistance.toFixed(1)} m del defensor más cercano. Son distancias geométricas, no probabilidades.`;
+  const eventShown = live.enabled ? live.ids.length > 0 : event.at <= displayTime;
+  const recapShown = analysis.data?.recap && selected === scene.events.length - 1 && eventShown;
+  const graphic = recapShown
+    ? {
+        kicker: `${language === 'en' ? 'SEQUENCE RECAP' : 'RESUMEN'} · ${analysis.data!.recap!.outcome.replace('-', ' ').toUpperCase()}`,
+        title: analysis.data!.recap!.title,
+        text: analysis.data!.recap!.summary,
+      }
+    : eventShown
+      ? {
+          kicker: `${event.type.toUpperCase()} · ${clock(scene.baseClock, event.at)}`,
+          title: event.label[language],
+          text:
+            serverExplanation?.text ??
+            evidenceFor(scene, event, analyst ? 'analyst' : 'fan', language),
+        }
+      : null;
+  const graphicOnAir = operator && onAir && !!graphic && !guide;
   return (
-    <div className={`desk ${immersive ? 'desk-immersive' : ''} ${threeD ? 'desk-3d' : ''}`}>
+    <div
+      className={`desk ${immersive ? 'desk-immersive' : ''} ${threeD ? 'desk-3d' : ''} ${operator ? 'desk-operator' : ''} ${graphicOnAir ? 'graphic-on-air' : ''}`}
+    >
       <header className="app-bar">
         <a className="brand" href="/" aria-label="Why That Goal home">
           <span className="brand-mark">
@@ -496,6 +530,14 @@ export default function App() {
           Spatial replay <span>/</span> Northstar vs Atlas
         </span>
         <div className="header-actions">
+          <div className="mode-switch" role="group" aria-label="Display mode">
+            <button aria-pressed={!operator} onClick={() => setOperator(false)}>
+              Viewer
+            </button>
+            <button aria-pressed={operator} onClick={() => setOperator(true)}>
+              <i /> Operator
+            </button>
+          </div>
           <span className="prototype-label">
             <i /> Synthetic replay
           </span>
@@ -739,6 +781,24 @@ export default function App() {
                       onFocus={setFocus}
                       comparison={comparison}
                     />
+                  )}
+                  {operator && !guide && (
+                    <div className="op-hud" aria-hidden="true">
+                      <span className={`op-hud-tally ${graphicOnAir ? 'on' : ''}`}>
+                        {graphicOnAir ? 'PGM · GRAPHIC ON AIR' : 'PROGRAM'}
+                      </span>
+                      <i className="tl" />
+                      <i className="tr" />
+                      <i className="bl" />
+                      <i className="br" />
+                    </div>
+                  )}
+                  {graphicOnAir && (
+                    <div className="lower-third" key={graphic!.title} role="status">
+                      <span>{graphic!.kicker}</span>
+                      <strong>{graphic!.title}</strong>
+                      <p>{graphic!.text}</p>
+                    </div>
                   )}
                   {guide && (
                     <aside className="guide-card" aria-label="Guided replay chapter" key={guide.id}>
@@ -1292,6 +1352,21 @@ export default function App() {
               </div>
             </aside>
           </div>
+          {operator && (
+            <OperatorConsole
+              scene={scene}
+              time={displayTime}
+              selected={selected}
+              live={live}
+              analysis={analysis}
+              language={language}
+              onAir={graphicOnAir}
+              graphic={graphic}
+              onToggleAir={() => setOnAir(!graphicOnAir)}
+              onJump={jump}
+              onCue={inspectFact}
+            />
+          )}
           <footer className="status-bar">
             <span>
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
