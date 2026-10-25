@@ -4,7 +4,9 @@ This release adds working access control, caller limits, operational telemetry a
 
 ## Access model
 
-The running API always loads authentication configuration. `AUTH_MODE=local` is for loopback development; `AUTH_MODE=entra` is the production path. The lower-level server factory can omit authentication for loopback tests, but the application entry point cannot disable it through configuration.
+**Hackathon default: `PUBLIC_DEMO=true`. Judges open the replay, evidence, live feed and Foundry explanations without accounts, cookies or a sign-in step. Anonymous viewers cannot access operator tools or monitoring. Set `PUBLIC_DEMO=false` to require authentication for all use. Anonymous caller quotas use the socket peer IP; visitors behind a shared proxy share that quota until a trusted ingress identity design is configured. Global Foundry budgets still apply.**
+
+The running API always loads authentication configuration. `AUTH_MODE=local` provides optional operator password access in the public demo; `AUTH_MODE=entra` is optional for a private enterprise deployment. Production still requires HTTPS and explicit origins. The lower-level server factory can omit authentication for loopback tests, but the application entry point cannot disable it through configuration.
 
 For local use, run `npm run setup:auth` once. It generates separate operator/viewer passwords, stores scrypt hashes in ignored `.env`, and puts credentials in ignored `research/local-access.txt` with owner-only permissions. Do not publish either file. Existing credentials are preserved on repeat runs. The browser receives a random opaque HttpOnly, SameSite=Strict cookie and a CSRF token kept in memory. The server stores only a hash of the session token; sessions expire after fifteen minutes by default, rotate on sign-in, and are revoked on sign-out. Sign-out remains available even after request quota exhaustion. Passwords, cookies, bearer tokens and CSRF values are not logged.
 
@@ -12,9 +14,9 @@ The frontend password field is custom styled. Viewer access permits replay, evid
 
 ## Microsoft Entra configuration
 
-The code supports single-tenant delegated API access through MSAL Browser and server-side JOSE JWT verification. **No tenant app registration, consent, role assignment or real Entra browser sign-in was performed in this change.** The local checkout currently uses password sessions; JWT security tests use real RSA signatures and test keys, not a live tenant.
+The code supports single-tenant delegated API access through MSAL Browser and server-side JOSE JWT verification. **No tenant app registration, consent, role assignment or real Entra browser sign-in was performed in this change.** The local checkout currently permits public demo access with optional operator password sessions; JWT security tests use real RSA signatures and test keys, not a live tenant.
 
-To enable Entra for deployment:
+To optionally enable Entra for a private deployment, first set `PUBLIC_DEMO=false`, then:
 
 1. Register a single-tenant application (or separate SPA/API registrations). Expose an API scope named `access_as_user`; set the API's requested access-token version to v2. Use `api://<API application ID>` as the default application ID URI.
 2. Register the exact frontend SPA redirect `https://<app-host>/redirect.html`. In development the exact localhost URL/port must also be registered. The bundled MSAL v5 redirect bridge is a separate Vite build entry. Serve it and its bundled assets from the application origin with `Cache-Control: no-store`; do not apply Cross-Origin-Opener-Policy to the bridge page.

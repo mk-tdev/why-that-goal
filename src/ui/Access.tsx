@@ -1,15 +1,21 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { securedFetch, setSessionCsrf, ApiError } from '../core/session';
-type Session = { role: 'viewer' | 'operator'; csrf?: string; expiresAt: number };
+type Session = { role: 'viewer' | 'operator'; csrf?: string; guest?: boolean; expiresAt: number };
 type Config = {
   mode: 'local' | 'entra' | 'disabled';
+  publicDemo?: boolean;
   tenantId?: string;
   clientId?: string;
   scope?: string;
 };
-const AccessContext = createContext<{ session: Session; signOut: () => void }>({
+const AccessContext = createContext<{
+  session: Session;
+  signOut: () => void;
+  openOperator: () => void;
+}>({
   session: { role: 'viewer', expiresAt: 0 },
   signOut: () => {},
+  openOperator: () => {},
 });
 export const useAccess = () => useContext(AccessContext);
 export function AccessGate({ children }: { children: ReactNode }) {
@@ -58,7 +64,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
     };
   }, [attempt]);
   useEffect(() => {
-    if (!session) return;
+    if (!session || session.guest) return;
     const timer = setTimeout(
       () => {
         setSession(undefined);
@@ -120,9 +126,16 @@ export function AccessGate({ children }: { children: ReactNode }) {
     } catch {}
     setSession(undefined);
     setSessionCsrf();
+    if (config?.publicDemo) setAttempt((n) => n + 1);
   }
   if (session)
-    return <AccessContext.Provider value={{ session, signOut }}>{children}</AccessContext.Provider>;
+    return (
+      <AccessContext.Provider
+        value={{ session, signOut, openOperator: () => setSession(undefined) }}
+      >
+        {children}
+      </AccessContext.Provider>
+    );
   return (
     <main className="access-screen">
       <section className="access-card">
@@ -169,17 +182,32 @@ export function AccessGate({ children }: { children: ReactNode }) {
             Retry connection
           </button>
         )}
+        {config?.publicDemo && (
+          <button className="access-retry" onClick={() => setAttempt((n) => n + 1)}>
+            Back to demo
+          </button>
+        )}
         <small>Fictional match data · evidence-linked AI stories</small>
       </section>
     </main>
   );
 }
 export function AccessControls() {
-  const { session, signOut } = useAccess();
+  const { session, signOut, openOperator } = useAccess();
   return (
     <div className="access-controls">
-      <span>{session.role === 'operator' ? 'Operator access' : 'Viewer access'}</span>
-      <button onClick={signOut}>Sign out</button>
+      <span>
+        {session.guest
+          ? 'Public demo'
+          : session.role === 'operator'
+            ? 'Operator access'
+            : 'Viewer access'}
+      </span>
+      {session.guest ? (
+        <button onClick={openOperator}>Operator sign-in</button>
+      ) : (
+        <button onClick={signOut}>Sign out</button>
+      )}
     </div>
   );
 }

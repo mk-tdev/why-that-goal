@@ -3,7 +3,7 @@
   "info": {
     "title": "Why That Goal local evidence API",
     "version": "1.0.0",
-    "description": "Authenticated evidence API with local-development sessions or Entra delegated bearer tokens. Rate limits, CSRF, operator-only monitoring and optional Foundry multi-agent narrative generation. Factory-without-auth mode is loopback-test-only; application startup requires authentication."
+    "description": "Authenticated evidence API with local-development sessions or Entra delegated bearer tokens. Rate limits, CSRF, operator-only monitoring and optional Foundry multi-agent narrative generation. Factory-without-auth mode is loopback-test-only; application startup requires authentication. Public demo mode allows anonymous viewer requests to analysis, feed, readiness and auth/me; operator metrics still require authentication. Anonymous quotas use the socket peer IP."
   },
   "servers": [
     {
@@ -22,15 +22,23 @@
                 "schema": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["status", "foundry"],
+                  "required": [
+                    "status",
+                    "foundry"
+                  ],
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": ["ok"]
+                      "enum": [
+                        "ok"
+                      ]
                     },
                     "foundry": {
                       "type": "string",
-                      "enum": ["configured", "disconnected"]
+                      "enum": [
+                        "configured",
+                        "disconnected"
+                      ]
                     }
                   }
                 }
@@ -240,7 +248,7 @@
             }
           }
         },
-        "description": "Measured evidence immediately; poll while trace.pending. Optional Foundry orchestration exposes trace.workflow with distinct analyst, storyteller and reviewer steps, concrete handoffs and a single writer revision. AI publication requires host checks and reviewer approval; otherwise deterministic fallback.",
+        "description": "Measured evidence immediately; poll while trace.pending. Optional Foundry orchestration exposes trace.workflow with distinct analyst, storyteller and reviewer steps, concrete handoffs and a single writer revision. AI publication requires host checks and reviewer approval; otherwise deterministic fallback. Anonymous access is allowed only when PUBLIC_DEMO=true.",
         "parameters": [
           {
             "in": "header",
@@ -251,13 +259,25 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "LocalSession": []
+          },
+          {
+            "SecureSession": []
+          },
+          {}
         ]
       }
     },
     "/api/feed": {
       "get": {
         "operationId": "streamSyntheticSequence",
-        "description": "One seeded sequence per connection, paced at 1x. SSE data frames every approximately 100 ms contain the replay clock and newly received versioned events. Final frame has complete=true; connection closes. Restart begins at zero, with no resume protocol. Foundry disconnected.",
+        "description": "One seeded sequence per connection, paced at 1x. SSE data frames every approximately 100 ms contain the replay clock and newly received versioned events. Final frame has complete=true; connection closes. Restart begins at zero, with no resume protocol. Foundry disconnected. Anonymous access is allowed only when PUBLIC_DEMO=true.",
         "parameters": [
           {
             "name": "scenarioId",
@@ -384,7 +404,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "LocalSession": []
+          },
+          {
+            "SecureSession": []
+          },
+          {}
+        ]
       }
     },
     "/api/auth/config": {
@@ -401,7 +433,10 @@
                   "properties": {
                     "mode": {
                       "type": "string",
-                      "enum": ["local", "entra"]
+                      "enum": [
+                        "local",
+                        "entra"
+                      ]
                     },
                     "tenantId": {
                       "type": "string"
@@ -432,7 +467,9 @@
               "schema": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["password"],
+                "required": [
+                  "password"
+                ],
                 "properties": {
                   "password": {
                     "type": "string",
@@ -684,7 +721,20 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "LocalSession": []
+          },
+          {
+            "SecureSession": []
+          },
+          {}
+        ],
+        "description": " Anonymous access is allowed only when PUBLIC_DEMO=true."
       }
     },
     "/api/auth/logout": {
@@ -711,7 +761,9 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": ["signed_out"]
+                      "enum": [
+                        "signed_out"
+                      ]
                     }
                   }
                 }
@@ -797,7 +849,10 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": ["ready", "draining"]
+                      "enum": [
+                        "ready",
+                        "draining"
+                      ]
                     },
                     "authentication": {
                       "type": "string"
@@ -807,7 +862,9 @@
                     },
                     "modelConnectivity": {
                       "type": "string",
-                      "enum": ["not_probed"]
+                      "enum": [
+                        "not_probed"
+                      ]
                     },
                     "requestId": {
                       "type": "string"
@@ -880,7 +937,20 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "LocalSession": []
+          },
+          {
+            "SecureSession": []
+          },
+          {}
+        ],
+        "description": " Anonymous access is allowed only when PUBLIC_DEMO=true."
       }
     },
     "/api/ops/metrics": {
@@ -1051,7 +1121,13 @@
       "AnalysisRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["scenarioId", "through", "receivedThrough", "audience", "language"],
+        "required": [
+          "scenarioId",
+          "through",
+          "receivedThrough",
+          "audience",
+          "language"
+        ],
         "properties": {
           "scenarioId": {
             "type": "string",
@@ -1069,11 +1145,17 @@
           },
           "audience": {
             "type": "string",
-            "enum": ["fan", "analyst"]
+            "enum": [
+              "fan",
+              "analyst"
+            ]
           },
           "language": {
             "type": "string",
-            "enum": ["en", "es"]
+            "enum": [
+              "en",
+              "es"
+            ]
           }
         }
       },
@@ -1121,7 +1203,10 @@
           "target": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["x", "y"],
+            "required": [
+              "x",
+              "y"
+            ],
             "properties": {
               "x": {
                 "type": "number"
@@ -1142,7 +1227,9 @@
           },
           "unit": {
             "type": "string",
-            "enum": ["m"]
+            "enum": [
+              "m"
+            ]
           },
           "fromTime": {
             "type": "number"
@@ -1203,7 +1290,10 @@
           "target": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["x", "y"],
+            "required": [
+              "x",
+              "y"
+            ],
             "properties": {
               "x": {
                 "type": "number"
@@ -1224,7 +1314,9 @@
           },
           "unit": {
             "type": "string",
-            "enum": ["m"]
+            "enum": [
+              "m"
+            ]
           },
           "replayAt": {
             "type": "number"
@@ -1246,15 +1338,26 @@
       "EvidencePacket": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["schemaVersion", "source", "request", "score", "facts", "limitations"],
+        "required": [
+          "schemaVersion",
+          "source",
+          "request",
+          "score",
+          "facts",
+          "limitations"
+        ],
         "properties": {
           "schemaVersion": {
             "type": "string",
-            "enum": ["1.0"]
+            "enum": [
+              "1.0"
+            ]
           },
           "source": {
             "type": "string",
-            "enum": ["synthetic"]
+            "enum": [
+              "synthetic"
+            ]
           },
           "request": {
             "$ref": "#/components/schemas/AnalysisRequest"
@@ -1262,7 +1365,10 @@
           "score": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["home", "away"],
+            "required": [
+              "home",
+              "away"
+            ],
             "properties": {
               "home": {
                 "type": "integer"
@@ -1303,11 +1409,17 @@
         "properties": {
           "schemaVersion": {
             "type": "string",
-            "enum": ["1.0"]
+            "enum": [
+              "1.0"
+            ]
           },
           "mode": {
             "type": "string",
-            "enum": ["deterministic", "model-selected", "fallback"]
+            "enum": [
+              "deterministic",
+              "model-selected",
+              "fallback"
+            ]
           },
           "provider": {
             "type": "string"
@@ -1338,7 +1450,11 @@
           "trace": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["elapsedMs", "calls", "validated"],
+            "required": [
+              "elapsedMs",
+              "calls",
+              "validated"
+            ],
             "properties": {
               "elapsedMs": {
                 "type": "number"
@@ -1373,7 +1489,12 @@
           "buildup": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["title", "summary", "limitation", "factIds"],
+            "required": [
+              "title",
+              "summary",
+              "limitation",
+              "factIds"
+            ],
             "properties": {
               "title": {
                 "type": "string"
@@ -1407,7 +1528,9 @@
       "Selection": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["factIds"],
+        "required": [
+          "factIds"
+        ],
         "properties": {
           "factIds": {
             "type": "array",
@@ -1422,7 +1545,9 @@
       "Error": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["error"],
+        "required": [
+          "error"
+        ],
         "properties": {
           "error": {
             "type": "string"
@@ -1448,7 +1573,11 @@
         "properties": {
           "outcome": {
             "type": "string",
-            "enum": ["goal", "save", "failed-attack"]
+            "enum": [
+              "goal",
+              "save",
+              "failed-attack"
+            ]
           },
           "title": {
             "type": "string"
@@ -1471,7 +1600,11 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["title", "text", "factIds"],
+              "required": [
+                "title",
+                "text",
+                "factIds"
+              ],
               "properties": {
                 "title": {
                   "type": "string"
@@ -1497,7 +1630,11 @@
         "properties": {
           "agent": {
             "type": "string",
-            "enum": ["analysis", "storytelling", "evidence-check"]
+            "enum": [
+              "analysis",
+              "storytelling",
+              "evidence-check"
+            ]
           },
           "attempt": {
             "type": "integer",
@@ -1506,7 +1643,13 @@
           },
           "status": {
             "type": "string",
-            "enum": ["running", "completed", "revision-requested", "rejected", "failed"]
+            "enum": [
+              "running",
+              "completed",
+              "revision-requested",
+              "rejected",
+              "failed"
+            ]
           },
           "elapsedMs": {
             "type": "number",
@@ -1529,13 +1672,18 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "enum": ["getFact"]
+                  "enum": [
+                    "getFact"
+                  ]
                 },
                 "factId": {
                   "type": "string"
                 }
               },
-              "required": ["name", "factId"]
+              "required": [
+                "name",
+                "factId"
+              ]
             }
           },
           "inputTokens": {
@@ -1588,7 +1736,12 @@
             }
           }
         },
-        "required": ["target", "reason", "detail", "factIds"]
+        "required": [
+          "target",
+          "reason",
+          "detail",
+          "factIds"
+        ]
       },
       "WorkflowTrace": {
         "type": "object",
@@ -1600,11 +1753,17 @@
           },
           "version": {
             "type": "string",
-            "enum": ["1.0"]
+            "enum": [
+              "1.0"
+            ]
           },
           "status": {
             "type": "string",
-            "enum": ["running", "approved", "fallback"]
+            "enum": [
+              "running",
+              "approved",
+              "fallback"
+            ]
           },
           "steps": {
             "type": "array",
@@ -1621,11 +1780,19 @@
               "properties": {
                 "from": {
                   "type": "string",
-                  "enum": ["analysis", "storytelling", "evidence-check"]
+                  "enum": [
+                    "analysis",
+                    "storytelling",
+                    "evidence-check"
+                  ]
                 },
                 "to": {
                   "type": "string",
-                  "enum": ["analysis", "storytelling", "evidence-check"]
+                  "enum": [
+                    "analysis",
+                    "storytelling",
+                    "evidence-check"
+                  ]
                 },
                 "reason": {
                   "type": "string"
@@ -1637,7 +1804,12 @@
                   }
                 }
               },
-              "required": ["from", "to", "reason", "factIds"]
+              "required": [
+                "from",
+                "to",
+                "reason",
+                "factIds"
+              ]
             }
           },
           "issues": {
@@ -1671,11 +1843,17 @@
       "Session": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["role", "expiresAt"],
+        "required": [
+          "role",
+          "expiresAt"
+        ],
         "properties": {
           "role": {
             "type": "string",
-            "enum": ["viewer", "operator"]
+            "enum": [
+              "viewer",
+              "operator"
+            ]
           },
           "csrf": {
             "type": "string",

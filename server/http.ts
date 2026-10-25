@@ -156,6 +156,16 @@ export function createApiServer(
         limit(`invalid-token:${ip}`, 20);
         throw new HttpError(401, 'invalid_access_token');
       }
+      if (!identity?.principal && options.auth?.publicDemo) {
+        identity = {
+          principal: {
+            id: `guest:${ip}`,
+            role: 'viewer' as const,
+            expiresAt: Date.now() + 3600000,
+          },
+          method: 'guest' as const,
+        };
+      }
       if (!identity?.principal) {
         limit(`unauthenticated:${ip}`, 120);
         throw new HttpError(401, 'authentication_required');
@@ -178,7 +188,11 @@ export function createApiServer(
       if (url.pathname === '/api/auth/me' && req.method === 'GET')
         return send(
           200,
-          auth?.info(req) ?? { role: principal.role, expiresAt: principal.expiresAt },
+          auth?.info(req) ?? {
+            role: principal.role,
+            expiresAt: principal.expiresAt,
+            guest: identity.method === 'guest',
+          },
         );
       if (url.pathname === '/api/auth/session') {
         if (req.method !== 'POST') throw new HttpError(405, 'method_not_allowed');

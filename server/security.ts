@@ -7,6 +7,7 @@ export type Principal = { id: string; role: 'viewer' | 'operator'; expiresAt: nu
 export type AuthConfig = {
   mode: 'local' | 'entra';
   secureCookies: boolean;
+  publicDemo?: boolean;
   operatorHash?: string;
   viewerHash?: string;
   tenantId?: string;
@@ -112,6 +113,7 @@ export function createSecurity(config: AuthConfig) {
     mode: config.mode,
     publicConfig: () => ({
       mode: config.mode,
+      publicDemo: config.publicDemo ?? false,
       ...(config.mode === 'entra'
         ? {
             tenantId: config.tenantId,
@@ -178,7 +180,7 @@ export function createSecurity(config: AuthConfig) {
 export function configuredSecurity(env = process.env): AuthConfig {
   const mode = env.AUTH_MODE ?? 'local';
   if (mode !== 'local' && mode !== 'entra') throw new Error('AUTH_MODE must be local or entra');
-  if (env.NODE_ENV === 'production' && mode !== 'entra')
+  if (env.NODE_ENV === 'production' && mode !== 'entra' && env.PUBLIC_DEMO !== 'true')
     throw new Error('Production requires Entra authentication');
   if (env.NODE_ENV === 'production') {
     const origins = (env.APP_ORIGINS ?? '')
@@ -202,6 +204,7 @@ export function configuredSecurity(env = process.env): AuthConfig {
   if (!Number.isInteger(ttl) || ttl < 60 || ttl > 3600) throw new Error('Invalid session duration');
   return {
     mode,
+    publicDemo: env.PUBLIC_DEMO === 'true',
     secureCookies: env.NODE_ENV === 'production',
     sessionTtlMs: ttl * 1000,
     operatorHash: env.AUTH_OPERATOR_PASSWORD_HASH,

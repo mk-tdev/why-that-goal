@@ -419,3 +419,34 @@ test('malformed absolute request URLs fail closed without terminating the server
     await app.close();
   }
 });
+
+test('public demo admits judges without credentials, retains quotas and protects operator metrics', async () => {
+  const app = await listen({ ...(await local()), publicDemo: true }, { requestLimit: 4 });
+  try {
+    const config = await (await fetch(`${app.base}/api/auth/config`)).json();
+    assert.equal(config.publicDemo, true);
+    const me = await fetch(`${app.base}/api/auth/me`);
+    assert.equal(me.status, 200);
+    assert.equal(me.headers.get('set-cookie'), null);
+    assert.equal((await me.json()).guest, true);
+    assert.equal((await fetch(`${app.base}/api/ops/metrics`)).status, 403);
+    const analysis = await fetch(`${app.base}/api/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    assert.equal(analysis.status, 200);
+    const stream = await fetch(`${app.base}/api/feed?scenarioId=quick-break`);
+    assert.equal(stream.status, 200);
+    await stream.body?.cancel();
+    assert.equal((await fetch(`${app.base}/api/auth/me`)).status, 429);
+    const operator = await login(app.base, password);
+    assert.equal(operator.response.status, 200);
+    assert.equal(
+      (await fetch(`${app.base}/api/ops/metrics`, { headers: { Cookie: operator.cookie } })).status,
+      200,
+    );
+  } finally {
+    await app.close();
+  }
+});
