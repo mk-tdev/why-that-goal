@@ -40,7 +40,7 @@ References: [Microsoft claim validation](https://learn.microsoft.com/en-us/entra
 | Feed starts | 10/minute per principal |
 | Concurrent event streams | 2/principal, 20/process |
 | Active inference jobs | 2/process |
-| Foundry upstream requests | 12/minute, 200/process before restart |
+| Foundry upstream requests | 12/minute, 200/rolling hour per process; automatically recovering |
 | Per workflow | Normally 3 calls; at most 6 with bounded repairs |
 | Deadlines | 18 seconds per model call; 90 seconds per workflow |
 
@@ -78,3 +78,7 @@ Browser verification covered operator/viewer sign-in, role restrictions even wit
 Show public replay access, enter the open inspection workspace, follow a real Foundry story through agent review, and inspect the recorded false-save correction plus measured fallback tests. Explain that tenant access is optional for a private rollout, not a barrier in this demo. Inspect request IDs, known usage, rate-limit signals and a reserved-case report. The business case is a studio workflow that exposes provenance, operational health and failure behavior instead of silently publishing unsupported AI text.
 
 Remaining deployment work: real Entra registration/consent verification, managed identity, shared session/limiter/job state, hosted telemetry and alert routing, disaster recovery, tenant/data isolation for customer uploads, independent human model evaluation, and actual hosted load/security testing. This release strengthens the enterprise case without claiming those items are complete.
+
+## Judging availability hardening — 25 October 2026
+
+The old 200-call lifetime cutoff could leave a warm server without inference until restart. It now uses a rolling one-hour budget; minute/hour capacity expires automatically. Provider 429 Retry-After is respected without automatic paid retries. The public inspection workspace exposes remaining local capacity under Operations pulse. Unit tests cover expiry, minute recovery, provider cooldown and concurrent-token-acquisition budget races. See [judging readiness](judging-readiness.md) for actual Azure limits, live checks, costs and remaining operational limits.

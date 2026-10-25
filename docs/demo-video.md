@@ -53,6 +53,6 @@ python3 scripts/video/render-demo.py
 
 Use a Python environment with Pillow; the bundled workspace Python was used for this export. Fonts currently reference installed Avenir Next and DIN Condensed. The script preserves recorded timestamp spacing, samples at 30 fps, holds static panels, creates a silent, caption-free video by default. The optional `--narrated` variant requires running `make-narration.py` first and uses only burned captions, avoiding duplicate subtitle layers. Narration text is versioned in `scripts/video/chapters.json`.
 
-## Still required for final entry
+## Final uploaded video and entry
 
-Upload the master to an allowed public video host, verify playback while signed out, then add its public video URL to the existing Innovation Studio project. This task creates the finished video file; it does not publish a YouTube/Vimeo upload or perform final submission/entrant declarations.
+The entrant provided https://www.youtube.com/watch?v=qVZuNPllBsk on 25 October 2026. It opens, plays and displays 1:50 in the existing browser session. Signed-out playback remains to be independently confirmed. Use this public URL in the existing Innovation Studio project, alongside the finished pitch and public repository. Portal completion and entrant declarations remain separate from producing/uploading this video.

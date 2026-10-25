@@ -25,17 +25,17 @@ Title: 47 characters. Tagline: 211 characters. Both fit the previously observed 
 
 The portal still showed the old **Current stage: in development** description and an empty Code Repository field at this review. These need saving even though the actual app and repository exist.
 
-## Video link to add after hosting
+## Final public video
 
-Publish the finished video to YouTube, Vimeo, Facebook Video or Youku, check signed-out playback, then insert this line immediately after the app/source links in the description, replacing the bracketed instruction with the real URL:
+The entrant has uploaded the final video. Use this exact line after the app/source links (already included in `submission-description.md`):
 
 ```text
-**Demo video (1 minute 50 seconds):** [PASTE THE REAL PUBLIC VIDEO URL HERE]
+**Demo video (1 minute 50 seconds):** https://www.youtube.com/watch?v=qVZuNPllBsk
 ```
 
-Do not submit a placeholder or a local file path as the video URL. The observed portal offers file upload, but the official rules also require a public video-host link on the project page. A dedicated video-URL text field was not observed; place that link in Description regardless of any uploaded copy.
+The video opened in the browser and YouTube displayed 1:50. Confirm playback in a genuinely signed-out session before final submission; existing tested browser sessions were signed in. The portal also offers direct file upload, but keep the public-host URL in the description. No local file path belongs in that field.
 
-Use `artifacts/demo/why-that-goal-demo-clean.mp4` as the picture master. It is 110 seconds, 1080p/30 fps, silent and subtitle-free. Add your voiceover using [the timed script](demo-narration-script.md), keep the total under two minutes, and verify the final export. Adding narration is your chosen finishing step; the rules require a functioning demo video, not our previous synthetic voice. The old narrated export is superseded.
+The silent picture master and timed script remain available in [video instructions](demo-video.md); the entrant's uploaded final version supersedes those local editing deliverables for submission.
 
 ## Categories: what to select if the portal asks
 
@@ -59,11 +59,11 @@ The deployed Azure Container Apps prototype combines scoped managed identity, se
 
 ## What is still pending
 
-1. **Your voiceover and final video export**, if desired, using the clean master and timed script. Check duration, legibility and audio synchronization after editing.
-2. **Public video hosting and signed-out verification**. No public video URL is currently recorded. A local MP4/ZIP or script does not satisfy that link requirement.
+1. **Uploaded video:** https://www.youtube.com/watch?v=qVZuNPllBsk is provided and displays 1:50. Final signed-out playback check remains pending.
+2. **Copy the public video link into the portal** along with the finished description; hosting itself is done.
 3. **Save the portal updates**: description, tagline, repository, media/video link, and optionally replace concept art with a product screenshot. Reopen the saved page and verify each value.
-4. **Final access check**: app and repository public; video plays without permission requests; Foundry runs or clearly labels cache/fallback; test a goal, save and failed attack. Ensure demo quotas still allow judges to complete that path. Current reports are recorded evidence, not a new test run today.
-5. **Entrant declarations**: confirm eligibility, actual team, original ownership/data and asset rights, open-source license compliance, no disqualifying prior prize or support, and any required terms. Personal attestations remain the entrant's responsibility.
+4. **Final access check**: app and repository public; video plays without permission requests; Foundry runs or clearly labels cache/fallback; test a goal, save and failed attack. Ensure demo quotas still allow judges to complete that path. Current deployment and judging reports were refreshed after the quota-recovery and notice fixes; see `docs/judging-readiness.md` for scope and limitations.
+5. **Entrant declarations**: confirm eligibility, actual team, original ownership/data and asset rights, open-source license compliance, no disqualifying prior prize or support, and any required terms. The dependency notice audit is now documented in `THIRD_PARTY_NOTICES.md`; it does not attest to personal ownership or every external asset right. Personal attestations remain the entrant's responsibility.
 6. **Complete the portal's final workflow before the deadline** and retain its confirmation. No separate Submit button was visible in the inspected project page or Manage project menu (Change log / Clone / Delete only); check any event-specific instructions before claiming submission is complete.
 7. **Keep free judge access available through judging**, including adequate Azure/Foundry budget and working resource permissions.
 

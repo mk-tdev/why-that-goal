@@ -34,6 +34,7 @@ export function createFoundryAdapter(options: FoundryOptions): IntelligenceAdapt
   const cache = new Map<string, unknown>();
   return {
     name: 'microsoft-foundry',
+    capacity: client.capacity,
     async select(input) {
       const key = JSON.stringify({ evidence: input.evidence, recap: input.recap });
       if (cache.has(key))

@@ -1465,7 +1465,10 @@ export default function App() {
           {operator && <OperationsPanel />}
           <footer className="status-bar">
             <span>
-              <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking
+              <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking <b>·</b>{' '}
+              <a href="/third-party-notices.txt" target="_blank" rel="noreferrer">
+                Third-party notices
+              </a>
             </span>
             <span>
               {analysis.data?.mode === 'model-selected'

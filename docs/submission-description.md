@@ -8,6 +8,8 @@ A goal replay shows the finish. Fans, analysts and studio producers also need to
 
 **Public source, setup and evaluation reports:** https://github.com/mk-tdev/why-that-goal
 
+**Demo video (1 minute 50 seconds):** https://www.youtube.com/watch?v=qVZuNPllBsk
+
 ### One pipeline, five stages
 
 1. **Ingest:** receive fictional match events one by one, preserving event time, arrival time and versions.

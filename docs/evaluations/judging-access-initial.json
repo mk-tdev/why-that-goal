@@ -1,0 +1,80 @@
+{
+  "recordedAt": "2026-10-25T10:18:29.544Z",
+  "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "anonymousReplay": true,
+  "passwordlessWorkspace": true,
+  "publicNotices": true,
+  "capacityBefore": {
+    "scope": "process-local",
+    "callsPerMinute": 12,
+    "callsPerWindow": 200,
+    "windowSeconds": 3600,
+    "remainingMinute": 8,
+    "remainingWindow": 196,
+    "activeRequests": 0,
+    "retryAfterSeconds": 0
+  },
+  "capacityAfter": {
+    "scope": "process-local",
+    "callsPerMinute": 12,
+    "callsPerWindow": 200,
+    "windowSeconds": 3600,
+    "remainingMinute": 1,
+    "remainingWindow": 188,
+    "activeRequests": 0,
+    "retryAfterSeconds": 0
+  },
+  "cases": [
+    {
+      "scenarioId": "quick-break",
+      "expectedOutcome": "goal",
+      "actualOutcome": "goal",
+      "mode": "model-selected",
+      "reason": "validated",
+      "cacheHit": true,
+      "workflowStatus": "approved",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 4,
+      "elapsedMs": 15,
+      "clickableEvidence": true
+    },
+    {
+      "scenarioId": "cutback-save",
+      "expectedOutcome": "save",
+      "actualOutcome": "save",
+      "mode": "fallback",
+      "reason": "invalid-output",
+      "cacheHit": true,
+      "workflowStatus": "fallback",
+      "roles": [
+        "analysis"
+      ],
+      "modelCalls": 2,
+      "elapsedMs": 6228,
+      "clickableEvidence": true
+    },
+    {
+      "scenarioId": "counter-cut-out",
+      "expectedOutcome": "failed-attack",
+      "actualOutcome": "failed-attack",
+      "mode": "fallback",
+      "reason": "invalid-output",
+      "cacheHit": true,
+      "workflowStatus": "fallback",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 6,
+      "elapsedMs": 25143,
+      "clickableEvidence": true
+    }
+  ],
+  "passed": false,
+  "scope": "Small real public-deployment judge walkthrough with managed-identity Foundry. Each first uncached workflow may incur charges. Cached results are explicit. Not an uptime guarantee, traffic forecast or independent semantic accuracy assessment."
+}

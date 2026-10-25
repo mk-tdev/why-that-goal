@@ -4737,3 +4737,5 @@ button.op-row:hover:not(:disabled) {
 .intelligence-review .operations-panel {margin:24px 0 0;}
 @media(max-width:1000px){.pipeline-proof{grid-template-columns:repeat(3,1fr)}.header-actions{flex-wrap:wrap}.intelligence-trigger{padding:8px;font-size:10px}.review-agent-grid{grid-template-columns:1fr}.review-score-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.review-shade{padding:10px}.review-shade>section{max-height:calc(100dvh - 20px)}.intelligence-review{padding:20px}.review-heading,.review-section-heading{flex-direction:column;gap:10px}.pipeline-proof{grid-template-columns:1fr 1fr}.review-value{padding:18px}.access-card{padding:24px}}
+
+.status-bar a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }

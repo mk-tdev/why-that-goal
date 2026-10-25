@@ -1,0 +1,70 @@
+{
+  "recordedAt": "2026-10-25T10:21:59.937643+00:00",
+  "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "subscriptionState": "Enabled",
+  "deployment": {
+    "name": "wtg-insights",
+    "state": "Succeeded",
+    "deploymentState": "Running",
+    "sku": {
+      "capacity": 100,
+      "family": null,
+      "name": "GlobalStandard",
+      "size": null,
+      "tier": null
+    },
+    "model": {
+      "callRateLimit": null,
+      "format": "OpenAI",
+      "name": "gpt-6-luna",
+      "publisher": null,
+      "source": null,
+      "sourceAccount": null,
+      "version": "2026-09-22"
+    },
+    "rateLimits": [
+      {
+        "count": 100.0,
+        "dynamicThrottlingEnabled": null,
+        "key": "request",
+        "matchPatterns": null,
+        "minCount": null,
+        "renewalPeriod": 60.0
+      },
+      {
+        "count": 100000.0,
+        "dynamicThrottlingEnabled": null,
+        "key": "token",
+        "matchPatterns": null,
+        "minCount": null,
+        "renewalPeriod": 60.0
+      }
+    ]
+  },
+  "app": {
+    "state": "Succeeded",
+    "readyRevision": "why-that-goal--0000003",
+    "scale": {
+      "cooldownPeriod": 300,
+      "maxReplicas": 1,
+      "minReplicas": 0,
+      "pollingInterval": 30,
+      "rules": [
+        {
+          "http": {
+            "metadata": {
+              "concurrentRequests": "20"
+            }
+          },
+          "name": "http"
+        }
+      ]
+    },
+    "identityType": "UserAssigned",
+    "httpsOnly": true,
+    "publicDemo": true,
+    "foundryEnabled": true,
+    "orchestration": "multi-agent"
+  },
+  "scope": "Read-only Azure control-plane inspection. Configured limits, not remaining quota, future credits/funding, load certification or an uptime guarantee. No quota increase, new identity grants or paid services provisioned."
+}

@@ -190,6 +190,7 @@ export function mergeRevision(
 export function createMultiAgentAdapter(client: ModelClient): IntelligenceAdapter {
   return {
     name: 'microsoft-foundry-multi-agent',
+    capacity: client.capacity,
     timeoutMs: 90000,
     async select(input) {
       const state: WorkflowTrace = {

@@ -9,7 +9,7 @@ The five scored dimensions are equally weighted. This is our evidence review, no
 | Technology implementation | Public HTTPS app, paced event/receipt ingestion, versioned evidence, three Foundry roles, semantic review, actual deployed-model result, reproducible Docker image and CI. | Six authored scenes; not a real event/video ingestion integration. |
 | Agentic design and innovation | Distinct analyst/writer/reviewer contexts, typed shared snapshot, getFact lookups, concrete correction handoffs and bounded recovery. The new review view exposes these without searching collapsed panels. | Same deployment in all roles; custom TypeScript coordination, not Microsoft Agent Framework/A2A. Small comparisons do not establish general superiority. |
 | Impact and applicability | Producer can inspect a buildup, cue evidence/camera and prepare a lower-third graphic; fan/analyst and language modes reuse trusted facts. New system overview explains the adoption use case and rollout limits. | No customer time-saving study, real broadcast integration, commercial SLA or measured financial ROI. |
-| UX and presentation | Cinematic 3D replay, clickable pass/run/space evidence, automatic goal/save/interception recaps, direct judge access, passwordless demo workspace, dedicated inspection overview. | Required public video and final portal presentation still need completion. |
+| UX and presentation | Cinematic 3D replay, clickable pass/run/space evidence, automatic goal/save/interception recaps, direct judge access, passwordless demo workspace, dedicated inspection overview. | Public 1:50 video is uploaded; signed-out playback and final portal updates need confirmation. |
 | Category adherence | Explicit separation of real Foundry generation, actual multi-agent trace, recorded evaluations and working deployment controls. No enterprise certification, accuracy score or unimplemented Azure integration is claimed. | Each category has stronger competitors; category fit is not a guarantee of an award. |
 
 ## Category position
@@ -32,9 +32,9 @@ The five scored dimensions are equally weighted. This is our evidence review, no
 
 ## Before submission
 
-1. Upload the completed 110-second Chrome-recorded master to an allowed public video host. Verify signed-out playback. Use the clean master and timed narration script linked from demo-video.md; a script is not a completed video.
+1. The final video is uploaded at https://www.youtube.com/watch?v=qVZuNPllBsk (1:50 displayed). Verify signed-out playback and include it in the project. Use the clean master and timed narration script linked from demo-video.md; a script is not a completed video.
 2. Update existing Innovation Studio project **126704**, not a duplicate, with the public repository, demo URL, final pitch and video URL. Verify saved values. Final submission is not performed or asserted by this review.
 3. Entrant confirms personal/team eligibility, ownership/rights and required declarations. No personal attestations are made here.
 4. Submit before **28 October 2026, 2:59 PM Singapore**; keep free judge access available through **11 November 2026, 3:59 PM Singapore**. These are the official Pacific deadlines converted to Singapore time, with a recommended earlier upload buffer.
 
-The completed 110-second master is documented in demo-video.md. Public video hosting and portal submission remain pending; do not treat a local video file as the required public host URL.
+The completed 110-second master is documented in demo-video.md. Video hosting is complete; signed-out playback and portal submission remain pending; do not treat a local video file as the required public host URL.

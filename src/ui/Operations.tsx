@@ -19,6 +19,13 @@ type Metrics = {
     approvalRate: number | null;
   };
   alerts: string[];
+  foundryCapacity?: {
+    remainingMinute: number;
+    remainingWindow: number;
+    callsPerMinute: number;
+    callsPerWindow: number;
+    retryAfterSeconds: number;
+  } | null;
 };
 export function OperationsPanel() {
   const { session } = useAccess();
@@ -79,6 +86,17 @@ export function OperationsPanel() {
             ))}
           </div>
           <p>{data.alerts.length ? data.alerts.join(' · ') : 'No configured threshold alerts.'}</p>
+          {data.foundryCapacity && (
+            <p>
+              Foundry budget: {data.foundryCapacity.remainingMinute}/
+              {data.foundryCapacity.callsPerMinute} calls available this minute ·{' '}
+              {data.foundryCapacity.remainingWindow}/{data.foundryCapacity.callsPerWindow} this
+              rolling hour.
+              {data.foundryCapacity.retryAfterSeconds > 0 &&
+                ` New calls can retry in ${data.foundryCapacity.retryAfterSeconds}s.`}{' '}
+              Limits recover automatically; cached stories remain available.
+            </p>
+          )}
           <small>
             Process-local counters · usage from completed workflows · last 500 latency samples ·
             refreshes every 30 seconds · not an external uptime monitor.

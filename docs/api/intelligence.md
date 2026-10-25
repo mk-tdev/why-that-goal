@@ -1,10 +1,10 @@
 # Local intelligence pipeline, contract v1
 
-Foundry is disconnected. No Azure resources, SDK, credentials or external model calls are involved. The replay notebook calls this backend through the same-origin Vite proxy and falls back to local explanations when unavailable. Run `npm run dev:api` in a second terminal to start the loopback-only service on port 8791. Run `npm test` for core and backend checks (local socket permission is required).
+Foundry is enabled on the public deployment; local default configuration remains disconnected unless explicitly enabled. The replay notebook calls this backend through the same-origin Vite proxy and falls back to local explanations when unavailable. Run `npm run dev:api` in a second terminal to start the loopback-only service on port 8791. Run `npm test` for core and backend checks (local socket permission is required).
 
 ## HTTP contract
 
-The machine-readable contract is [openapi.json](openapi.json). `GET /api/health` reports the disconnected state. `POST /api/analyze` accepts JSON with exactly these fields:
+The machine-readable contract is [openapi.json](openapi.json). `GET /api/health` reports configured/disconnected status, not an inference connectivity probe. `POST /api/analyze` accepts JSON with exactly these fields:
 
 ```json
 {
@@ -86,3 +86,5 @@ HTTP rate limits return 429 with Retry-After; AI job/provider budget exhaustion 
 Public hackathon mode (`PUBLIC_DEMO=true`) permits anonymous viewer analysis and SSE access; `/api/auth/me` returns `guest: true`. Monitoring remains operator-only. Anonymous quotas use the socket peer IP; global Foundry limits remain active. Entra sign-in is optional for private deployments.
 
 Public workspace entry: `POST /api/auth/demo` (only with `PUBLIC_DEMO=true`) returns an expiring `demo: true` operator inspection session. No password is accepted or required. The session shares the caller IP quota, exposes aggregate monitoring and requires CSRF for subsequent cookie POSTs. It does not expose Azure management permissions.
+
+Operator metrics include `foundryCapacity`: process-local minute/hour request limits, remaining requests, active requests and retry-after seconds. Defaults are 12/minute and 200/rolling hour, recovering without restart. Provider 429 Retry-After is honored. This is not Azure remaining-token quota or a durable spending cap. Public `/third-party-notices.txt` serves retained dependency and font notices.

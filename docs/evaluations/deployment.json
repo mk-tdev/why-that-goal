@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-25T07:51:40.467Z",
+  "recordedAt": "2026-10-25T10:18:29.430Z",
   "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
   "checks": {
     "frontend": true,
@@ -22,26 +22,26 @@
     "liveFeed": true
   },
   "passed": true,
-  "generationModelCalls": 3,
+  "generationModelCalls": 4,
   "verificationCacheHit": true,
   "analysis": {
     "recap": {
       "outcome": "goal",
-      "title": "Goal after forward passes to Silva and Vega",
-      "summary": "Osei found Silva, who moved the ball forward to Vega. Vega offered a destination ahead of the pass, and the nearest opponent was farther from the fixed receiving point at reception. Okafor’s finish is recorded as a goal.",
+      "title": "Okafor’s finish is recorded as a goal",
+      "summary": "Osei’s pass progressed the move to Silva, who found Vega after Vega moved ahead. More separation from the nearest opponent was recorded at Vega’s receiving point by reception. Okafor’s finish was recorded as a goal.",
       "through": 19,
       "terminalFactId": "quick-break-06@1:event",
       "cards": [
         {
-          "title": "Osei finds Silva moving forward",
-          "text": "Osei found Silva, moving the ball toward goal and changing where the next action could begin.",
+          "title": "Osei finds Silva further toward goal",
+          "text": "Osei’s pass moved the ball toward goal and changed where the next action could begin.",
           "factIds": [
             "quick-break-02@1:progress"
           ]
         },
         {
-          "title": "Silva finds Vega ahead",
-          "text": "Silva’s pass to Vega moved the ball toward goal. Vega moved before receiving, offering a new destination ahead of the pass.",
+          "title": "Silva finds Vega after his forward run",
+          "text": "Vega moved ahead before receiving Silva’s pass, which also progressed the ball toward goal.",
           "factIds": [
             "quick-break-03@1:progress",
             "quick-break-03@1:run"
@@ -49,14 +49,14 @@
         },
         {
           "title": "More separation at Vega’s receiving point",
-          "text": "The nearest opponent was farther from the fixed receiving point when the pass arrived. This does not establish that Vega’s run caused the gap.",
+          "text": "The nearest opponent was farther from the fixed receiving point when the pass arrived than earlier; the evidence does not show that Vega’s run caused this change.",
           "factIds": [
             "quick-break-03@1:space-change"
           ]
         },
         {
-          "title": "Okafor’s finish is recorded as a goal",
-          "text": "The terminal event records Okafor’s finish as a goal.",
+          "title": "Okafor’s finish is a goal",
+          "text": "The finish is recorded as a goal.",
           "factIds": [
             "quick-break-06@1:event"
           ]
@@ -65,8 +65,8 @@
       "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
     },
     "buildup": {
-      "title": "Osei and Silva move the ball forward to Vega",
-      "summary": "Osei’s pass to Silva and Silva’s pass to Vega each moved play toward goal. Vega moved before receiving, while the nearest opponent was farther from the fixed receiving point at reception. Okafor’s finish is recorded as a goal.",
+      "title": "Osei and Silva progress the break to Vega",
+      "summary": "Osei’s pass found Silva further toward goal, and Silva then found Vega, who moved ahead before receiving. At Vega’s fixed receiving point, the nearest opponent was farther away at reception than earlier. The sequence ended with Okafor’s finish recorded as a goal; these details describe the move, not what caused the goal.",
       "factIds": [
         "quick-break-02@1:progress",
         "quick-break-03@1:progress",
@@ -546,7 +546,7 @@
       }
     ],
     "trace": {
-      "elapsedMs": 10859,
+      "elapsedMs": 15416,
       "calls": 0,
       "validated": true,
       "workflow": {
@@ -557,8 +557,19 @@
           {
             "agent": "analysis",
             "attempt": 1,
+            "status": "failed",
+            "elapsedMs": 6454,
+            "factIds": [],
+            "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
+            "toolCalls": [],
+            "inputTokens": 2595,
+            "outputTokens": 321
+          },
+          {
+            "agent": "analysis",
+            "attempt": 2,
             "status": "completed",
-            "elapsedMs": 3858,
+            "elapsedMs": 3229,
             "factIds": [
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
@@ -589,14 +600,14 @@
                 "factId": "quick-break-06@1:event"
               }
             ],
-            "inputTokens": 2595,
-            "outputTokens": 361
+            "inputTokens": 2598,
+            "outputTokens": 269
           },
           {
             "agent": "storytelling",
             "attempt": 1,
             "status": "completed",
-            "elapsedMs": 3237,
+            "elapsedMs": 3520,
             "factIds": [
               "quick-break-02@1:progress",
               "quick-break-03@1:progress",
@@ -628,13 +639,13 @@
               }
             ],
             "inputTokens": 1356,
-            "outputTokens": 385
+            "outputTokens": 393
           },
           {
             "agent": "evidence-check",
             "attempt": 1,
             "status": "completed",
-            "elapsedMs": 3760,
+            "elapsedMs": 2202,
             "factIds": [
               "quick-break-01@1:event",
               "quick-break-02@1:event",
@@ -745,11 +756,17 @@
                 "factId": "quick-break-04@1:space-change"
               }
             ],
-            "inputTokens": 3236,
-            "outputTokens": 322
+            "inputTokens": 3244,
+            "outputTokens": 212
           }
         ],
         "handoffs": [
+          {
+            "from": "analysis",
+            "to": "analysis",
+            "reason": "Host contract gate requested one corrected analysis plan.",
+            "factIds": []
+          },
           {
             "from": "analysis",
             "to": "storytelling",
@@ -777,11 +794,11 @@
         ],
         "issues": [],
         "revisions": 0,
-        "modelCalls": 3
+        "modelCalls": 4
       },
       "cacheHit": true,
-      "inputTokens": 7187,
-      "outputTokens": 1068
+      "inputTokens": 9793,
+      "outputTokens": 1195
     }
   },
   "streamFrames": 191,

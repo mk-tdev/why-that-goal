@@ -164,3 +164,11 @@ Superseded the narrated master with `why-that-goal-demo-clean.mp4`: 110 seconds,
 ## Final submission copy — 25 October 2026
 
 Rechecked official rules and inspected the existing Innovation Studio entry, description editor, media dialog and Manage project menu without saving changes. Prepared `docs/submission.md` with confirmed field values, optional category justifications and an explicit pending checklist; `docs/submission-description.md` contains the exact replacement Markdown. The portal still has its initial development description and blank repository field. Public video hosting, portal updates, entrant declarations and final completion remain pending. No separate prize-category selector or final-submit button was observed in the inspected sections.
+
+## Dependency licenses and judging capacity — 25 October 2026
+
+Audited 133 locked npm entries (including platform variants), preserved upstream copyright/license/bundled notices and OFL font notices, published a consolidated copy in the app footer and container, and added a CI/license audit command. Linux image build verified the same audit before pruning build dependencies. Original application licensing was not changed.
+
+Fixed the 200-call lifetime Foundry lockout with automatically expiring 12/minute and 200/rolling-hour process-local gates; honor Azure Retry-After without automatic paid retries and expose remaining capacity in Operations pulse. Added four transport regression tests; all 101 tests and production build pass. Deployed revision why-that-goal--0000003, with Foundry and the three agents connected. Azure reports 100 RPM / 100,000 TPM, no quota increase or new paid service.
+
+Public access/session/CSRF/feed checks passed. The first live multi-outcome attempt used fallback for save/interception output; the initial report is retained. Later bounded generations approved both (interception revised/re-reviewed), and final cached reads approved all three outcomes with 180/200 calls remaining in the hour. These results do not establish uninterrupted inference or independent semantic accuracy. Linked the entrant's finished 1:50 YouTube video in README and submission materials; independent signed-out video playback and portal completion remain unconfirmed. See docs/judging-readiness.md and THIRD_PARTY_NOTICES.md.

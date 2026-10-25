@@ -241,7 +241,11 @@ export function createApiServer(
       if (url.pathname.startsWith('/api/ops/')) {
         if (principal.role !== 'operator') throw new HttpError(403, 'operator_role_required');
         if (req.method !== 'GET') throw new HttpError(405, 'method_not_allowed');
-        if (url.pathname === '/api/ops/metrics') return send(200, ops.snapshot());
+        if (url.pathname === '/api/ops/metrics')
+          return send(200, {
+            ...ops.snapshot(),
+            foundryCapacity: options.adapter?.capacity?.() ?? null,
+          });
         if (url.pathname === '/api/ops/prometheus') {
           res.writeHead(200, { 'Content-Type': 'text/plain; version=0.0.4; charset=utf-8' });
           res.end(ops.prometheus());

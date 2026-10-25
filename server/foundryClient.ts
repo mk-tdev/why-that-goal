@@ -5,6 +5,8 @@ export type FoundryOptions = {
   deployment: string;
   getToken?: (signal: AbortSignal) => Promise<string>;
   maxCalls?: number;
+  budgetWindowMs?: number;
+  now?: () => number;
   requestsPerMinute?: number;
   timeoutMs?: number;
   allowLocalTestEndpoint?: boolean;
@@ -18,8 +20,21 @@ export type ModelCall = {
   maxOutputTokens?: number;
 };
 export type ModelResult = { value: unknown; inputTokens: number; outputTokens: number };
-export type ModelClient = { run(call: ModelCall): Promise<ModelResult> };
-/** Shared transport and process budget. Each agent invocation counts as a separate paid request. */
+export type FoundryCapacity = {
+  scope: 'process-local';
+  callsPerMinute: number;
+  callsPerWindow: number;
+  windowSeconds: number;
+  remainingMinute: number;
+  remainingWindow: number;
+  activeRequests: number;
+  retryAfterSeconds: number;
+};
+export type ModelClient = {
+  run(call: ModelCall): Promise<ModelResult>;
+  capacity?: () => FoundryCapacity;
+};
+/** Rolling, automatically recovering process budgets. Each agent invocation is a paid request. */
 export function createFoundryClient(options: FoundryOptions): ModelClient {
   const url = new URL(options.endpoint);
   if (
@@ -46,20 +61,45 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
       if (!token) throw new Error('Azure authentication unavailable');
       return token.token;
     });
-  let calls = 0,
-    active = 0,
+  const clock = options.now ?? Date.now;
+  const windowMs = options.budgetWindowMs ?? 3600000;
+  const maxCalls = options.maxCalls ?? 200;
+  const perMinute = options.requestsPerMinute ?? 12;
+  let active = 0,
     blockedUntil = 0;
-  let recent: number[] = [];
+  let recent: number[] = [],
+    budget: number[] = [];
+  function capacity(): FoundryCapacity {
+    const now = clock();
+    recent = recent.filter((t) => now - t < 60000);
+    budget = budget.filter((t) => now - t < windowMs);
+    const until = Math.max(
+      blockedUntil,
+      recent.length >= perMinute ? (recent[0] ?? now) + 60000 : 0,
+      budget.length >= maxCalls ? (budget[0] ?? now) + windowMs : 0,
+      active >= 2 ? now + 1000 : 0,
+    );
+    return {
+      scope: 'process-local',
+      callsPerMinute: perMinute,
+      callsPerWindow: maxCalls,
+      windowSeconds: windowMs / 1000,
+      remainingMinute: Math.max(0, perMinute - recent.length),
+      remainingWindow: Math.max(0, maxCalls - budget.length),
+      activeRequests: active,
+      retryAfterSeconds: Math.max(0, Math.ceil((until - now) / 1000)),
+    };
+  }
   return {
+    capacity,
     async run(call) {
-      const now = Date.now();
-      recent = recent.filter((t) => now - t < 60000);
+      const available = capacity();
       if (call.signal.aborted) throw new ProviderFailure('timeout', 0);
       if (
-        now < blockedUntil ||
+        available.retryAfterSeconds > 0 ||
         active >= 2 ||
-        calls >= (options.maxCalls ?? 200) ||
-        recent.length >= (options.requestsPerMinute ?? 12)
+        available.remainingWindow === 0 ||
+        available.remainingMinute === 0
       )
         throw new ProviderFailure('capacity', 0);
       active++;
@@ -72,13 +112,15 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
         const token = await getToken(signal);
         if (signal.aborted) throw new Error('Cancelled');
         // Recheck after asynchronous authentication so concurrent token acquisition cannot exceed budgets.
+        const afterAuth = capacity();
         if (
-          calls >= (options.maxCalls ?? 200) ||
-          recent.length >= (options.requestsPerMinute ?? 12)
+          afterAuth.remainingWindow === 0 ||
+          afterAuth.remainingMinute === 0 ||
+          clock() < blockedUntil
         )
           throw new ProviderFailure('capacity', 0);
-        calls++;
-        recent.push(Date.now());
+        recent.push(clock());
+        budget.push(clock());
         sent = true;
         const response = await fetch(url, {
           method: 'POST',
@@ -97,6 +139,19 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
             },
           }),
         });
+        if (response.status === 429) {
+          const header = response.headers.get('retry-after');
+          const seconds =
+            header && /^\d+(\.\d+)?$/.test(header)
+              ? Number(header)
+              : header
+                ? (Date.parse(header) - clock()) / 1000
+                : 20;
+          blockedUntil =
+            clock() +
+            Math.min(3600000, Math.max(1000, (Number.isFinite(seconds) ? seconds : 20) * 1000));
+          throw new ProviderFailure('capacity', 1);
+        }
         if (!response.ok) throw new Error(`Foundry HTTP ${response.status}`);
         const body = (await response.json()) as {
           status?: string;
@@ -127,7 +182,9 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
           outputTokens: body.usage?.output_tokens ?? 0,
         };
       } catch (error) {
-        blockedUntil = Date.now() + 20000;
+        // Locally exhausted budgets have their own expiry; do not prolong them on each poll.
+        if (!(error instanceof ProviderFailure && error.reason === 'capacity'))
+          blockedUntil = Math.max(blockedUntil, clock() + 20000);
         if (error instanceof ProviderFailure) throw error;
         console.warn(
           'Foundry request failed:',

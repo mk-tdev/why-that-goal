@@ -1,0 +1,172 @@
+{
+  "recordedAt": "2026-10-25T10:22:00.374Z",
+  "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "anonymousReplay": true,
+  "passwordlessWorkspace": true,
+  "publicNotices": true,
+  "capacityBefore": {
+    "scope": "process-local",
+    "callsPerMinute": 12,
+    "callsPerWindow": 200,
+    "windowSeconds": 3600,
+    "remainingMinute": 12,
+    "remainingWindow": 180,
+    "activeRequests": 0,
+    "retryAfterSeconds": 0
+  },
+  "capacityAfter": {
+    "scope": "process-local",
+    "callsPerMinute": 12,
+    "callsPerWindow": 200,
+    "windowSeconds": 3600,
+    "remainingMinute": 12,
+    "remainingWindow": 180,
+    "activeRequests": 0,
+    "retryAfterSeconds": 0
+  },
+  "cases": [
+    {
+      "scenarioId": "quick-break",
+      "expectedOutcome": "goal",
+      "actualOutcome": "goal",
+      "mode": "model-selected",
+      "reason": "validated",
+      "cacheHit": true,
+      "workflowStatus": "approved",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 4,
+      "steps": [
+        {
+          "agent": "analysis",
+          "attempt": 1,
+          "status": "failed",
+          "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld."
+        },
+        {
+          "agent": "analysis",
+          "attempt": 2,
+          "status": "completed",
+          "summary": "Selected findings checked against measured facts."
+        },
+        {
+          "agent": "storytelling",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Cited draft handed to independent evidence review."
+        },
+        {
+          "agent": "evidence-check",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "All narrative targets reviewed; publication approved."
+        }
+      ],
+      "issues": [],
+      "elapsedMs": 12,
+      "clickableEvidence": true
+    },
+    {
+      "scenarioId": "cutback-save",
+      "expectedOutcome": "save",
+      "actualOutcome": "save",
+      "mode": "model-selected",
+      "reason": "validated",
+      "cacheHit": true,
+      "workflowStatus": "approved",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 3,
+      "steps": [
+        {
+          "agent": "analysis",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Selected findings checked against measured facts."
+        },
+        {
+          "agent": "storytelling",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Cited draft handed to independent evidence review."
+        },
+        {
+          "agent": "evidence-check",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "All narrative targets reviewed; publication approved."
+        }
+      ],
+      "issues": [],
+      "elapsedMs": 10,
+      "clickableEvidence": true
+    },
+    {
+      "scenarioId": "counter-cut-out",
+      "expectedOutcome": "failed-attack",
+      "actualOutcome": "failed-attack",
+      "mode": "model-selected",
+      "reason": "validated",
+      "cacheHit": true,
+      "workflowStatus": "approved",
+      "roles": [
+        "analysis",
+        "storytelling",
+        "evidence-check"
+      ],
+      "modelCalls": 5,
+      "steps": [
+        {
+          "agent": "analysis",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Selected findings checked against measured facts."
+        },
+        {
+          "agent": "storytelling",
+          "attempt": 1,
+          "status": "completed",
+          "summary": "Cited draft handed to independent evidence review."
+        },
+        {
+          "agent": "evidence-check",
+          "attempt": 1,
+          "status": "revision-requested",
+          "summary": "Review completed against the full evidence snapshot."
+        },
+        {
+          "agent": "storytelling",
+          "attempt": 2,
+          "status": "completed",
+          "summary": "Cited draft handed to independent evidence review."
+        },
+        {
+          "agent": "evidence-check",
+          "attempt": 2,
+          "status": "completed",
+          "summary": "All narrative targets reviewed; publication approved."
+        }
+      ],
+      "issues": [
+        {
+          "target": "story",
+          "reason": "causal-overclaim",
+          "detail": "“His movement created a new destination” overstates the run evidence, which says Silva’s movement offered a new passing destination ahead; it does not establish that the movement created it.",
+          "factIds": [
+            "counter-cut-out-02@1:run"
+          ]
+        }
+      ],
+      "elapsedMs": 12,
+      "clickableEvidence": true
+    }
+  ],
+  "passed": true,
+  "scope": "Small real public-deployment judge walkthrough with managed-identity Foundry. Each first uncached workflow may incur charges. Cached results are explicit. Not an uptime guarantee, traffic forecast or independent semantic accuracy assessment."
+}

@@ -12,6 +12,7 @@ test('production frontend serves only built assets, preserves API protection and
   await writeFile(join(root, 'index.html'), '<html>public replay</html>');
   await writeFile(join(root, 'assets', 'main-123.js'), 'console.log("replay")');
   await writeFile(join(root, '.env'), 'private');
+  await writeFile(join(root, 'third-party-notices.txt'), 'Upstream license notices');
   const server = createApiServer({
     staticDirectory: root,
     auth: {
@@ -31,6 +32,10 @@ test('production frontend serves only built assets, preserves API protection and
     assert.match(await home.text(), /public replay/);
     assert.match(home.headers.get('content-security-policy')!, /frame-ancestors 'none'/);
     assert.equal(home.headers.get('cache-control'), 'no-cache');
+    const notices = await fetch(`${base}/third-party-notices.txt`);
+    assert.equal(notices.status, 200);
+    assert.match(notices.headers.get('content-type')!, /text\/plain/);
+    assert.equal(await notices.text(), 'Upstream license notices');
     const asset = await fetch(`${base}/assets/main-123.js`);
     assert.match(asset.headers.get('cache-control')!, /immutable/);
     assert.equal((await fetch(`${base}/assets/missing.js`)).status, 404);

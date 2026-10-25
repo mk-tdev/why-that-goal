@@ -1,4 +1,5 @@
 import type { Scenario } from '../src/core/model';
+import type { FoundryCapacity } from './foundryClient';
 import type { WorkflowTrace } from './agentContracts';
 import { createRecap } from './recap';
 import { validateNarrative, type Narrative } from './narrative';
@@ -17,6 +18,7 @@ import { createEvidenceTools, type EvidenceTools } from './evidence';
 export interface IntelligenceAdapter {
   name: string;
   timeoutMs?: number;
+  capacity?: () => FoundryCapacity;
   select(input: {
     evidence: EvidencePacket;
     tools: EvidenceTools;

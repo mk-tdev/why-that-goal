@@ -9,7 +9,7 @@ Why That Goal? is an interactive football companion built for Microsoft and the 
 
 It turns fictional match events into a story you can explore: follow the attack, understand the key passes and runs, and click an explanation to see the evidence directly on the pitch.
 
-[Our hackathon project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704) · [The challenge](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/executive_challenge_details/5078/about)
+[Watch the 1:50 demo video](https://www.youtube.com/watch?v=qVZuNPllBsk) · [Our hackathon project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/126704) · [The challenge](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/executive_challenge_details/5078/about)
 
 ![Why That Goal? interactive football replay](docs/screenshots/stadium-3d.jpg)
 
@@ -49,7 +49,7 @@ The replay, live synthetic feed, clickable explanations, automatic sequence reca
 
 **Microsoft Foundry powers the buildup explanations and sequence recaps.** It writes audience- and language-specific narratives with versioned evidence citations. Measured geometry and replay targets remain code-derived. The replay shows measured evidence immediately while a story is being generated, and clearly identifies deterministic fallback. Generated stories are cached in memory, so the first run of a sequence can take longer than a repeat.
 
-Recorded checks are published in [`public/verification.json`](public/verification.json) and shown in **Inside the intelligence**. They cover 40/40 controlled checks, 4/4 approved live Foundry cases and a reviewer-corrected false-save fault. These are integration evidence, not an independent AI quality benchmark. The public demo video is still to be recorded.
+Recorded checks are published in [`public/verification.json`](public/verification.json) and shown in **Inside the intelligence**. They cover 40/40 controlled checks, 4/4 approved live Foundry cases and a reviewer-corrected false-save fault. These are integration evidence, not an independent AI quality benchmark. The [public 1:50 demo video](https://www.youtube.com/watch?v=qVZuNPllBsk) is uploaded.
 
 All teams, players and match data are fictional and created for this project. This is a hackathon prototype, not a live Premier League data service.
 
@@ -103,4 +103,8 @@ Run `npm run evaluate:enterprise` for forty reserved-case stress checks, `npm ru
 
 ## Judge walkthrough
 
-Open **Inside the intelligence** for the five-stage pipeline, current Foundry handoffs, the recorded false-save correction and evaluation limits. Choose **Open workspace → Enter Workspace** for the broadcast console and Operations pulse. No password is required. [Criteria review](docs/judging-review.md) · [Submission copy and 110-second demo script](docs/submission.md).
+Open **Inside the intelligence** for the five-stage pipeline, current Foundry handoffs, the recorded false-save correction and evaluation limits. Choose **Open workspace → Enter Workspace** for the broadcast console and Operations pulse. No password is required. [Criteria review](docs/judging-review.md) · [Submission field guide](docs/submission.md).
+
+## Third-party licenses
+
+[Dependency and asset notices](THIRD_PARTY_NOTICES.md) · [Exact lockfile audit](docs/evaluations/dependency-licenses.json). Run `npm run audit:licenses` after installing all dependencies. Notices also ship in the app footer and container; original application code is not relicensed by that notice file.
