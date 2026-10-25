@@ -1,5 +1,8 @@
 # Why That Goal?
 
+**[Open the public judge demo](https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io)** — no sign-in. Foundry and all three agents are connected. [Deployment, costs and verification](docs/deployment.md).
+
+
 **The goal is the ending. Discover the play that made it possible.**
 
 Why That Goal? is an interactive football companion built for Microsoft and the Premier League’s **Inside the Game: Developer Hackathon**, tackling **The Synthetic Match Insights Engine for Premier League Studio** challenge.

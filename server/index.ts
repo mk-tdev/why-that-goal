@@ -6,6 +6,8 @@ const shutdown = new AbortController();
 const adapter = configuredFoundry();
 const server = createApiServer({
   adapter,
+  staticDirectory: process.env.STATIC_DIRECTORY,
+  trustAzureIngress: process.env.TRUST_AZURE_INGRESS === 'true',
   auth: configuredSecurity(),
   operations: new Operations(),
   shutdownSignal: shutdown.signal,
@@ -15,9 +17,10 @@ const server = createApiServer({
 });
 server.requestTimeout = 30000;
 server.headersTimeout = 10000;
-server.listen(8791, '127.0.0.1', () =>
+const port = Number(process.env.PORT ?? 8791);
+server.listen(port, process.env.HOST ?? '127.0.0.1', () =>
   console.log(
-    `Evidence API: http://127.0.0.1:8791 — ${adapter ? 'Foundry configured' : 'Foundry disconnected'}`,
+    `Evidence API: http://localhost:${port} — ${adapter ? 'Foundry configured' : 'Foundry disconnected'}`,
   ),
 );
 

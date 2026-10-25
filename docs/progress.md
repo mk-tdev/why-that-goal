@@ -136,3 +136,9 @@ Validation: 92 tests pass, production build passes, dependency audit reports zer
 ## 25 October 2026 — Frictionless judging
 
 Enabled explicit public demo access for the hackathon. Judges enter the replay and connected Foundry analysis without credentials; administrative tools remain operator-only. Anonymous calls retain peer-IP request/job/stream quotas and global inference limits. Private deployments can disable public access and optionally use Entra. Browser verification confirmed direct entry, public-demo status and disabled operator mode after restart without a valid session. All 93 tests and the production build pass.
+
+## 25 October 2026 — Public Azure deployment
+
+Deployed the no-login judging experience to Azure Container Apps Consumption in Southeast Asia. One HTTPS origin serves built assets, the evidence API and paced SSE. The app uses an approved user-assigned managed identity with registry-pull and account-scoped inference roles, not a model API key. All three Foundry agents completed a reviewed goal narrative in 12.6 seconds; anonymous access, protected metrics/private files, origin checks, 191 paced SSE frames and automatic recap were verified over the public URL. Browser inspection verified the 3D stadium and a recap evidence jump into the measured receiving run.
+
+Cost controls: 0.25 vCPU / 0.5 GiB, scale zero-to-one, existing registry reused, no dedicated pool or paid log ingestion. Free grants are shared and Foundry token billing remains separate; process budgets reset on restart and do not guarantee a monthly spending cap. Added a production Dockerfile, scoped ingress-IP trust, static isolation/cache/security headers, repeatable deployment and public-verification scripts, and cost/operations guidance. All 95 tests and the production build pass. The retained final HTTPS verification used the cached approved workflow after fixing test-harness agent-name labels, with no change to model output.

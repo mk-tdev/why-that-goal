@@ -1,0 +1,812 @@
+{
+  "recordedAt": "2026-10-25T07:34:56.315Z",
+  "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "checks": {
+    "frontend": true,
+    "securityHeaders": true,
+    "foundryConfigured": true,
+    "publicDemo": true,
+    "noLoginOrSessionCookie": true,
+    "operatorProtected": true,
+    "secretFilesBlocked": true,
+    "originRestriction": true,
+    "reviewedFoundryStory": true,
+    "threeConnectedAgents": true,
+    "goalRecap": true,
+    "liveFeed": true
+  },
+  "passed": true,
+  "analysis": {
+    "recap": {
+      "outcome": "goal",
+      "title": "Goal: Okafor finishes the move",
+      "summary": "The ball progressed through Silva to Vega before Okafor\u2019s finish was recorded as a goal.",
+      "through": 19,
+      "terminalFactId": "quick-break-06@1:event",
+      "cards": [
+        {
+          "title": "Osei finds Silva",
+          "text": "Osei moved the ball toward goal to find Silva, but space at the receiving point narrowed by reception.",
+          "factIds": [
+            "quick-break-02@1:progress",
+            "quick-break-02@1:space-change"
+          ]
+        },
+        {
+          "title": "Silva finds Vega",
+          "text": "Silva progressed the ball to Vega, who moved before receiving to offer a new destination. Space at the fixed receiving point opened by reception.",
+          "factIds": [
+            "quick-break-03@1:progress",
+            "quick-break-03@1:run",
+            "quick-break-03@1:space-change"
+          ]
+        },
+        {
+          "title": "Okafor scores",
+          "text": "Okafor\u2019s finish is recorded as a goal.",
+          "factIds": [
+            "quick-break-06@1:event"
+          ]
+        }
+      ],
+      "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+    },
+    "buildup": {
+      "title": "Osei and Silva progress the ball; Vega offers a forward option",
+      "summary": "Osei\u2019s pass found Silva farther toward goal, though the gap at Silva\u2019s receiving point narrowed. Silva then found Vega, whose movement offered a new destination ahead of the pass; space at Vega\u2019s fixed receiving point had opened by reception. Okafor\u2019s finish was recorded as a goal.",
+      "factIds": [
+        "quick-break-02@1:progress",
+        "quick-break-02@1:space-change",
+        "quick-break-03@1:progress",
+        "quick-break-03@1:run",
+        "quick-break-03@1:space-change",
+        "quick-break-06@1:event"
+      ],
+      "limitation": "Foundry-generated interpretation \u00b7 citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+    },
+    "schemaVersion": "1.0",
+    "mode": "model-selected",
+    "provider": "microsoft-foundry-multi-agent",
+    "reason": "validated",
+    "evidence": {
+      "schemaVersion": "1.0",
+      "source": "synthetic",
+      "request": {
+        "scenarioId": "quick-break",
+        "through": 19,
+        "receivedThrough": 19,
+        "audience": "fan",
+        "language": "en"
+      },
+      "score": {
+        "home": 1,
+        "away": 0
+      },
+      "facts": [
+        {
+          "eventId": "quick-break-01",
+          "version": 1,
+          "at": 1,
+          "playerId": "N-6",
+          "target": {
+            "x": 57,
+            "y": 31
+          },
+          "id": "quick-break-01@1:event",
+          "kind": "event",
+          "text": "Osei recovers the ball. This is the first recorded action in this sequence; the preceding pressure is not measured.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-6",
+          "target": {
+            "x": 72,
+            "y": 24
+          },
+          "id": "quick-break-02@1:event",
+          "kind": "event",
+          "text": "Osei finds Silva with a 16.6-metre pass. The highlighted line shows the ball's recorded route.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-6",
+          "target": {
+            "x": 72,
+            "y": 24
+          },
+          "id": "quick-break-02@1:distance",
+          "kind": "pass-distance",
+          "value": 16.6,
+          "unit": "m",
+          "text": "The pass travelled 16.6 m.",
+          "method": "Euclidean distance between event endpoints."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-6",
+          "target": {
+            "x": 72,
+            "y": 24
+          },
+          "id": "quick-break-02@1:space",
+          "kind": "receiver-space",
+          "value": 2.9,
+          "unit": "m",
+          "text": "At reception, the nearest opponent was 2.9 m from the receiving point.",
+          "method": "Nearest opponent distance at reception from synthetic tracking; not pressure, pass difficulty or causation."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-8",
+          "target": {
+            "x": 88,
+            "y": 46
+          },
+          "id": "quick-break-03@1:event",
+          "kind": "event",
+          "text": "Silva finds Vega with a 25.3-metre pass. The highlighted line shows the ball's recorded route.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-8",
+          "target": {
+            "x": 88,
+            "y": 46
+          },
+          "id": "quick-break-03@1:distance",
+          "kind": "pass-distance",
+          "value": 25.3,
+          "unit": "m",
+          "text": "The pass travelled 25.3 m.",
+          "method": "Euclidean distance between event endpoints."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-8",
+          "target": {
+            "x": 88,
+            "y": 46
+          },
+          "id": "quick-break-03@1:space",
+          "kind": "receiver-space",
+          "value": 7.4,
+          "unit": "m",
+          "text": "At reception, the nearest opponent was 7.4 m from the receiving point.",
+          "method": "Nearest opponent distance at reception from synthetic tracking; not pressure, pass difficulty or causation."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-7",
+          "target": {
+            "x": 94,
+            "y": 34
+          },
+          "id": "quick-break-04@1:event",
+          "kind": "event",
+          "text": "Vega finds Okafor with a 11.8-metre pass. The highlighted line shows the ball's recorded route.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-7",
+          "target": {
+            "x": 94,
+            "y": 34
+          },
+          "id": "quick-break-04@1:distance",
+          "kind": "pass-distance",
+          "value": 11.8,
+          "unit": "m",
+          "text": "The pass travelled 11.8 m.",
+          "method": "Euclidean distance between event endpoints."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-7",
+          "target": {
+            "x": 94,
+            "y": 34
+          },
+          "id": "quick-break-04@1:space",
+          "kind": "receiver-space",
+          "value": 5.4,
+          "unit": "m",
+          "text": "At reception, the nearest opponent was 5.4 m from the receiving point.",
+          "method": "Nearest opponent distance at reception from synthetic tracking; not pressure, pass difficulty or causation."
+        },
+        {
+          "eventId": "quick-break-05",
+          "version": 1,
+          "at": 15.586129171721417,
+          "playerId": "N-9",
+          "target": {
+            "x": 105,
+            "y": 31.8
+          },
+          "id": "quick-break-05@1:event",
+          "kind": "event",
+          "text": "Okafor takes a shot from 9.6 m from the centre of goal. This is distance, not an expected-goals probability.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-06",
+          "version": 1,
+          "at": 16,
+          "playerId": "N-9",
+          "target": {
+            "x": 105,
+            "y": 31.8
+          },
+          "id": "quick-break-06@1:event",
+          "kind": "event",
+          "text": "Okafor's finish is recorded as a goal. Rewind the preceding passes to inspect how the ball reached this position.",
+          "method": "Recorded synthetic event; not causal evidence."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-6",
+          "target": {
+            "x": 72,
+            "y": 24
+          },
+          "fromTime": 2,
+          "toTime": 4,
+          "id": "quick-break-02@1:progress",
+          "kind": "pass-progress",
+          "value": 15,
+          "unit": "m",
+          "text": "Osei found Silva, moving the ball 15 m toward goal. This changed where the next action could begin.",
+          "method": "Signed endpoint progress along the team attacking axis; not a line-break classification."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-8",
+          "target": {
+            "x": 71.9990973046875,
+            "y": 23.99975928125
+          },
+          "fromTime": 2,
+          "toTime": 3.9,
+          "id": "quick-break-02@1:run",
+          "kind": "off-ball-run",
+          "value": 3.1,
+          "unit": "m",
+          "text": "Silva moved 3.1 m before receiving, offering a new passing destination ahead of the pass from Osei.",
+          "method": "Receiver endpoint displacement before reception, excluding recorded possession/actions; not distance travelled or proof a defender was drawn away."
+        },
+        {
+          "eventId": "quick-break-02",
+          "version": 1,
+          "at": 4,
+          "playerId": "N-6",
+          "target": {
+            "x": 72,
+            "y": 24
+          },
+          "fromTime": 2,
+          "toTime": 4,
+          "id": "quick-break-02@1:space-change",
+          "kind": "space-change",
+          "value": -0.6,
+          "before": 3.5,
+          "after": 2.9,
+          "unit": "m",
+          "text": "Space at the receiving point closed: the nearest opponent was 3.5 m away, then 2.9 m at reception. The gap at that fixed point did not grow during this interval.",
+          "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-8",
+          "target": {
+            "x": 88,
+            "y": 46
+          },
+          "fromTime": 6,
+          "toTime": 8,
+          "id": "quick-break-03@1:progress",
+          "kind": "pass-progress",
+          "value": 13.8,
+          "unit": "m",
+          "text": "Silva found Vega, moving the ball 13.8 m toward goal. This changed where the next action could begin.",
+          "method": "Signed endpoint progress along the team attacking axis; not a line-break classification."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-7",
+          "target": {
+            "x": 87.9974110954513,
+            "y": 46.0008629681829
+          },
+          "fromTime": 6,
+          "toTime": 7.9,
+          "id": "quick-break-03@1:run",
+          "kind": "off-ball-run",
+          "value": 5.4,
+          "unit": "m",
+          "text": "Vega moved 5.4 m before receiving, offering a new passing destination ahead of the pass from Silva.",
+          "method": "Receiver endpoint displacement before reception, excluding recorded possession/actions; not distance travelled or proof a defender was drawn away."
+        },
+        {
+          "eventId": "quick-break-03",
+          "version": 1,
+          "at": 8,
+          "playerId": "N-8",
+          "target": {
+            "x": 88,
+            "y": 46
+          },
+          "fromTime": 6,
+          "toTime": 8,
+          "id": "quick-break-03@1:space-change",
+          "kind": "space-change",
+          "value": 1,
+          "before": 6.5,
+          "after": 7.4,
+          "unit": "m",
+          "text": "Space at the receiving point opened: the nearest opponent was 6.5 m away, then 7.4 m at reception. The pass arrived with more separation from the nearest defender.",
+          "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-7",
+          "target": {
+            "x": 94,
+            "y": 34
+          },
+          "fromTime": 10,
+          "toTime": 12,
+          "id": "quick-break-04@1:progress",
+          "kind": "pass-progress",
+          "value": 3.8,
+          "unit": "m",
+          "text": "Vega found Okafor, moving the ball 3.8 m toward goal. This changed where the next action could begin.",
+          "method": "Signed endpoint progress along the team attacking axis; not a line-break classification."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-9",
+          "target": {
+            "x": 93.9974110954513,
+            "y": 34.0008629681829
+          },
+          "fromTime": 10,
+          "toTime": 11.9,
+          "id": "quick-break-04@1:run",
+          "kind": "off-ball-run",
+          "value": 5.4,
+          "unit": "m",
+          "text": "Okafor moved 5.4 m before receiving, offering a new passing destination ahead of the pass from Vega.",
+          "method": "Receiver endpoint displacement before reception, excluding recorded possession/actions; not distance travelled or proof a defender was drawn away."
+        },
+        {
+          "eventId": "quick-break-04",
+          "version": 1,
+          "at": 12,
+          "playerId": "N-7",
+          "target": {
+            "x": 94,
+            "y": 34
+          },
+          "fromTime": 10,
+          "toTime": 12,
+          "id": "quick-break-04@1:space-change",
+          "kind": "space-change",
+          "value": 0,
+          "before": 5.4,
+          "after": 5.4,
+          "unit": "m",
+          "text": "Space at the receiving point held roughly steady: the nearest opponent was 5.4 m away, then 5.4 m at reception. The gap at that fixed point did not grow during this interval.",
+          "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap."
+        }
+      ],
+      "limitations": [
+        "Authored synthetic sequence, not live football.",
+        "Spatial measurements are retrospective and do not establish why a goal happened.",
+        "Tracking is preloaded synthetic data; independent tracking arrival timestamps are not modeled."
+      ]
+    },
+    "moments": [
+      {
+        "eventId": "quick-break-02",
+        "version": 1,
+        "at": 4,
+        "playerId": "N-6",
+        "target": {
+          "x": 72,
+          "y": 24
+        },
+        "fromTime": 2,
+        "toTime": 4,
+        "id": "quick-break-02@1:progress",
+        "kind": "pass-progress",
+        "value": 15,
+        "unit": "m",
+        "text": "Osei found Silva, moving the ball 15 m toward goal. This changed where the next action could begin.",
+        "method": "Signed endpoint progress along the team attacking axis; not a line-break classification.",
+        "replayAt": 4
+      },
+      {
+        "eventId": "quick-break-02",
+        "version": 1,
+        "at": 4,
+        "playerId": "N-6",
+        "target": {
+          "x": 72,
+          "y": 24
+        },
+        "fromTime": 2,
+        "toTime": 4,
+        "id": "quick-break-02@1:space-change",
+        "kind": "space-change",
+        "value": -0.6,
+        "before": 3.5,
+        "after": 2.9,
+        "unit": "m",
+        "text": "Space at the receiving point closed: the nearest opponent was 3.5 m away, then 2.9 m at reception. The gap at that fixed point did not grow during this interval.",
+        "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap.",
+        "replayAt": 4
+      },
+      {
+        "eventId": "quick-break-03",
+        "version": 1,
+        "at": 8,
+        "playerId": "N-8",
+        "target": {
+          "x": 88,
+          "y": 46
+        },
+        "fromTime": 6,
+        "toTime": 8,
+        "id": "quick-break-03@1:progress",
+        "kind": "pass-progress",
+        "value": 13.8,
+        "unit": "m",
+        "text": "Silva found Vega, moving the ball 13.8 m toward goal. This changed where the next action could begin.",
+        "method": "Signed endpoint progress along the team attacking axis; not a line-break classification.",
+        "replayAt": 8
+      },
+      {
+        "eventId": "quick-break-03",
+        "version": 1,
+        "at": 8,
+        "playerId": "N-7",
+        "target": {
+          "x": 87.9974110954513,
+          "y": 46.0008629681829
+        },
+        "fromTime": 6,
+        "toTime": 7.9,
+        "id": "quick-break-03@1:run",
+        "kind": "off-ball-run",
+        "value": 5.4,
+        "unit": "m",
+        "text": "Vega moved 5.4 m before receiving, offering a new passing destination ahead of the pass from Silva.",
+        "method": "Receiver endpoint displacement before reception, excluding recorded possession/actions; not distance travelled or proof a defender was drawn away.",
+        "replayAt": 8
+      },
+      {
+        "eventId": "quick-break-03",
+        "version": 1,
+        "at": 8,
+        "playerId": "N-8",
+        "target": {
+          "x": 88,
+          "y": 46
+        },
+        "fromTime": 6,
+        "toTime": 8,
+        "id": "quick-break-03@1:space-change",
+        "kind": "space-change",
+        "value": 1,
+        "before": 6.5,
+        "after": 7.4,
+        "unit": "m",
+        "text": "Space at the receiving point opened: the nearest opponent was 6.5 m away, then 7.4 m at reception. The pass arrived with more separation from the nearest defender.",
+        "method": "Nearest-opponent distance to one fixed receiving point at two timestamps. The nearest opponent may change; this does not establish that the run caused the gap.",
+        "replayAt": 8
+      },
+      {
+        "eventId": "quick-break-06",
+        "version": 1,
+        "at": 16,
+        "playerId": "N-9",
+        "target": {
+          "x": 105,
+          "y": 31.8
+        },
+        "id": "quick-break-06@1:event",
+        "kind": "event",
+        "text": "Okafor's finish is recorded as a goal. Rewind the preceding passes to inspect how the ball reached this position.",
+        "method": "Recorded synthetic event; not causal evidence.",
+        "replayAt": 16
+      }
+    ],
+    "trace": {
+      "elapsedMs": 12629,
+      "calls": 0,
+      "validated": true,
+      "workflow": {
+        "snapshotId": "34a33a9bcdb4fe7a",
+        "version": "1.0",
+        "status": "approved",
+        "steps": [
+          {
+            "agent": "analysis",
+            "attempt": 1,
+            "status": "completed",
+            "elapsedMs": 6374,
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-02@1:space-change",
+              "quick-break-06@1:event"
+            ],
+            "summary": "Selected findings checked against measured facts.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              }
+            ],
+            "inputTokens": 2595,
+            "outputTokens": 258
+          },
+          {
+            "agent": "storytelling",
+            "attempt": 1,
+            "status": "completed",
+            "elapsedMs": 3036,
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-02@1:space-change",
+              "quick-break-06@1:event"
+            ],
+            "summary": "Cited draft handed to independent evidence review.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              }
+            ],
+            "inputTokens": 1544,
+            "outputTokens": 341
+          },
+          {
+            "agent": "evidence-check",
+            "attempt": 1,
+            "status": "completed",
+            "elapsedMs": 3210,
+            "factIds": [
+              "quick-break-01@1:event",
+              "quick-break-02@1:event",
+              "quick-break-02@1:distance",
+              "quick-break-02@1:space",
+              "quick-break-03@1:event",
+              "quick-break-03@1:distance",
+              "quick-break-03@1:space",
+              "quick-break-04@1:event",
+              "quick-break-04@1:distance",
+              "quick-break-04@1:space",
+              "quick-break-05@1:event",
+              "quick-break-06@1:event",
+              "quick-break-02@1:progress",
+              "quick-break-02@1:run",
+              "quick-break-02@1:space-change",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-04@1:progress",
+              "quick-break-04@1:run",
+              "quick-break-04@1:space-change"
+            ],
+            "summary": "All narrative targets reviewed; publication approved.",
+            "toolCalls": [
+              {
+                "name": "getFact",
+                "factId": "quick-break-01@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:distance"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-05@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-06@1:event"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-02@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-03@1:space-change"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:progress"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:run"
+              },
+              {
+                "name": "getFact",
+                "factId": "quick-break-04@1:space-change"
+              }
+            ],
+            "inputTokens": 3216,
+            "outputTokens": 205
+          }
+        ],
+        "handoffs": [
+          {
+            "from": "analysis",
+            "to": "storytelling",
+            "reason": "Ranked measured findings and hydrated evidence.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-02@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          },
+          {
+            "from": "storytelling",
+            "to": "evidence-check",
+            "reason": "Draft and exact citations; reviewer can inspect all facts.",
+            "factIds": [
+              "quick-break-02@1:progress",
+              "quick-break-02@1:space-change",
+              "quick-break-03@1:progress",
+              "quick-break-03@1:run",
+              "quick-break-03@1:space-change",
+              "quick-break-06@1:event"
+            ]
+          }
+        ],
+        "issues": [],
+        "revisions": 0,
+        "modelCalls": 3
+      },
+      "cacheHit": true,
+      "inputTokens": 7355,
+      "outputTokens": 804
+    }
+  },
+  "streamFrames": 191,
+  "scope": "Real public HTTPS app, anonymous judge access, deployed managed-identity Foundry workflow and paced synthetic SSE. Not a load/availability certification.",
+  "generationModelCalls": 3,
+  "verificationCacheHit": true
+}

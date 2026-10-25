@@ -1,0 +1,13 @@
+{
+  "subscription": "23894f22-7366-444f-80dd-73ee86709eed",
+  "resourceGroup": "rg-why-that-goal",
+  "location": "southeastasia",
+  "environment": "cae-why-that-goal",
+  "app": "why-that-goal",
+  "registry": "acrvillageshadows23894.azurecr.io",
+  "identityName": "id-why-that-goal",
+  "identityClientId": "f6a83bf3-ce5c-41b6-b923-1570e7e685f4",
+  "publicOrigin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "foundryEndpoint": "https://why-that-goal.services.ai.azure.com/openai/v1/responses",
+  "foundryDeployment": "wtg-insights"
+}

@@ -1,0 +1,10 @@
+{
+  "deployedAt": "2026-10-25",
+  "origin": "https://why-that-goal.blacksand-18241469.southeastasia.azurecontainerapps.io",
+  "revision": "why-that-goal--lwrrufl",
+  "image": "acrvillageshadows23894.azurecr.io/why-that-goal@sha256:ffb08ff998516c7562dbf7678b08df85330a6c0ec329c7b7b058f91e7a5b5396",
+  "publicDemo": true,
+  "foundryOrchestration": "multi-agent",
+  "testsPassed": 95,
+  "publicVerification": "docs/evaluations/deployment.json"
+}

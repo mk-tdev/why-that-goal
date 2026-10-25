@@ -1,5 +1,7 @@
 # Enterprise controls and validation
 
+The [public hackathon deployment](deployment.md) now runs on Azure Container Apps Consumption with managed-identity Foundry inference and open judge access. Hosted monitoring remains process-local; no paid log ingestion or pager is configured.
+
 This release adds working access control, caller limits, operational telemetry and reserved-case evaluation around the connected Foundry agents. It is a single-process prototype with concrete enterprise foundations, not an independently certified or production-scale service.
 
 ## Access model

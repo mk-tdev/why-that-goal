@@ -1,3 +1,5 @@
+import { isIP } from 'node:net';
+import { serveFrontend } from './static';
 import { randomUUID } from 'node:crypto';
 import { createServer, type IncomingMessage } from 'node:http';
 import { scenarios } from '../src/core/scenarios';
@@ -29,6 +31,8 @@ async function json(req: IncomingMessage, max = 8192) {
 }
 export function createApiServer(
   options: {
+    staticDirectory?: string;
+    trustAzureIngress?: boolean;
     intervalMs?: number;
     speed?: number;
     adapter?: IntelligenceAdapter;
@@ -75,6 +79,8 @@ export function createApiServer(
       ops.request('unknown', 400, performance.now() - started, requestId);
       return;
     }
+    if (options.staticDirectory && url.pathname !== '/api' && !url.pathname.startsWith('/api/'))
+      return serveFrontend(req, res, options.staticDirectory, url.pathname);
     const routes = [
       '/api/health',
       '/api/ready',
@@ -89,7 +95,14 @@ export function createApiServer(
       '/api/ops/prometheus',
     ];
     const route = routes.includes(url.pathname) ? url.pathname : 'unknown';
-    const ip = req.socket.remoteAddress ?? 'unknown';
+    const forwarded = req.headers['x-forwarded-for'];
+    const rightmost =
+      typeof forwarded === 'string' ? forwarded.split(',').at(-1)?.trim() : undefined;
+    // ACA appends the rightmost client IP. Enable only behind its managed ingress.
+    const ip =
+      options.trustAzureIngress && rightmost && isIP(rightmost)
+        ? rightmost
+        : (req.socket.remoteAddress ?? 'unknown');
     res.setHeader('X-Request-Id', requestId);
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'no-store');
