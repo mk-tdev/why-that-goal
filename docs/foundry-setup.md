@@ -36,3 +36,7 @@ For this repository, use the environment variables listed above; they are read b
 ## Orchestration mode
 
 When enabled, Foundry defaults to the three-agent workflow. Set `FOUNDRY_ORCHESTRATION=single-agent` for the original baseline and restart the API. Each reviewed story normally uses three requests, with a maximum of six including bounded contract correction and one writer revision. Measured evidence continues immediately while agents work.
+
+## Workspace access
+
+The API now requires authentication. Run `npm run setup:auth` once for local access and read the ignored `research/local-access.txt` file. This checkout is already configured. Authentication does not change the Azure identity used by Foundry: `az login` remains the development model credential, and model tokens never reach the browser. Entra production sign-in is a separate application registration; see [enterprise setup](enterprise-readiness.md).

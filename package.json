@@ -14,10 +14,15 @@
     "dev:api": "node --env-file-if-exists=.env --import tsx server/index.ts",
     "evaluate:scenarios": "node --import tsx scripts/evaluate-scenarios.ts",
     "check:foundry": "node --env-file-if-exists=.env --import tsx scripts/check-foundry.ts",
-    "evaluate:agents": "node --env-file-if-exists=.env --import tsx scripts/evaluate-multi-agent.ts"
+    "evaluate:agents": "node --env-file-if-exists=.env --import tsx scripts/evaluate-multi-agent.ts",
+    "setup:auth": "node --import tsx scripts/setup-local-auth.ts",
+    "evaluate:enterprise": "node --env-file-if-exists=.env --import tsx scripts/evaluate-enterprise.ts",
+    "check:load": "node --import tsx scripts/check-enterprise-load.ts"
   },
   "dependencies": {
     "@azure/identity": "4.13.0",
+    "@azure/msal-browser": "^5.26.0",
+    "jose": "^6.2.13",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "three": "^0.186.1"

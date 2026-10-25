@@ -3,7 +3,7 @@
   "info": {
     "title": "Why That Goal local evidence API",
     "version": "1.0.0",
-    "description": "Loopback-only evidence API with optional server-side Microsoft Foundry generation. Measured evidence is immediate; poll identical POST while trace.pending=true for the cited AI story. CORS disabled."
+    "description": "Authenticated evidence API with local-development sessions or Entra delegated bearer tokens. Rate limits, CSRF, operator-only monitoring and optional Foundry multi-agent narrative generation. Factory-without-auth mode is loopback-test-only; application startup requires authentication."
   },
   "servers": [
     {
@@ -37,7 +37,8 @@
               }
             }
           }
-        }
+        },
+        "security": []
       }
     },
     "/api/analyze": {
@@ -69,6 +70,15 @@
                   "$ref": "#/components/schemas/AnalysisResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           },
           "400": {
@@ -79,15 +89,33 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           },
           "403": {
-            "description": "Browser Origin not allowed",
+            "description": "Origin, CSRF or operator role denied",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
               }
             }
           },
@@ -99,6 +127,15 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           },
           "413": {
@@ -108,6 +145,15 @@
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
               }
             }
           },
@@ -119,6 +165,15 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           },
           "500": {
@@ -129,10 +184,74 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           }
         },
-        "description": "Measured evidence immediately; poll while trace.pending. Optional Foundry orchestration exposes trace.workflow with distinct analyst, storyteller and reviewer steps, concrete handoffs and a single writer revision. AI publication requires host checks and reviewer approval; otherwise deterministic fallback."
+        "description": "Measured evidence immediately; poll while trace.pending. Optional Foundry orchestration exposes trace.workflow with distinct analyst, storyteller and reviewer steps, concrete handoffs and a single writer revision. AI publication requires host checks and reviewer approval; otherwise deterministic fallback.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": false,
+            "description": "Required with browser session cookies; not required for valid bearer tokens.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
     "/api/feed": {
@@ -167,16 +286,761 @@
                 },
                 "example": "data: {\"scenarioId\":\"quick-break\",\"time\":0,\"events\":[],\"complete\":false}\n\n"
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
             }
           },
           "400": {
-            "description": "Unknown scenario, missing/duplicate scenarioId or unexpected query parameter"
+            "description": "Unknown scenario, missing/duplicate scenarioId or unexpected query parameter",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
           },
           "403": {
-            "description": "Origin outside the local allowlist"
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
           },
           "405": {
-            "description": "Method other than GET"
+            "description": "Method other than GET",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/config": {
+      "get": {
+        "operationId": "authConfiguration",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Non-secret browser sign-in settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "type": "string",
+                      "enum": ["local", "entra"]
+                    },
+                    "tenantId": {
+                      "type": "string"
+                    },
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "localSignIn",
+        "security": [],
+        "description": "Local-development password sign-in. Five attempts/minute per socket IP. Returns an opaque HttpOnly cookie; passwords are verified against scrypt hashes. Disabled in Entra mode.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["password"],
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 256
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session created; Set-Cookie is HttpOnly and SameSite=Strict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/session": {
+      "post": {
+        "operationId": "exchangeEntraSession",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Exchange a validated Entra access token for an opaque browser session. Production uses Secure __Host- cookie.",
+        "responses": {
+          "200": {
+            "description": "Session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "operationId": "currentSession",
+        "responses": {
+          "200": {
+            "description": "Current role, CSRF value for cookie sessions, and absolute expiry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "signOut",
+        "description": "Revoke the current browser session and expire its cookie. Cookie authentication requires X-CSRF-Token. Remains available after caller request quota exhaustion.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["signed_out"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ready": {
+      "get": {
+        "operationId": "readiness",
+        "responses": {
+          "200": {
+            "description": "Authenticated configuration/draining state; no model connectivity probe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["ready", "draining"]
+                    },
+                    "authentication": {
+                      "type": "string"
+                    },
+                    "foundry": {
+                      "type": "string"
+                    },
+                    "modelConnectivity": {
+                      "type": "string",
+                      "enum": ["not_probed"]
+                    },
+                    "requestId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ops/metrics": {
+      "get": {
+        "operationId": "operationsMetrics",
+        "description": "Operator-only process-local request/limit/auth counts, workflow usage/outcomes, last-500-sample latency p95 and threshold alerts. No identities or prompt content.",
+        "responses": {
+          "200": {
+            "description": "Operations snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ops/prometheus": {
+      "get": {
+        "operationId": "prometheusMetrics",
+        "description": "Operator-only Prometheus text counters/gauges; no scraper is provisioned. Delegated/session authentication required; app-only monitoring tokens are not supported yet.",
+        "responses": {
+          "200": {
+            "description": "Metrics text",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, CSRF or operator role denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
+          },
+          "429": {
+            "description": "Caller rate limit or stream cap exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds before retrying."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "description": "Server-generated HTTP correlation ID."
+              }
+            }
           }
         }
       }
@@ -456,7 +1320,9 @@
               "invalid-output",
               "provider-error",
               "timeout",
-              "generating"
+              "generating",
+              "capacity",
+              "collecting"
             ]
           },
           "evidence": {
@@ -560,6 +1426,10 @@
         "properties": {
           "error": {
             "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -797,7 +1667,57 @@
           "revisions",
           "modelCalls"
         ]
+      },
+      "Session": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "expiresAt"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["viewer", "operator"]
+          },
+          "csrf": {
+            "type": "string",
+            "description": "Keep in memory; send as X-CSRF-Token for cookie-authenticated POSTs."
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Unix epoch milliseconds; absolute session expiry."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Single-tenant Entra v2 delegated API token; exact audience, azp, tenant and access_as_user scope required."
+      },
+      "LocalSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "wtg_session",
+        "description": "HttpOnly local-development session. POSTs require X-CSRF-Token."
+      },
+      "SecureSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-wtg_session",
+        "description": "Secure HttpOnly production session, Path=/, SameSite=Strict. POSTs require X-CSRF-Token."
       }
     }
-  }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "LocalSession": []
+    },
+    {
+      "SecureSession": []
+    }
+  ]
 }

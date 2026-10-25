@@ -1,5 +1,11 @@
 # Architecture and implementation status
 
+## Current access and operations boundary — 25 October 2026
+
+Browser sign-in → opaque session/Entra validation → origin/CSRF checks → caller quotas → time-bounded evidence → checkpoint/job gate → Foundry analyst/storyteller/reviewer → validated story or measured fallback. Authenticated SSE shares the session and stream caps. Operator-only metrics and structured request/workflow records expose the service state.
+
+Local auth, sessions, quotas, caches and job coordination are currently one process. The protected application entry point binds to loopback; the unauthenticated server factory is used only by controlled tests. No tenant app registration, external monitoring backend or distributed production state has been provisioned. See [enterprise controls and validation](enterprise-readiness.md) for current guarantees and deployment gaps.
+
 ## Tactical replay prototype
 
 ```text

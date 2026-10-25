@@ -61,7 +61,7 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
         calls >= (options.maxCalls ?? 200) ||
         recent.length >= (options.requestsPerMinute ?? 12)
       )
-        throw new ProviderFailure('provider-error', 0);
+        throw new ProviderFailure('capacity', 0);
       active++;
       const signal = AbortSignal.any([
         call.signal,
@@ -76,7 +76,7 @@ export function createFoundryClient(options: FoundryOptions): ModelClient {
           calls >= (options.maxCalls ?? 200) ||
           recent.length >= (options.requestsPerMinute ?? 12)
         )
-          throw new ProviderFailure('provider-error', 0);
+          throw new ProviderFailure('capacity', 0);
         calls++;
         recent.push(Date.now());
         sent = true;

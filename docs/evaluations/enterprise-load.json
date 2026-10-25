@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-25T07:17:04.602Z",
+  "scope": "50 real loopback HTTP requests with local authentication and a controlled failing provider. Not a live Foundry concurrency/scale benchmark.",
+  "requests": 50,
+  "initialAccepted": 20,
+  "burstLimited": 10,
+  "unauthorizedDenied": 10,
+  "providerInvocations": 1,
+  "p95Ms": 27,
+  "metrics": {
+    "uptimeSeconds": 0,
+    "requests": 51,
+    "serverErrors": 0,
+    "rateLimited": 10,
+    "authDenied": 10,
+    "routes": {
+      "/api/auth/login": {
+        "requests": 1,
+        "serverErrors": 0,
+        "p95Ms": 22
+      },
+      "/api/analyze": {
+        "requests": 50,
+        "serverErrors": 0,
+        "p95Ms": 1
+      }
+    },
+    "workflows": {
+      "started": 1,
+      "active": 0,
+      "completed": 1,
+      "approved": 0,
+      "fallback": 1,
+      "calls": 1,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "reasons": {
+        "provider-error": 1
+      },
+      "p95Ms": 22,
+      "approvalRate": 0
+    },
+    "alerts": []
+  },
+  "passed": true
+}

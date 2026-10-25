@@ -106,7 +106,10 @@ export function evidenceFor(
     return language === 'en'
       ? 'This event was withdrawn. Its earlier interpretation is no longer valid.'
       : 'Este evento fue anulado. Su interpretación anterior ya no es válida.';
-  if (event.type === 'recovery' && event.team === 'away')
+  if (
+    event.type === 'recovery' &&
+    scenario.events.some((e) => e.at < event.at && e.outcome === 'failed' && e.team !== event.team)
+  )
     return language === 'en'
       ? `${name} takes possession for the opposition. The attack has broken down.`
       : `${name} recupera para el rival. El ataque termina.`;
@@ -130,8 +133,8 @@ export function evidenceFor(
     },
     pass: { en: '', es: '' },
     shot: {
-      en: `${name} takes a shot from ${distance(event.from, { x: 105, y: 34 }).toFixed(1)} m from the centre of goal. This is distance, not an expected-goals probability.`,
-      es: `${name} remata a ${distance(event.from, { x: 105, y: 34 }).toFixed(1)} m del centro de la portería. Es una distancia, no una probabilidad de gol.`,
+      en: `${name} takes a shot from ${distance(event.from, { x: event.team === 'home' ? 105 : 0, y: 34 }).toFixed(1)} m from the centre of goal. This is distance, not an expected-goals probability.`,
+      es: `${name} remata a ${distance(event.from, { x: event.team === 'home' ? 105 : 0, y: 34 }).toFixed(1)} m del centro de la portería. Es una distancia, no una probabilidad de gol.`,
     },
     goal: {
       en: `${name}'s finish is recorded as a goal. Rewind the preceding passes to inspect how the ball reached this position.`,

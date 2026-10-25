@@ -1,3 +1,5 @@
+import { AccessControls, useAccess } from './ui/Access';
+import { OperationsPanel } from './ui/Operations';
 import { useLiveFeed } from './hooks/useLiveFeed';
 import type { Fact } from '../server/contracts';
 import { useAnalysis } from './hooks/useAnalysis';
@@ -231,6 +233,7 @@ function Field({
 }
 
 export default function App() {
+  const { session: accessSession } = useAccess();
   const [recapReturn, setRecapReturn] = useState(false);
   const [evidenceGuide, setEvidenceGuide] = useState<GuideStep | undefined>();
   const [guideIndex, setGuideIndex] = useState<number | null>(null);
@@ -239,13 +242,14 @@ export default function App() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [threeD, setThreeD] = useState(true);
   const [immersive, setImmersive] = useState(true);
-  const [operator, setOperator] = useState(() => {
+  const [operatorPreference, setOperator] = useState(() => {
     try {
       return localStorage.getItem('wtg-operator') === '1';
     } catch {
       return false;
     }
   });
+  const operator = accessSession.role === 'operator' && operatorPreference;
   const [onAir, setOnAir] = useState(false);
   useEffect(() => {
     try {
@@ -530,11 +534,16 @@ export default function App() {
           Spatial replay <span>/</span> Northstar vs Atlas
         </span>
         <div className="header-actions">
+          <AccessControls />
           <div className="mode-switch" role="group" aria-label="Display mode">
             <button aria-pressed={!operator} onClick={() => setOperator(false)}>
               Viewer
             </button>
-            <button aria-pressed={operator} onClick={() => setOperator(true)}>
+            <button
+              aria-pressed={operator}
+              disabled={accessSession.role !== 'operator'}
+              onClick={() => setOperator(true)}
+            >
               <i /> Operator
             </button>
           </div>
@@ -1196,7 +1205,9 @@ export default function App() {
                     {analysis.status === 'loading'
                       ? 'Loading replay evidence…'
                       : analysis.status === 'offline'
-                        ? 'Local fallback · evidence API unavailable'
+                        ? analysis.rateLimited
+                          ? 'Rate limit reached · retrying automatically'
+                          : 'Local fallback · evidence API unavailable'
                         : analysis.data?.mode === 'model-selected'
                           ? analysis.data.trace.workflow
                             ? 'Foundry · reviewed agent story'
@@ -1204,8 +1215,12 @@ export default function App() {
                           : analysis.data?.trace.pending
                             ? 'Foundry is writing · live evidence ready'
                             : analysis.data?.mode === 'fallback'
-                              ? 'Foundry unavailable · rule-based fallback'
-                              : 'Backend evidence · deterministic'}
+                              ? analysis.data.reason === 'capacity'
+                                ? 'AI budget reached · measured fallback'
+                                : 'Foundry unavailable · rule-based fallback'
+                              : analysis.data?.reason === 'collecting'
+                                ? 'AI at key checkpoints · live evidence ready'
+                                : 'Backend evidence · deterministic'}
                   </div>
                   <small>
                     {analysis.data?.mode === 'model-selected'
@@ -1432,6 +1447,7 @@ export default function App() {
               onCue={inspectFact}
             />
           )}
+          {operator && <OperationsPanel />}
           <footer className="status-bar">
             <span>
               <i /> SYNTHETIC MATCH LAB <b>/</b> Original fictional teams & tracking

@@ -57,6 +57,8 @@ export type AnalysisResponse = {
   provider: string;
   reason:
     | 'generating'
+    | 'capacity'
+    | 'collecting'
     | 'disconnected'
     | 'validated'
     | 'invalid-output'
@@ -82,7 +84,7 @@ export class ProviderFailure extends Error {
   inputTokens?: number;
   outputTokens?: number;
   constructor(
-    public reason: 'provider-error' | 'timeout' | 'invalid-output',
+    public reason: 'provider-error' | 'timeout' | 'invalid-output' | 'capacity',
     public calls: number,
   ) {
     super(reason);

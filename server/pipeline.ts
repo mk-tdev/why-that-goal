@@ -1,3 +1,4 @@
+import type { Scenario } from '../src/core/model';
 import type { WorkflowTrace } from './agentContracts';
 import { createRecap } from './recap';
 import { validateNarrative, type Narrative } from './narrative';
@@ -29,10 +30,11 @@ export async function analyze(
   adapter?: IntelligenceAdapter,
   timeoutMs = adapter?.timeoutMs ?? 5000,
   onProgress?: (trace: WorkflowTrace) => void,
+  evaluationScenario?: Scenario,
 ): Promise<AnalysisResponse> {
   const started = performance.now();
   const request = parseRequest(input);
-  const scenario = scenarios.find((s) => s.id === request.scenarioId);
+  const scenario = evaluationScenario ?? scenarios.find((s) => s.id === request.scenarioId);
   if (!scenario) throw new ContractError('Unknown scenario');
   const tools = createEvidenceTools(scenario, request);
   const packet = tools.snapshot();
@@ -222,6 +224,10 @@ export async function analyze(
       ...telemetry,
     },
   };
+  if (adapter && !narrative && result.recap)
+    result.recap.limitation = en
+      ? `Measured fallback recap · AI status: ${reason} · synthetic data.`
+      : `Resumen medido de respaldo · estado de IA: ${reason} · datos sintéticos.`;
   if (narrative) {
     const limitation = en
       ? 'Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation.'

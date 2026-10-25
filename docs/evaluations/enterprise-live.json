@@ -1,0 +1,1473 @@
+{
+  "recordedAt": "2026-10-25T07:02:04.983Z",
+  "scope": "Reserved authored synthetic attacks and stress snapshots; not blinded, external football data or independent human AI accuracy. These cases exposed away-team baseline defects before the final live run. Prompts were not tuned to these live outputs. Token totals reflect reported usage, not a dollar-cost estimate; human semantic review remains pending.",
+  "live": true,
+  "policy": {
+    "maxModelCalls": 30,
+    "requestsPerMinute": 30,
+    "maxWorkflowCalls": 6,
+    "maxWorkflowKnownTokens": 20000,
+    "maxP95Ms": 30000,
+    "minApprovedFraction": 0.75
+  },
+  "deterministic": {
+    "recordedAt": "2026-10-25T07:01:09.026Z",
+    "scope": "Four new authored reserved attacks with deterministic temporal, geometry, missing-data and duplicate stress checks. Not external/blinded football data or statistical AI accuracy.",
+    "checks": 40,
+    "passed": 40,
+    "rows": [
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 10,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "duplicate-event",
+        "status": "passed"
+      }
+    ]
+  },
+  "summary": {
+    "cases": 4,
+    "approved": 4,
+    "fallback": 0,
+    "p95Ms": 21048,
+    "knownInputTokens": 27689,
+    "knownOutputTokens": 4541
+  },
+  "gates": {
+    "deterministic": true,
+    "workflowCallBound": true,
+    "knownTokenBound": true,
+    "latency": true,
+    "approval": true
+  },
+  "passed": true,
+  "results": [
+    {
+      "case": "reserved-patient-goal",
+      "expected": {
+        "outcome": "goal",
+        "space": "closing",
+        "runs": true,
+        "attackingTeam": "home"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 21048,
+        "calls": 6,
+        "validated": true,
+        "workflow": {
+          "snapshotId": "a03059f7b5846779",
+          "version": "1.0",
+          "status": "approved",
+          "steps": [
+            {
+              "agent": "analysis",
+              "attempt": 1,
+              "status": "failed",
+              "elapsedMs": 4635,
+              "factIds": [],
+              "summary": "Contract gate: Analysis omitted terminal evidence. Unpublished prose withheld.",
+              "toolCalls": [],
+              "inputTokens": 1955,
+              "outputTokens": 260
+            },
+            {
+              "agent": "analysis",
+              "attempt": 2,
+              "status": "completed",
+              "elapsedMs": 2506,
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ],
+              "summary": "Selected findings checked against measured facts.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1958,
+              "outputTokens": 257
+            },
+            {
+              "agent": "storytelling",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3383,
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ],
+              "summary": "Cited draft handed to independent evidence review.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1344,
+              "outputTokens": 359
+            },
+            {
+              "agent": "evidence-check",
+              "attempt": 1,
+              "status": "revision-requested",
+              "elapsedMs": 4361,
+              "factIds": [
+                "reserved-patient-goal-recover@1:event",
+                "reserved-patient-goal-first@1:event",
+                "reserved-patient-goal-first@1:distance",
+                "reserved-patient-goal-first@1:space",
+                "reserved-patient-goal-second@1:event",
+                "reserved-patient-goal-second@1:distance",
+                "reserved-patient-goal-second@1:space",
+                "reserved-patient-goal-shot@1:event",
+                "reserved-patient-goal-terminal@1:event",
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-first@1:space-change",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-second@1:space-change"
+              ],
+              "summary": "Review completed against the full evidence snapshot.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-recover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-shot@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-terminal@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:space-change"
+                }
+              ],
+              "inputTokens": 2572,
+              "outputTokens": 369
+            },
+            {
+              "agent": "storytelling",
+              "attempt": 2,
+              "status": "completed",
+              "elapsedMs": 3602,
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ],
+              "summary": "Cited draft handed to independent evidence review.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1758,
+              "outputTokens": 417
+            },
+            {
+              "agent": "evidence-check",
+              "attempt": 2,
+              "status": "completed",
+              "elapsedMs": 2557,
+              "factIds": [
+                "reserved-patient-goal-recover@1:event",
+                "reserved-patient-goal-first@1:event",
+                "reserved-patient-goal-first@1:distance",
+                "reserved-patient-goal-first@1:space",
+                "reserved-patient-goal-second@1:event",
+                "reserved-patient-goal-second@1:distance",
+                "reserved-patient-goal-second@1:space",
+                "reserved-patient-goal-shot@1:event",
+                "reserved-patient-goal-terminal@1:event",
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-first@1:space-change",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-second@1:space-change"
+              ],
+              "summary": "All narrative targets reviewed; publication approved.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-recover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-shot@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-terminal@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-patient-goal-second@1:space-change"
+                }
+              ],
+              "inputTokens": 2568,
+              "outputTokens": 180
+            }
+          ],
+          "handoffs": [
+            {
+              "from": "analysis",
+              "to": "analysis",
+              "reason": "Host contract gate requested one corrected analysis plan.",
+              "factIds": []
+            },
+            {
+              "from": "analysis",
+              "to": "storytelling",
+              "reason": "Ranked measured findings and hydrated evidence.",
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ]
+            },
+            {
+              "from": "storytelling",
+              "to": "evidence-check",
+              "reason": "Draft and exact citations; reviewer can inspect all facts.",
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ]
+            },
+            {
+              "from": "evidence-check",
+              "to": "storytelling",
+              "reason": "Reviewer requested a bounded correction with supporting evidence.",
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ]
+            },
+            {
+              "from": "storytelling",
+              "to": "evidence-check",
+              "reason": "Draft and exact citations; reviewer can inspect all facts.",
+              "factIds": [
+                "reserved-patient-goal-first@1:progress",
+                "reserved-patient-goal-first@1:run",
+                "reserved-patient-goal-second@1:progress",
+                "reserved-patient-goal-second@1:run",
+                "reserved-patient-goal-terminal@1:event"
+              ]
+            }
+          ],
+          "issues": [
+            {
+              "target": "recap-summary",
+              "reason": "missing-evidence",
+              "detail": "“A goal for the home side” is not supported by the cited facts, which record Noor’s finish as a goal but do not identify Noor’s side as the home side.",
+              "factIds": [
+                "reserved-patient-goal-terminal@1:event"
+              ]
+            }
+          ],
+          "revisions": 1,
+          "modelCalls": 6
+        },
+        "cacheHit": false,
+        "inputTokens": 12155,
+        "outputTokens": 1842
+      },
+      "story": {
+        "title": "Rowan and Noor offer forward options",
+        "summary": "Aster’s pass found Rowan moving into a new destination ahead, advancing the ball toward goal. Rowan then found Noor, whose movement offered another forward option as the ball progressed again. Noor’s finish is recorded as a goal; the sequence shows how the receiving destinations changed between passes, without establishing why the goal happened.",
+        "factIds": [
+          "reserved-patient-goal-first@1:progress",
+          "reserved-patient-goal-first@1:run",
+          "reserved-patient-goal-second@1:progress",
+          "reserved-patient-goal-second@1:run",
+          "reserved-patient-goal-terminal@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "goal",
+        "title": "Noor’s finish is recorded as a goal",
+        "summary": "The recorded outcome is a goal. The preceding sequence shows Aster finding Rowan, then Rowan finding Noor, with both receivers moving before reception.",
+        "through": 14,
+        "terminalFactId": "reserved-patient-goal-terminal@1:event",
+        "cards": [
+          {
+            "title": "Aster finds Rowan moving ahead",
+            "text": "Rowan moved before receiving and offered a new destination ahead of Aster’s pass, which advanced the ball toward goal.",
+            "factIds": [
+              "reserved-patient-goal-first@1:progress",
+              "reserved-patient-goal-first@1:run"
+            ]
+          },
+          {
+            "title": "Rowan finds Noor’s forward option",
+            "text": "Noor moved before receiving and offered a new destination ahead of Rowan’s pass, which advanced the ball toward goal.",
+            "factIds": [
+              "reserved-patient-goal-second@1:progress",
+              "reserved-patient-goal-second@1:run"
+            ]
+          },
+          {
+            "title": "Noor’s finish is recorded as a goal",
+            "text": "The terminal event records Noor’s finish as a goal.",
+            "factIds": [
+              "reserved-patient-goal-terminal@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "screen": {
+        "mentionsExpectedOutcome": true,
+        "note": "Lexical screening only; not an independent semantic-accuracy score. Human review remains required."
+      },
+      "humanSemanticReview": "pending"
+    },
+    {
+      "case": "reserved-wide-save",
+      "expected": {
+        "outcome": "save",
+        "space": "opening",
+        "runs": true,
+        "attackingTeam": "home"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 12545,
+        "calls": 3,
+        "validated": true,
+        "workflow": {
+          "snapshotId": "8b360e83ca74916a",
+          "version": "1.0",
+          "status": "approved",
+          "steps": [
+            {
+              "agent": "analysis",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3429,
+              "factIds": [
+                "reserved-wide-save-first@1:progress",
+                "reserved-wide-save-second@1:progress",
+                "reserved-wide-save-second@1:run",
+                "reserved-wide-save-first@1:space-change",
+                "reserved-wide-save-second@1:space-change",
+                "reserved-wide-save-terminal@1:event"
+              ],
+              "summary": "Selected findings checked against measured facts.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1889,
+              "outputTokens": 346
+            },
+            {
+              "agent": "storytelling",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 4656,
+              "factIds": [
+                "reserved-wide-save-first@1:progress",
+                "reserved-wide-save-second@1:progress",
+                "reserved-wide-save-second@1:run",
+                "reserved-wide-save-first@1:space-change",
+                "reserved-wide-save-second@1:space-change",
+                "reserved-wide-save-terminal@1:event"
+              ],
+              "summary": "Cited draft handed to independent evidence review.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1516,
+              "outputTokens": 380
+            },
+            {
+              "agent": "evidence-check",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 4456,
+              "factIds": [
+                "reserved-wide-save-recover@1:event",
+                "reserved-wide-save-first@1:event",
+                "reserved-wide-save-first@1:distance",
+                "reserved-wide-save-first@1:space",
+                "reserved-wide-save-second@1:event",
+                "reserved-wide-save-second@1:distance",
+                "reserved-wide-save-second@1:space",
+                "reserved-wide-save-shot@1:event",
+                "reserved-wide-save-terminal@1:event",
+                "reserved-wide-save-first@1:progress",
+                "reserved-wide-save-first@1:run",
+                "reserved-wide-save-first@1:space-change",
+                "reserved-wide-save-second@1:progress",
+                "reserved-wide-save-second@1:run",
+                "reserved-wide-save-second@1:space-change"
+              ],
+              "summary": "All narrative targets reviewed; publication approved.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-recover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-shot@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-terminal@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-wide-save-second@1:space-change"
+                }
+              ],
+              "inputTokens": 2549,
+              "outputTokens": 204
+            }
+          ],
+          "handoffs": [
+            {
+              "from": "analysis",
+              "to": "storytelling",
+              "reason": "Ranked measured findings and hydrated evidence.",
+              "factIds": [
+                "reserved-wide-save-first@1:progress",
+                "reserved-wide-save-second@1:progress",
+                "reserved-wide-save-second@1:run",
+                "reserved-wide-save-first@1:space-change",
+                "reserved-wide-save-second@1:space-change",
+                "reserved-wide-save-terminal@1:event"
+              ]
+            },
+            {
+              "from": "storytelling",
+              "to": "evidence-check",
+              "reason": "Draft and exact citations; reviewer can inspect all facts.",
+              "factIds": [
+                "reserved-wide-save-first@1:progress",
+                "reserved-wide-save-second@1:progress",
+                "reserved-wide-save-second@1:run",
+                "reserved-wide-save-first@1:space-change",
+                "reserved-wide-save-second@1:space-change",
+                "reserved-wide-save-terminal@1:event"
+              ]
+            }
+          ],
+          "issues": [],
+          "revisions": 0,
+          "modelCalls": 3
+        },
+        "cacheHit": false,
+        "inputTokens": 5954,
+        "outputTokens": 930
+      },
+      "story": {
+        "title": "Progression into a saved shot",
+        "summary": "Aster’s pass to Rowan advanced the ball, but the gap at the fixed receiving point narrowed by reception. Rowan then found Noor, whose movement offered a destination ahead of the pass. At Noor’s receiving point, the gap to the nearest opponent was wider by reception. The sequence ended with the goalkeeper saving the shot.",
+        "factIds": [
+          "reserved-wide-save-first@1:progress",
+          "reserved-wide-save-second@1:progress",
+          "reserved-wide-save-second@1:run",
+          "reserved-wide-save-first@1:space-change",
+          "reserved-wide-save-second@1:space-change",
+          "reserved-wide-save-terminal@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "save",
+        "title": "Goalkeeper saves the shot",
+        "summary": "The sequence ended in a save, not a goal. The passes advanced the ball, and Noor received with more separation from the nearest opponent at the fixed receiving point.",
+        "through": 14,
+        "terminalFactId": "reserved-wide-save-terminal@1:event",
+        "cards": [
+          {
+            "title": "Aster advances the ball to Rowan",
+            "text": "Aster found Rowan with a pass that moved the ball toward goal. At Rowan’s fixed receiving point, the gap to the nearest opponent narrowed by reception.",
+            "factIds": [
+              "reserved-wide-save-first@1:progress",
+              "reserved-wide-save-first@1:space-change"
+            ]
+          },
+          {
+            "title": "Rowan finds Noor moving ahead",
+            "text": "Rowan’s pass advanced the ball toward goal. Noor moved before receiving, offering a new destination ahead of the pass; at that receiving point, the gap to the nearest opponent was wider by reception.",
+            "factIds": [
+              "reserved-wide-save-second@1:progress",
+              "reserved-wide-save-second@1:run",
+              "reserved-wide-save-second@1:space-change"
+            ]
+          },
+          {
+            "title": "The shot is saved",
+            "text": "The goalkeeper saved the shot; the sequence did not produce a goal.",
+            "factIds": [
+              "reserved-wide-save-terminal@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "screen": {
+        "mentionsExpectedOutcome": true,
+        "note": "Lexical screening only; not an independent semantic-accuracy score. Human review remains required."
+      },
+      "humanSemanticReview": "pending"
+    },
+    {
+      "case": "reserved-square-interception",
+      "expected": {
+        "outcome": "failed-attack",
+        "space": "closing",
+        "runs": true,
+        "attackingTeam": "home"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 12234,
+        "calls": 3,
+        "validated": true,
+        "workflow": {
+          "snapshotId": "4aa4f4ed938eb223",
+          "version": "1.0",
+          "status": "approved",
+          "steps": [
+            {
+              "agent": "analysis",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3424,
+              "factIds": [
+                "reserved-square-interception-first@1:progress",
+                "reserved-square-interception-first@1:run",
+                "reserved-square-interception-first@1:space-change",
+                "reserved-square-interception-turnover@1:event"
+              ],
+              "summary": "Selected findings checked against measured facts.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-turnover@1:event"
+                }
+              ],
+              "inputTokens": 1240,
+              "outputTokens": 194
+            },
+            {
+              "agent": "storytelling",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 5195,
+              "factIds": [
+                "reserved-square-interception-first@1:progress",
+                "reserved-square-interception-first@1:run",
+                "reserved-square-interception-first@1:space-change",
+                "reserved-square-interception-turnover@1:event"
+              ],
+              "summary": "Cited draft handed to independent evidence review.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-turnover@1:event"
+                }
+              ],
+              "inputTokens": 1231,
+              "outputTokens": 422
+            },
+            {
+              "agent": "evidence-check",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3613,
+              "factIds": [
+                "reserved-square-interception-recover@1:event",
+                "reserved-square-interception-first@1:event",
+                "reserved-square-interception-first@1:distance",
+                "reserved-square-interception-first@1:space",
+                "reserved-square-interception-second@1:event",
+                "reserved-square-interception-turnover@1:event",
+                "reserved-square-interception-first@1:progress",
+                "reserved-square-interception-first@1:run",
+                "reserved-square-interception-first@1:space-change"
+              ],
+              "summary": "All narrative targets reviewed; publication approved.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-recover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-second@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-turnover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:run"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-square-interception-first@1:space-change"
+                }
+              ],
+              "inputTokens": 1764,
+              "outputTokens": 281
+            }
+          ],
+          "handoffs": [
+            {
+              "from": "analysis",
+              "to": "storytelling",
+              "reason": "Ranked measured findings and hydrated evidence.",
+              "factIds": [
+                "reserved-square-interception-first@1:progress",
+                "reserved-square-interception-first@1:run",
+                "reserved-square-interception-first@1:space-change",
+                "reserved-square-interception-turnover@1:event"
+              ]
+            },
+            {
+              "from": "storytelling",
+              "to": "evidence-check",
+              "reason": "Draft and exact citations; reviewer can inspect all facts.",
+              "factIds": [
+                "reserved-square-interception-first@1:progress",
+                "reserved-square-interception-first@1:run",
+                "reserved-square-interception-first@1:space-change",
+                "reserved-square-interception-turnover@1:event"
+              ]
+            }
+          ],
+          "issues": [],
+          "revisions": 0,
+          "modelCalls": 3
+        },
+        "cacheHit": false,
+        "inputTokens": 4235,
+        "outputTokens": 897
+      },
+      "story": {
+        "title": "Forward pass, closing gap, interception",
+        "summary": "Aster’s forward pass found Rowan, whose movement offered a destination ahead. But space at the fixed receiving point closed before the ball arrived. The opponent later intercepted and took possession; the attack ended without a shot.",
+        "factIds": [
+          "reserved-square-interception-first@1:progress",
+          "reserved-square-interception-first@1:run",
+          "reserved-square-interception-first@1:space-change",
+          "reserved-square-interception-turnover@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "failed-attack",
+        "title": "Attack ends after interception",
+        "summary": "Aster progressed the ball to Rowan, but the gap at the receiving point closed. The opponent then intercepted, took possession and ended the attack without a shot.",
+        "through": 10,
+        "terminalFactId": "reserved-square-interception-turnover@1:event",
+        "cards": [
+          {
+            "title": "Pass finds a moving receiver",
+            "text": "Aster moved the ball toward goal to Rowan, who moved before receiving and offered a destination ahead of the pass.",
+            "factIds": [
+              "reserved-square-interception-first@1:progress",
+              "reserved-square-interception-first@1:run"
+            ]
+          },
+          {
+            "title": "Receiving-point gap closes; attack ends",
+            "text": "The nearest-opponent gap at the fixed receiving point was smaller at reception. The opponent later took possession after an interception, and the attack ended without a shot.",
+            "factIds": [
+              "reserved-square-interception-first@1:space-change",
+              "reserved-square-interception-turnover@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "screen": {
+        "mentionsExpectedOutcome": true,
+        "note": "Lexical screening only; not an independent semantic-accuracy score. Human review remains required."
+      },
+      "humanSemanticReview": "pending"
+    },
+    {
+      "case": "reserved-away-finish",
+      "expected": {
+        "outcome": "goal",
+        "space": "opening",
+        "runs": false,
+        "attackingTeam": "away"
+      },
+      "mode": "model-selected",
+      "reason": "validated",
+      "trace": {
+        "elapsedMs": 10124,
+        "calls": 3,
+        "validated": true,
+        "workflow": {
+          "snapshotId": "7ffb3df9a4a4eddb",
+          "version": "1.0",
+          "status": "approved",
+          "steps": [
+            {
+              "agent": "analysis",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3543,
+              "factIds": [
+                "reserved-away-finish-first@1:progress",
+                "reserved-away-finish-second@1:progress",
+                "reserved-away-finish-first@1:space-change",
+                "reserved-away-finish-second@1:space-change",
+                "reserved-away-finish-terminal@1:event"
+              ],
+              "summary": "Selected findings checked against measured facts.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1669,
+              "outputTokens": 279
+            },
+            {
+              "agent": "storytelling",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3352,
+              "factIds": [
+                "reserved-away-finish-first@1:progress",
+                "reserved-away-finish-second@1:progress",
+                "reserved-away-finish-first@1:space-change",
+                "reserved-away-finish-second@1:space-change",
+                "reserved-away-finish-terminal@1:event"
+              ],
+              "summary": "Cited draft handed to independent evidence review.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-terminal@1:event"
+                }
+              ],
+              "inputTokens": 1390,
+              "outputTokens": 353
+            },
+            {
+              "agent": "evidence-check",
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 3226,
+              "factIds": [
+                "reserved-away-finish-recover@1:event",
+                "reserved-away-finish-first@1:event",
+                "reserved-away-finish-first@1:distance",
+                "reserved-away-finish-first@1:space",
+                "reserved-away-finish-second@1:event",
+                "reserved-away-finish-second@1:distance",
+                "reserved-away-finish-second@1:space",
+                "reserved-away-finish-shot@1:event",
+                "reserved-away-finish-terminal@1:event",
+                "reserved-away-finish-first@1:progress",
+                "reserved-away-finish-first@1:space-change",
+                "reserved-away-finish-second@1:progress",
+                "reserved-away-finish-second@1:space-change"
+              ],
+              "summary": "All narrative targets reviewed; publication approved.",
+              "toolCalls": [
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-recover@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:distance"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:space"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-shot@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-terminal@1:event"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-first@1:space-change"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:progress"
+                },
+                {
+                  "name": "getFact",
+                  "factId": "reserved-away-finish-second@1:space-change"
+                }
+              ],
+              "inputTokens": 2286,
+              "outputTokens": 240
+            }
+          ],
+          "handoffs": [
+            {
+              "from": "analysis",
+              "to": "storytelling",
+              "reason": "Ranked measured findings and hydrated evidence.",
+              "factIds": [
+                "reserved-away-finish-first@1:progress",
+                "reserved-away-finish-second@1:progress",
+                "reserved-away-finish-first@1:space-change",
+                "reserved-away-finish-second@1:space-change",
+                "reserved-away-finish-terminal@1:event"
+              ]
+            },
+            {
+              "from": "storytelling",
+              "to": "evidence-check",
+              "reason": "Draft and exact citations; reviewer can inspect all facts.",
+              "factIds": [
+                "reserved-away-finish-first@1:progress",
+                "reserved-away-finish-second@1:progress",
+                "reserved-away-finish-first@1:space-change",
+                "reserved-away-finish-second@1:space-change",
+                "reserved-away-finish-terminal@1:event"
+              ]
+            }
+          ],
+          "issues": [],
+          "revisions": 0,
+          "modelCalls": 3
+        },
+        "cacheHit": false,
+        "inputTokens": 5345,
+        "outputTokens": 872
+      },
+      "story": {
+        "title": "Rowan and Noor advance before Noor’s goal",
+        "summary": "Aster’s pass to Rowan moved the ball toward goal, though the receiving point became more crowded. Rowan then found Noor farther forward; at Noor’s receiving point, the nearest-opponent gap widened. Noor’s finish was recorded as a goal. The tracking describes how the attack progressed, but does not establish why it ended in a goal.",
+        "factIds": [
+          "reserved-away-finish-first@1:progress",
+          "reserved-away-finish-second@1:progress",
+          "reserved-away-finish-first@1:space-change",
+          "reserved-away-finish-second@1:space-change",
+          "reserved-away-finish-terminal@1:event"
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "recap": {
+        "outcome": "goal",
+        "title": "Noor’s finish recorded as a goal",
+        "summary": "Aster found Rowan, then Rowan found Noor farther toward goal. Noor’s finish was recorded as a goal; the tracking does not establish what caused it.",
+        "through": 14,
+        "terminalFactId": "reserved-away-finish-terminal@1:event",
+        "cards": [
+          {
+            "title": "Aster finds Rowan",
+            "text": "Aster’s pass to Rowan moved the ball toward goal. At the fixed receiving point, the nearest-opponent gap narrowed by reception.",
+            "factIds": [
+              "reserved-away-finish-first@1:progress",
+              "reserved-away-finish-first@1:space-change"
+            ]
+          },
+          {
+            "title": "Rowan finds Noor",
+            "text": "Rowan’s pass moved the ball farther toward goal. At Noor’s fixed receiving point, the nearest-opponent gap widened by reception.",
+            "factIds": [
+              "reserved-away-finish-second@1:progress",
+              "reserved-away-finish-second@1:space-change"
+            ]
+          },
+          {
+            "title": "Noor scores",
+            "text": "Noor’s finish is recorded as a goal.",
+            "factIds": [
+              "reserved-away-finish-terminal@1:event"
+            ]
+          }
+        ],
+        "limitation": "Foundry-generated interpretation · citations and structure checked; interpretation may be imperfect. Synthetic tracking, not proof of tactical causation."
+      },
+      "screen": {
+        "mentionsExpectedOutcome": true,
+        "note": "Lexical screening only; not an independent semantic-accuracy score. Human review remains required."
+      },
+      "humanSemanticReview": "pending"
+    }
+  ]
+}

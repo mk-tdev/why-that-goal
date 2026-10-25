@@ -1,0 +1,266 @@
+{
+  "recordedAt": "2026-10-25T07:17:04.314Z",
+  "scope": "Reserved authored synthetic attacks and stress snapshots; not blinded, external football data or independent human AI accuracy. These cases exposed away-team baseline defects before the final live run. Prompts were not tuned to these live outputs. Token totals reflect reported usage, not a dollar-cost estimate; human semantic review remains pending.",
+  "live": false,
+  "policy": {
+    "maxModelCalls": 30,
+    "requestsPerMinute": 30,
+    "maxWorkflowCalls": 6,
+    "maxWorkflowKnownTokens": 20000,
+    "maxP95Ms": 30000,
+    "minApprovedFraction": 0.75
+  },
+  "deterministic": {
+    "recordedAt": "2026-10-25T07:17:04.313Z",
+    "scope": "Four new authored reserved attacks with deterministic temporal, geometry, missing-data and duplicate stress checks. Not external/blinded football data or statistical AI accuracy.",
+    "checks": 40,
+    "passed": 40,
+    "rows": [
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-patient-goal",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-wide-save",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "snapshot",
+        "cut": 10,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-square-interception",
+        "case": "duplicate-event",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 0,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 1,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 3.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 4,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 7.9,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 8,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "snapshot",
+        "cut": 14,
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "missing-tracking",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "delayed-terminal",
+        "status": "passed"
+      },
+      {
+        "id": "reserved-away-finish",
+        "case": "duplicate-event",
+        "status": "passed"
+      }
+    ]
+  },
+  "summary": {
+    "cases": 0,
+    "approved": 0,
+    "fallback": 0,
+    "p95Ms": null,
+    "knownInputTokens": 0,
+    "knownOutputTokens": 0
+  },
+  "gates": {
+    "deterministic": true,
+    "workflowCallBound": true,
+    "knownTokenBound": true,
+    "latency": true,
+    "approval": true
+  },
+  "passed": true,
+  "results": []
+}

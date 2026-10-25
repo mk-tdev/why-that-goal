@@ -1,3 +1,4 @@
+import { securedFetch } from './session';
 import type { AnalysisRequest, AnalysisResponse } from '../../server/contracts';
 
 /** Reject mismatched snapshots before any server text or coordinates reach the replay. */
@@ -150,7 +151,7 @@ export function readAnalysis(value: unknown, request: AnalysisRequest): Analysis
   return data;
 }
 export async function fetchAnalysis(request: AnalysisRequest, signal: AbortSignal, base = '') {
-  const response = await fetch(`${base}/api/analyze`, {
+  const response = await securedFetch(`${base}/api/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),

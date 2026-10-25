@@ -1,3 +1,4 @@
+import { securedFetch } from '../core/session';
 import { useEffect, useState } from 'react';
 import type { FeedFrame } from '../../server/feed';
 export function useLiveFeed(scenarioId: string, duration: number) {
@@ -58,7 +59,10 @@ export function useLiveFeed(scenarioId: string, duration: number) {
         fail();
       }
     };
-    source.onerror = fail;
+    source.onerror = () => {
+      fail();
+      void securedFetch('/api/auth/me').catch(() => {});
+    };
     return () => {
       active = false;
       clearTimeout(watchdog);

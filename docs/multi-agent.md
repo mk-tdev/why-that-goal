@@ -41,3 +41,7 @@ The final recorded development run produced reviewed AI output for all three aut
 | counter-cut-out | model-selected | 3.5s | model-selected | 19.1s | 5 | 1 |
 
 The controlled false-save story passed the baseline's structural/provenance gate. The real Foundry reviewer flagged the wrong outcome and missing citations, the writer repaired the flagged targets, and re-review approved publication. That workflow used 5 calls and 23.6s. This demonstrates one recovery path, not a measured false-claim detection rate. All outputs and failures are preserved in the linked JSON reports.
+
+## Enterprise scheduling
+
+The authenticated API now runs one useful nonterminal checkpoint per scenario/audience/language cache window (after two completed passes) and the terminal outcome, while intermediate moments use current measured explanations. This prevents per-event inference from consuming the model budget before the recap. Direct evaluation calls still run a complete workflow for the supplied snapshot. Access, per-caller limits and monitoring are documented in [enterprise controls](enterprise-readiness.md).

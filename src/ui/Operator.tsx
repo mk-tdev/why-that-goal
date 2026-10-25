@@ -103,9 +103,21 @@ export function OperatorConsole({
     },
     {
       name: 'Microsoft Foundry',
-      state: data?.mode === 'model-selected' ? 'on' : 'off',
-      value: data?.mode === 'model-selected' ? 'LIVE' : 'OFFLINE',
-      detail: data ? `${data.provider} · ${data.reason}` : 'Not connected',
+      state: data?.mode === 'model-selected' ? 'on' : data?.mode === 'fallback' ? 'warn' : 'idle',
+      value:
+        data?.mode === 'model-selected'
+          ? data.trace.cacheHit
+            ? 'CACHED'
+            : 'REVIEWED'
+          : data?.trace.pending
+            ? 'WORKING'
+            : data?.mode === 'fallback'
+              ? 'FALLBACK'
+              : 'STANDBY',
+      detail:
+        data?.provider && data.provider !== 'none'
+          ? `${data.provider} · ${data.trace.pending ? 'agents processing' : data.evidence.facts.length ? data.reason : 'waiting for evidence'}`
+          : 'Not configured',
     },
     {
       name: 'Auto recap',

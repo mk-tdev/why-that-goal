@@ -1,3 +1,4 @@
+import { ApiError } from '../core/session';
 import { useEffect, useState } from 'react';
 import type { AnalysisRequest, AnalysisResponse } from '../../server/contracts';
 import { fetchAnalysis } from '../core/analysisClient';
@@ -8,6 +9,7 @@ export function useAnalysis(request: AnalysisRequest) {
     key: string;
     status: 'loading' | 'ready' | 'offline';
     data?: AnalysisResponse;
+    rateLimited?: boolean;
   }>({ key, status: 'loading' });
   useEffect(() => {
     const controller = new AbortController();
@@ -21,9 +23,19 @@ export function useAnalysis(request: AnalysisRequest) {
         if (active) {
           setState({ key, status: 'ready', data });
           if (data.trace.pending) poll = setTimeout(load, 1500);
+          else if (data.reason === 'capacity') poll = setTimeout(load, 60000);
         }
-      } catch {
-        if (active) setState({ key, status: 'offline' });
+      } catch (error) {
+        if (active) {
+          const rateLimited = error instanceof ApiError && error.status === 429;
+          setState((previous) => ({
+            key,
+            status: 'offline',
+            rateLimited,
+            data: previous.key === key ? previous.data : undefined,
+          }));
+          if (rateLimited) poll = setTimeout(load, error.retryAfter * 1000);
+        }
       } finally {
         clearTimeout(timeout);
       }
@@ -37,6 +49,7 @@ export function useAnalysis(request: AnalysisRequest) {
   }, [key, attempt]);
   return {
     ...(state.key === key ? state : { key, status: 'loading' as const }),
+    rateLimited: state.key === key && state.rateLimited === true,
     retry: () => setAttempt((n) => n + 1),
   };
 }
