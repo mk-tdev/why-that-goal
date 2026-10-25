@@ -160,3 +160,7 @@ Recording exposed a misleading cached-output description; corrected and deployed
 ## Clean video export — 25 October 2026
 
 Superseded the narrated master with `why-that-goal-demo-clean.mp4`: 110 seconds, 1080p/30 fps, no audio, burned captions or subtitle tracks. Provided a separate timed narration script with picture cues for the user’s own voiceover. The renderer now defaults to clean video; the optional narrated variant no longer adds a second subtitle layer. Verified stream structure, full decode and a clean replay frame. See `docs/demo-video.md` and `docs/demo-narration-script.md`.
+
+## Final submission copy — 25 October 2026
+
+Rechecked official rules and inspected the existing Innovation Studio entry, description editor, media dialog and Manage project menu without saving changes. Prepared `docs/submission.md` with confirmed field values, optional category justifications and an explicit pending checklist; `docs/submission-description.md` contains the exact replacement Markdown. The portal still has its initial development description and blank repository field. Public video hosting, portal updates, entrant declarations and final completion remain pending. No separate prize-category selector or final-submit button was observed in the inspected sections.
