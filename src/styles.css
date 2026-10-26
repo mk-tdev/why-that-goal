@@ -4739,3 +4739,58 @@ button.op-row:hover:not(:disabled) {
 @media(max-width:600px){.review-shade{padding:10px}.review-shade>section{max-height:calc(100dvh - 20px)}.intelligence-review{padding:20px}.review-heading,.review-section-heading{flex-direction:column;gap:10px}.pipeline-proof{grid-template-columns:1fr 1fr}.review-value{padding:18px}.access-card{padding:24px}}
 
 .status-bar a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+
+/* Let wrapped header controls own their space above the match. */
+@media (max-width: 1150px) {
+  .app-bar {
+    height: auto;
+    min-height: 72px;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    gap: 12px;
+  }
+  .app-bar .brand {
+    flex-shrink: 0;
+  }
+  .app-bar .header-actions {
+    flex: 1 1 100%;
+    min-width: 0;
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .app-bar .header-actions > * {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 560px) {
+  .app-bar {
+    padding: 12px 15px;
+  }
+  .app-bar .header-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px 10px;
+  }
+  .app-bar .intelligence-trigger,
+  .app-bar .access-controls button,
+  .app-bar .export {
+    min-height: 40px;
+  }
+  .app-bar .intelligence-trigger {
+    justify-self: start;
+    padding: 10px;
+  }
+  .app-bar .access-controls,
+  .app-bar .export {
+    justify-self: end;
+  }
+  .app-bar .mode-switch {
+    justify-self: start;
+  }
+  .app-bar .mode-switch button {
+    min-height: 34px;
+  }
+}
